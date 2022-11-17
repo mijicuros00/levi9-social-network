@@ -7,7 +7,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <include file="dblogs/changelog/changes/1-create-user-table-changeset.sql"/>
-    <!-- <include file="dblogs/changelog/changes/2-create-group-table-changeset.sql"/>
+    <include file="dblogs/changelog/changes/2-create-group-table-changeset.sql"/>
     <include file="dblogs/changelog/changes/3-create-post-table-changeset.sql"/>
     <include file="dblogs/changelog/changes/4-create-item-table-changeset.sql"/>
     <include file="dblogs/changelog/changes/5-create-comment-table-changeset.sql"/>
@@ -18,6 +18,6 @@
     <include file="dblogs/changelog/changes/10-create-friend-table-changeset.sql"/>
     <include file="dblogs/changelog/changes/11-create-member-event-table-changeset.sql"/>
     <include file="dblogs/changelog/changes/12-create-address-table-changeset.sql"/>
-    <include file="dblogs/changelog/changes/13-add-constraints-changeset.sql"/> -->
+    <include file="dblogs/changelog/changes/13-add-constraints-changeset.sql"/>
 </databaseChangeLog>
 
