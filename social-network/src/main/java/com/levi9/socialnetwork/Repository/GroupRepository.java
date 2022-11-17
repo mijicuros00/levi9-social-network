@@ -8,5 +8,4 @@ import com.levi9.socialnetwork.Model.Group;
 @Repository
 public interface GroupRepository extends JpaRepository<Group, Long> {
 
-	Group getById(Long id);
 }

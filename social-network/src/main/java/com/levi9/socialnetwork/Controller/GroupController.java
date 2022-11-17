@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Group;
 import com.levi9.socialnetwork.Service.GroupService;
+import com.levi9.socialnetwork.dto.GroupDTO;
 
 @RestController
 @RequestMapping("/api/groups")
@@ -35,7 +36,7 @@ public class GroupController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Group> getGroup(@PathVariable(value = "id") Long groupId){
+	public ResponseEntity<Group> getGroup(@PathVariable(value = "id") Long groupId) throws ResourceNotFoundException{
 		Group group = groupService.getGroupById(groupId);
 		if(group != null) {
 			return ResponseEntity.ok().body(group);
@@ -51,8 +52,8 @@ public class GroupController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Group> updateGroup(@PathVariable(value = "id") Long groupId, @RequestBody Group group) {
-		Group updatedGroup = groupService.updateGroup(groupId, group);
+	public ResponseEntity<Group> updateGroup(@PathVariable(value = "id") Long groupId, @RequestBody GroupDTO groupDTO) throws ResourceNotFoundException {
+		Group updatedGroup = groupService.updateGroup(groupId, groupDTO);
 		if(updatedGroup != null) {
 			return ResponseEntity.ok().body(updatedGroup);
 		} else {
