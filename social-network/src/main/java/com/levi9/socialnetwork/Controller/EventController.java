@@ -1,5 +1,6 @@
 package com.levi9.socialnetwork.Controller;
 
+import com.levi9.socialnetwork.Exception.ResourceExistsException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Event;
 import com.levi9.socialnetwork.Service.EventService;
@@ -24,38 +25,26 @@ public class EventController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Event> getEventById(@PathVariable(value = "id") Long eventId) {
-        try {
-            Event event = eventService.getEventById(eventId);
-            return new ResponseEntity<>(event, HttpStatus.OK);
-        } catch (ResourceNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<Event> getEventById(@PathVariable(value = "id") Long eventId) throws ResourceNotFoundException {
+        Event event = eventService.getEventById(eventId);
+        return new ResponseEntity<>(event, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Event> createEvent(@RequestBody EventDTO eventDTO) {
+    public ResponseEntity<Event> createEvent(@RequestBody EventDTO eventDTO) throws ResourceExistsException {
         Event event = eventService.createEvent(new Event(eventDTO));
         return new ResponseEntity<>(event, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Event> updateEvent(@PathVariable(value = "id") Long eventId, @RequestBody EventDTO eventDTO) {
-        try {
-            Event event = eventService.updateEvent(eventId, new Event(eventDTO));
-            return new ResponseEntity<>(event, HttpStatus.OK);
-        } catch (ResourceNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<Event> updateEvent(@PathVariable(value = "id") Long eventId, @RequestBody EventDTO eventDTO) throws ResourceNotFoundException {
+        Event event = eventService.updateEvent(eventId, new Event(eventDTO));
+        return new ResponseEntity<>(event, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> deleteEvent(@PathVariable(value = "id") Long eventId) {
-        try {
-            eventService.deleteEvent(eventId);
-            return new ResponseEntity<>(true, HttpStatus.OK);
-        } catch (ResourceNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<Boolean> deleteEvent(@PathVariable(value = "id") Long eventId) throws ResourceNotFoundException {
+        eventService.deleteEvent(eventId);
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }
