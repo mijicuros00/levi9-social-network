@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="User", schema="public")
+@Table(name="user", schema="public")
 @NoArgsConstructor
 public class User {
 	

@@ -7,7 +7,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <include file="dblogs/changelog/changes/1-create-user-table-changeset.sql"/>
-    <!-- <include file="dblogs/changelog/changes/2-create-group-table-changeset.sql"/>
+    <include file="dblogs/changelog/changes/2-create-group-table-changeset.sql"/>
     <include file="dblogs/changelog/changes/3-create-post-table-changeset.sql"/>
     <include file="dblogs/changelog/changes/4-create-item-table-changeset.sql"/>
     <include file="dblogs/changelog/changes/5-create-comment-table-changeset.sql"/>
@@ -18,10 +18,8 @@
     <include file="dblogs/changelog/changes/10-create-friend-table-changeset.sql"/>
     <include file="dblogs/changelog/changes/11-create-member-event-table-changeset.sql"/>
     <include file="dblogs/changelog/changes/12-create-address-table-changeset.sql"/>
-<<<<<<< HEAD
-    <include file="dblogs/changelog/changes/13-add-constraints-changeset.sql"/> -->
-=======
     <include file="dblogs/changelog/changes/13-add-constraints-changeset.sql"/>
+
     <!-- Inserting random test data into db -->
     <include file="dblogs/changelog/changes/14-insert-user-table-changeset.sql"/>
     <include file="dblogs/changelog/changes/15-insert-group-table-changeset.sql"/>
@@ -35,7 +33,5 @@
     <include file="dblogs/changelog/changes/23-insert-friend-table-changeset.sql"/>
     <include file="dblogs/changelog/changes/24-insert-member-event-table-changeset.sql"/>
     <include file="dblogs/changelog/changes/25-insert-request-table-changeset.sql"/>
-   
->>>>>>> 41ebf541fe46d290e55e5cb0ecfaa7e3ad79e845
 </databaseChangeLog>
 

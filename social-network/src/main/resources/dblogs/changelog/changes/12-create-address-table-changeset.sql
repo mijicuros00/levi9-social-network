@@ -1,4 +1,4 @@
-CREATE TABLE "Address" (
+CREATE TABLE "address" (
     "id" bigint PRIMARY KEY,
     "country" varchar,
     "city" varchar,
