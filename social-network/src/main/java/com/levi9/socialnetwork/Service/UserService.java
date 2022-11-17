@@ -42,6 +42,10 @@ public class UserService {
 				.orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
 		
 		user.setName(userDetails.getName());
+		user.setSurname(userDetails.getSurname());
+		user.setEmail(userDetails.getEmail());
+		user.setPassword(userDetails.getPassword());
+		
 	
 		final User updatedUser = UserRepository.save(user);
 		return ResponseEntity.ok(updatedUser);
