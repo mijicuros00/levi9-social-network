@@ -44,9 +44,11 @@ public class PostService {
     }
 
     public void deletePost(Long id) throws ResourceNotFoundException {
-        postRepository.findPostById(id)
+        Post post = postRepository.findPostById(id)
+                .map(deletedPost -> deletedPost)
                 .orElseThrow(() -> new ResourceNotFoundException("post with id " + " does not exists"));
 
-        postRepository.deleteById(id);
+        post.setDeleted(true);
+        postRepository.save(post);
     }
 }
