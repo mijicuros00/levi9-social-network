@@ -1,39 +1,39 @@
-ALTER TABLE "Group" ADD FOREIGN KEY ("id_admin") REFERENCES "User" ("id");
+ALTER TABLE "group" ADD FOREIGN KEY ("id_admin") REFERENCES "user" ("id");
 
-ALTER TABLE "Post" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id");
+ALTER TABLE "post" ADD FOREIGN KEY ("id_user") REFERENCES "user" ("id");
 
-ALTER TABLE "Post" ADD FOREIGN KEY ("id_group") REFERENCES "Group" ("id");
+ALTER TABLE "post" ADD FOREIGN KEY ("id_group") REFERENCES "group" ("id");
 
-ALTER TABLE "Item" ADD FOREIGN KEY ("id_post") REFERENCES "Post" ("id");
+ALTER TABLE "item" ADD FOREIGN KEY ("id_post") REFERENCES "post" ("id");
 
-ALTER TABLE "Comment" ADD FOREIGN KEY ("id_replied_to") REFERENCES "Comment" ("id");
+ALTER TABLE "comment" ADD FOREIGN KEY ("id_replied_to") REFERENCES "comment" ("id");
 
-ALTER TABLE "Comment" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id");
+ALTER TABLE "comment" ADD FOREIGN KEY ("id_user") REFERENCES "user" ("id");
 
-ALTER TABLE "Comment" ADD FOREIGN KEY ("id_post") REFERENCES "Post" ("id");
+ALTER TABLE "comment" ADD FOREIGN KEY ("id_post") REFERENCES "post" ("id");
 
-ALTER TABLE "Event" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id");
+ALTER TABLE "event" ADD FOREIGN KEY ("id_user") REFERENCES "user" ("id");
 
-ALTER TABLE "Event" ADD FOREIGN KEY ("id_location") REFERENCES "Address" ("id");
+ALTER TABLE "event" ADD FOREIGN KEY ("id_location") REFERENCES "address" ("id");
 
-ALTER TABLE "Event" ADD FOREIGN KEY ("id_group") REFERENCES "Group" ("id");
+ALTER TABLE "event" ADD FOREIGN KEY ("id_group") REFERENCES "group" ("id");
 
-ALTER TABLE "Member" ADD FOREIGN KEY ("id_user") REFERENCES "Mute_Group" ("id_user");
+ALTER TABLE "member" ADD FOREIGN KEY ("id_user") REFERENCES "mute_group" ("id_user");
 
-ALTER TABLE "Member" ADD FOREIGN KEY ("id_group") REFERENCES "Mute_Group" ("id_group");
+ALTER TABLE "member" ADD FOREIGN KEY ("id_group") REFERENCES "mute_group" ("id_group");
 
-ALTER TABLE "Request" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id");
+ALTER TABLE "request" ADD FOREIGN KEY ("id_user") REFERENCES "user" ("id");
 
-ALTER TABLE "Request" ADD FOREIGN KEY ("id_group") REFERENCES "Group" ("id");
+ALTER TABLE "request" ADD FOREIGN KEY ("id_group") REFERENCES "group" ("id");
 
-ALTER TABLE "Member" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id");
+ALTER TABLE "member" ADD FOREIGN KEY ("id_user") REFERENCES "user" ("id");
 
-ALTER TABLE "Member" ADD FOREIGN KEY ("id_group") REFERENCES "Group" ("id");
+ALTER TABLE "member" ADD FOREIGN KEY ("id_group") REFERENCES "group" ("id");
 
-ALTER TABLE "Friend" ADD FOREIGN KEY ("id_user") REFERENCES "User" ("id");
+ALTER TABLE "friend" ADD FOREIGN KEY ("id_user") REFERENCES "user" ("id");
 
-ALTER TABLE "Friend" ADD FOREIGN KEY ("id_friend") REFERENCES "User" ("id");
+ALTER TABLE "friend" ADD FOREIGN KEY ("id_friend") REFERENCES "user" ("id");
 
-ALTER TABLE "Member_Event" ADD FOREIGN KEY ("id_user") REFERENCES "Member" ("id_user");
+ALTER TABLE "member_event" ADD FOREIGN KEY ("id_user") REFERENCES "member" ("id_user");
 
-ALTER TABLE "Member_Event" ADD FOREIGN KEY ("id_event") REFERENCES "Event" ("id");
+ALTER TABLE "member_event" ADD FOREIGN KEY ("id_event") REFERENCES "event" ("id");

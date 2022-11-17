@@ -7,6 +7,8 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <include file="dblogs/changelog/changes/1-create-user-table-changeset.sql"/>
+    <include file="dblogs/changelog/changes/1.1-create-role-table-changeset.sql"/>
+    <include file="dblogs/changelog/changes/1.2-create-user_roles-table-changeset.sql"/>
     <include file="dblogs/changelog/changes/2-create-group-table-changeset.sql"/>
     <include file="dblogs/changelog/changes/3-create-post-table-changeset.sql"/>
     <include file="dblogs/changelog/changes/4-create-item-table-changeset.sql"/>
@@ -33,5 +35,6 @@
     <include file="dblogs/changelog/changes/23-insert-friend-table-changeset.sql"/>
     <include file="dblogs/changelog/changes/24-insert-member-event-table-changeset.sql"/>
     <include file="dblogs/changelog/changes/25-insert-request-table-changeset.sql"/>
+    <include file="dblogs/changelog/changes/26-insert-role-table-changeset.sql"/>
 </databaseChangeLog>
 
