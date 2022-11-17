@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 public class PostService {
 
@@ -26,6 +28,7 @@ public class PostService {
         return postRepository.save(PostMapper.mapDTOToEntity(postDTO)).getId();
     }
 
+    @Transactional
     public PostDTO updatePost(Long id, PostDTO postDTO) throws ResourceNotFoundException {
         Post post = postRepository.findPostById(id)
                 .map(searchedPost -> searchedPost)
@@ -43,6 +46,7 @@ public class PostService {
         return PostMapper.MapEntityToDTO(post);
     }
 
+    @Transactional
     public void deletePost(Long id) throws ResourceNotFoundException {
         postRepository.findPostById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("post with id " + " does not exists"));

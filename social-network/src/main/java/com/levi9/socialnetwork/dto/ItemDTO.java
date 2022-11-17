@@ -1,36 +1,25 @@
-package com.levi9.socialnetwork.Model;
+package com.levi9.socialnetwork.dto;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Column;
 
-@Entity
-@Table(name="item", schema="public")
-public class Item {
 
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+public class ItemDTO {
 
-    @Column(name = "link")
-    private String link;
-
-    @Column(name = "id_post")
-    private Long postId;
-
-    public Item(Long id, String link, Long postId) {
+    public ItemDTO(Long id, String link, Long postId) {
         this.id = id;
         this.link = link;
         this.postId = postId;
     }
 
-    public Item( String link, Long postId) {
+    public ItemDTO( String link, Long postId) {
         this.link = link;
         this.postId = postId;
     }
 
-    public Item() {
+    public ItemDTO() {
     }
 
     public Long getId() {
@@ -57,4 +46,7 @@ public class Item {
         this.postId = postId;
     }
 
+    private Long id;
+    private String link;
+    private Long postId;
 }
