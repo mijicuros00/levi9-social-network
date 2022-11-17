@@ -1,5 +1,5 @@
 CREATE TABLE "address" (
-    "id" bigint PRIMARY KEY,
+    "id" bigint generated always as identity primary key,
     "country" varchar,
     "city" varchar,
     "street" varchar,
