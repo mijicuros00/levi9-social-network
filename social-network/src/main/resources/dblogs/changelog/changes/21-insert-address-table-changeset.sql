@@ -1,0 +1,10 @@
+insert into "Address" (id, country, city, street, number) values (1, '', '', '', 50);
+insert into "Address" (id, country, city, street, number) values (2, '', '', '', 61);
+insert into "Address" (id, country, city, street, number) values (3, '', '', '', 18);
+insert into "Address" (id, country, city, street, number) values (4, '', '', '', 98);
+insert into "Address" (id, country, city, street, number) values (5, '', '', '', 3);
+insert into "Address" (id, country, city, street, number) values (6, '', '', '', 81);
+insert into "Address" (id, country, city, street, number) values (7, '', '', '', 8);
+insert into "Address" (id, country, city, street, number) values (8, '', '', '', 95);
+insert into "Address" (id, country, city, street, number) values (9, '', '', '', 94);
+insert into "Address" (id, country, city, street, number) values (10, '', '', '', 70);

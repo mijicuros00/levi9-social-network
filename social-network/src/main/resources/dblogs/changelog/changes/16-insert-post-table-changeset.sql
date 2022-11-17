@@ -1,0 +1,10 @@
+insert into "Post" (id, private, text, "createdDate", id_user, id_group, deleted) values (1, true, '', '2021-12-27', 3, 9, false);
+insert into "Post" (id, private, text, "createdDate", id_user, id_group, deleted) values (2, false, '', '2022-04-02', 3, 2, false);
+insert into "Post" (id, private, text, "createdDate", id_user, id_group, deleted) values (3, false, '', '2021-12-14', 5, 1, false);
+insert into "Post" (id, private, text, "createdDate", id_user, id_group, deleted) values (4, false, '', '2022-05-16', 7, 9, false);
+insert into "Post" (id, private, text, "createdDate", id_user, id_group, deleted) values (5, false, '', '2021-11-17', 1, 2, false);
+insert into "Post" (id, private, text, "createdDate", id_user, id_group, deleted) values (6, false, '', '2022-03-23', 7, 10, false);
+insert into "Post" (id, private, text, "createdDate", id_user, id_group, deleted) values (7, false, '', '2022-06-30', 7, 5, false);
+insert into "Post" (id, private, text, "createdDate", id_user, id_group, deleted) values (8, false, '', '2022-01-20', 10, 3, false);
+insert into "Post" (id, private, text, "createdDate", id_user, id_group, deleted) values (9, true, '', '2022-01-04', 10, 4, false);
+insert into "Post" (id, private, text, "createdDate", id_user, id_group, deleted) values (10, false, '', '2022-11-01', 3, 7, false);

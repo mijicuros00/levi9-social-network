@@ -1,0 +1,10 @@
+insert into "Comment" (id, text, "createdDate", deleted, id_user, id_replied_to, id_post) values (1, '', '2022-08-22', false, 1, null, 10);
+insert into "Comment" (id, text, "createdDate", deleted, id_user, id_replied_to, id_post) values (2, '', '2021-12-10', true, 6, null, 5);
+insert into "Comment" (id, text, "createdDate", deleted, id_user, id_replied_to, id_post) values (3, '', '2022-04-05', true, 8, null, 6);
+insert into "Comment" (id, text, "createdDate", deleted, id_user, id_replied_to, id_post) values (4, '', '2022-03-29', false, 1, 1, 5);
+insert into "Comment" (id, text, "createdDate", deleted, id_user, id_replied_to, id_post) values (5, '', '2022-03-07', true, 2, 2, 6);
+insert into "Comment" (id, text, "createdDate", deleted, id_user, id_replied_to, id_post) values (6, '', '2022-03-17', false, 7, 2, 1);
+insert into "Comment" (id, text, "createdDate", deleted, id_user, id_replied_to, id_post) values (7, '', '2021-12-15', true, 2, 4, 6);
+insert into "Comment" (id, text, "createdDate", deleted, id_user, id_replied_to, id_post) values (8, '', '2022-05-24', true, 7, 4, 8);
+insert into "Comment" (id, text, "createdDate", deleted, id_user, id_replied_to, id_post) values (9, '', '2022-07-16', true, 4, 4, 3);
+insert into "Comment" (id, text, "createdDate", deleted, id_user, id_replied_to, id_post) values (10, '', '2022-01-16', false, 3, 9, 7);
