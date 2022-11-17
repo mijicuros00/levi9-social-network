@@ -1,0 +1,10 @@
+insert into "User" (id, name, surname, email, password) values (1, 'Tadeo', 'Cawthery', 'tcawthery0@behance.net', '2O8q85MTqjtG');
+insert into "User" (id, name, surname, email, password) values (2, 'Cara', 'Sabin', 'csabin1@amazon.de', 'svQUCJ4ZQFAq');
+insert into "User" (id, name, surname, email, password) values (3, 'Maisie', 'Peepall', 'mpeepall2@sitemeter.com', 'LzfttHhhk9');
+insert into "User" (id, name, surname, email, password) values (4, 'Ruggiero', 'Boij', 'rboij3@imgur.com', '1L9yqB');
+insert into "User" (id, name, surname, email, password) values (5, 'Caz', 'Gavrieli', 'cgavrieli4@woothemes.com', 'Jix1T8R7AqXu');
+insert into "User" (id, name, surname, email, password) values (6, 'Correy', 'Klimentyonok', 'cklimentyonok5@businessinsider.com', 'hkDVWwl');
+insert into "User" (id, name, surname, email, password) values (7, 'Doloritas', 'Bonafacino', 'dbonafacino6@mapy.cz', 'tvF3HIVB6JtY');
+insert into "User" (id, name, surname, email, password) values (8, 'Lu', 'Uren', 'luren7@nhs.uk', 'nBBV66Sl9u');
+insert into "User" (id, name, surname, email, password) values (9, 'Talyah', 'Czaja', 'tczaja8@networksolutions.com', '9pDwZJmlP');
+insert into "User" (id, name, surname, email, password) values (10, 'Dalston', 'MacCartan', 'dmaccartan9@so-net.ne.jp', 'YmwO27');
