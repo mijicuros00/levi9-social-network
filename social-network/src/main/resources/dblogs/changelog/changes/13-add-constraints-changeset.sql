@@ -37,3 +37,9 @@ ALTER TABLE "friend" ADD FOREIGN KEY ("id_friend") REFERENCES "user" ("id");
 ALTER TABLE "member_event" ADD FOREIGN KEY ("id_user") REFERENCES "member" ("id_user");
 
 ALTER TABLE "member_event" ADD FOREIGN KEY ("id_event") REFERENCES "event" ("id");
+
+ALTER TABLE "user_roles" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
+
+-- ALTER TABLE "user_roles" ADD FOREIGN KEY ("role_id") REFERENCES "role" ("id");
+
+-- ALTER TABLE "user_roles" ADD FOREIGN KEY ("user_id") REFERENCES "user" ("id");
