@@ -32,7 +32,8 @@ import lombok.Setter;
 @Entity
 @Table(name = "user", schema = "public")
 @NoArgsConstructor
-
+@Getter
+@Setter
 public class User implements Serializable, UserDetails {
 
 	@Id
@@ -57,13 +58,17 @@ public class User implements Serializable, UserDetails {
 
 	@Column(name = "last_password_reset_date")
 	private Timestamp lastPasswordResetDate;
-
+	
 //	@Column(name = "enabled")
 //	private String enabled;
 
 	@ManyToMany(cascade= CascadeType.ALL, fetch= FetchType.EAGER)
 	@JoinTable(joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
 	private Set<Role> roles;
+	
+	@ManyToMany(cascade= CascadeType.PERSIST, fetch= FetchType.EAGER)
+	@JoinTable(joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "id_friend", referencedColumnName = "id"))
+	private Set<User> friends;
 
 //    @ManyToMany(mappedBy = "userRequests", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 //    private Collection<Group> groupRequests = new ArrayList<>();

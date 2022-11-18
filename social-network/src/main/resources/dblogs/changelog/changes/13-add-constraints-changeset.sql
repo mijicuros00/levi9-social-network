@@ -30,9 +30,9 @@ ALTER TABLE "member" ADD FOREIGN KEY ("id_user") REFERENCES "user" ("id");
 
 ALTER TABLE "member" ADD FOREIGN KEY ("id_group") REFERENCES "group" ("id");
 
-ALTER TABLE "friend" ADD FOREIGN KEY ("id_user") REFERENCES "user" ("id");
+ALTER TABLE "user_friends" ADD FOREIGN KEY ("id_user") REFERENCES "user" ("id");
 
-ALTER TABLE "friend" ADD FOREIGN KEY ("id_friend") REFERENCES "user" ("id");
+ALTER TABLE "user_friends" ADD FOREIGN KEY ("id_friend") REFERENCES "user" ("id");
 
 ALTER TABLE "member_event" ADD FOREIGN KEY ("id_user") REFERENCES "member" ("id_user");
 
