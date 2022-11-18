@@ -1,8 +1,8 @@
 package com.levi9.socialnetwork.Controller;
 
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
-import com.levi9.socialnetwork.Model.Post;
 import com.levi9.socialnetwork.Service.PostService;
+import com.levi9.socialnetwork.Service.impl.PostServiceImpl;
 import com.levi9.socialnetwork.dto.PostDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
