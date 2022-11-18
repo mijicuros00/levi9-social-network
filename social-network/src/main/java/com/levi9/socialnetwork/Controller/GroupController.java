@@ -46,8 +46,8 @@ public class GroupController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Group> createGroup(@RequestBody Group group) {
-		groupService.createGroup(group);
+	public ResponseEntity<Group> createGroup(@RequestBody GroupDTO groupDTO) {
+		groupService.createGroup(groupDTO);
 		return ResponseEntity.status(200).build();
 	}
 	

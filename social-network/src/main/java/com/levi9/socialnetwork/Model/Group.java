@@ -15,13 +15,17 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import lombok.Getter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name="group", schema="public")
 @NoArgsConstructor
+@Getter
+@Setter
 public class Group {
 
 	@Id
@@ -43,45 +47,12 @@ public class Group {
     @JsonIgnore
     private Collection<User> userRequests = new ArrayList<>();
 
-	public Group(Long id, boolean isPrivate, Long idAdmin) {
+	public Group(boolean isPrivate, Long idAdmin) {
 		super();
-		this.id = id;
 		this.isPrivate = isPrivate;
 		this.idAdmin = idAdmin;
 	}
-	
-	public Long getId() {
-		return id;
-	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public boolean isPrivate() {
-		return isPrivate;
-	}
-
-	public void setPrivate(boolean isPrivate) {
-		this.isPrivate = isPrivate;
-	}
-
-	public Long getIdAdmin() {
-		return idAdmin;
-	}
-
-	public void setIdAdmin(Long idAdmin) {
-		this.idAdmin = idAdmin;
-	}
-
-	public Collection<User> getUserRequests() {
-		return userRequests;
-	}
-
-	public void setUserRequests(Collection<User> userRequests) {
-		this.userRequests = userRequests;
-	}
-	
 	
 	
 }

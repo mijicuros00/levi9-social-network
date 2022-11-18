@@ -1,7 +1,10 @@
 package com.levi9.socialnetwork.Model;
 
 import com.levi9.socialnetwork.dto.MuteGroupDTO;
+
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,6 +13,8 @@ import java.time.LocalDateTime;
 @Table(name = "mute_group", schema = "public")
 @NoArgsConstructor
 @IdClass(MuteGroupId.class)
+@Getter
+@Setter
 public class MuteGroup {
     @Id
     @Column(name = "id_user")
@@ -39,49 +44,5 @@ public class MuteGroup {
         this.endOfMute = muteGroupDTO.getEndOfMute();
     }
 
-    public MuteGroupId getMuteGroupId() {
-        return new MuteGroupId(userId, groupId);
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Long getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
-    }
-
-    public Boolean getPermanent() {
-        return isPermanent;
-    }
-
-    public void setPermanent(Boolean permanent) {
-        isPermanent = permanent;
-    }
-
-    public LocalDateTime getEndOfMute() {
-        return endOfMute;
-    }
-
-    public void setEndOfMute(LocalDateTime endOfMute) {
-        this.endOfMute = endOfMute;
-    }
-
-    @Override
-    public String toString() {
-        return "MuteGroup{" +
-                "userId=" + userId +
-                ", groupId=" + groupId +
-                ", isPermanent=" + isPermanent +
-                ", endOfMute=" + endOfMute +
-                '}';
-    }
+   
 }
