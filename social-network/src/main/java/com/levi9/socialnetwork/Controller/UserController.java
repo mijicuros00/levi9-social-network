@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.levi9.socialnetwork.Exception.ResourceDuplicateException;
 import com.levi9.socialnetwork.Exception.ResourceExistsException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.User;
@@ -60,11 +61,11 @@ public class UserController {
 	}
 	
 	@PostMapping("/create-request")
-	public ResponseEntity<User> createGroupRequest(@RequestBody RequestDTO requestDTO) throws ResourceNotFoundException {
+	public ResponseEntity<User> createGroupRequest(@RequestBody RequestDTO requestDTO) throws ResourceNotFoundException, ResourceDuplicateException {
 		User user;
 		try {
 			user = userService.createGroupRequest(requestDTO);
-		} catch (ResourceNotFoundException | SQLException e) {
+		} catch (ResourceNotFoundException | ResourceDuplicateException e) {
 			return ResponseEntity.badRequest().build();
 		}
 		return ResponseEntity.ok().body(user);
