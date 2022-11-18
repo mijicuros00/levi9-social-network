@@ -26,7 +26,8 @@ public class GroupServiceImpl implements GroupService {
 		return groupRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Group is not found for this id ::" + id));
 	}
 
-	public Group createGroup(Group group) {
+	public Group createGroup(GroupDTO groupDTO) {
+		Group group = new Group(groupDTO.isPrivate(), groupDTO.getIdAdmin());
 		return groupRepository.save(group);
 	}
 	

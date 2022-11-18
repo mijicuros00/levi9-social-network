@@ -43,9 +43,8 @@ public class Group {
     @JsonIgnore
     private Collection<User> userRequests = new ArrayList<>();
 
-	public Group(Long id, boolean isPrivate, Long idAdmin) {
+	public Group(boolean isPrivate, Long idAdmin) {
 		super();
-		this.id = id;
 		this.isPrivate = isPrivate;
 		this.idAdmin = idAdmin;
 	}

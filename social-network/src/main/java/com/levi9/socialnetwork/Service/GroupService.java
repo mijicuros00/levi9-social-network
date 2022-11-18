@@ -14,7 +14,7 @@ public interface GroupService {
 	
 	public Group getGroupById(Long id) throws ResourceNotFoundException;
 
-	public Group createGroup(Group group);
+	public Group createGroup(GroupDTO groupDTO);
 	
 	public Group updateGroup(Long groupId, @RequestBody GroupDTO groupDTO) throws ResourceNotFoundException;
 	
