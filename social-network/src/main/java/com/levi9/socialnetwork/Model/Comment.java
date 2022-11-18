@@ -11,11 +11,15 @@ import javax.persistence.Table;
 
 import com.levi9.socialnetwork.dto.CommentDTO;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name="comment", schema="public")
 @NoArgsConstructor
+@Getter
+@Setter
 public class Comment {
 
 	@Id
@@ -63,60 +67,6 @@ public class Comment {
 		this.idPost = commentDTO.getIdPost();
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-	}
-
-	public LocalDateTime getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(LocalDateTime createdDate) {
-		this.createdDate = createdDate;
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
-
-	public Long getIdUser() {
-		return idUser;
-	}
-
-	public void setIdUser(Long idUser) {
-		this.idUser = idUser;
-	}
-
-	public Long getIdRepliedTo() {
-		return idRepliedTo;
-	}
-
-	public void setIdRepliedTo(Long idRepliedTo) {
-		this.idRepliedTo = idRepliedTo;
-	}
-
-	public Long getIdPost() {
-		return idPost;
-	}
-
-	public void setIdPost(Long idPost) {
-		this.idPost = idPost;
-	}
+	
 	
 }

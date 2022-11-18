@@ -22,11 +22,17 @@ import javax.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Getter;
+
+
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "user", schema = "public")
 @NoArgsConstructor
+
 public class User implements Serializable, UserDetails {
 
 	@Id

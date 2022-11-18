@@ -45,7 +45,7 @@ public class MuteGroupService {
         MuteGroup muteGroup = muteGroupRepository.findById(muteGroupId)
                 .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND_MESSAGE + muteGroupId));
 
-        muteGroup.setPermanent(muteGroupDetails.getPermanent());
+        muteGroup.setIsPermanent(muteGroupDetails.getIsPermanent());
         muteGroup.setEndOfMute(muteGroupDetails.getEndOfMute());
 
         return muteGroupRepository.save(muteGroup);
