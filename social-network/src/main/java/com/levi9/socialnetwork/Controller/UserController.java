@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.levi9.socialnetwork.Exception.ResourceDuplicateException;
@@ -42,6 +43,18 @@ public class UserController {
 			throws ResourceNotFoundException {
 		return userService.getUserById(userId);
 	}
+	
+	
+	@PostMapping("/{userId}/friend/{friendId}")
+	public int addFriend(
+			@PathVariable(value = "userId") Long userId,
+			@PathVariable(value = "friendId") Long friendId)
+	{
+		return userService.addFriend(userId,friendId);
+	}
+	
+
+	
 
 	@PostMapping()
 	public User createUser(@RequestBody User user) {
