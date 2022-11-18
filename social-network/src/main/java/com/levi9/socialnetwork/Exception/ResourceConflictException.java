@@ -1,9 +1,8 @@
 package com.levi9.socialnetwork.Exception;
 
-// Custom izuzetak
 public class ResourceConflictException extends RuntimeException {
-	private static final long serialVersionUID = 1791564636123821405L;
-
+	
+	private static final long serialVersionUID = 1L;
 	private Long resourceId;
 
 	public ResourceConflictException(Long resourceId, String message) {
@@ -18,5 +17,5 @@ public class ResourceConflictException extends RuntimeException {
 	public void setResourceId(Long resourceId) {
 		this.resourceId = resourceId;
 	}
-
+	
 }
