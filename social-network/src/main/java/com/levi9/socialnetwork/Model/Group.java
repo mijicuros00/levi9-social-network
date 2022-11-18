@@ -1,11 +1,21 @@
 package com.levi9.socialnetwork.Model;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.NoArgsConstructor;
 
@@ -24,6 +34,14 @@ public class Group {
 	
 	@Column(name = "id_admin")
 	private Long idAdmin;
+	
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "request",
+            joinColumns = @JoinColumn(name = "id_group"),
+            inverseJoinColumns = @JoinColumn(name = "id_user")
+    )
+    @JsonIgnore
+    private Collection<User> userRequests = new ArrayList<>();
 
 	public Group(Long id, boolean isPrivate, Long idAdmin) {
 		super();
@@ -55,6 +73,15 @@ public class Group {
 	public void setIdAdmin(Long idAdmin) {
 		this.idAdmin = idAdmin;
 	}
+
+	public Collection<User> getUserRequests() {
+		return userRequests;
+	}
+
+	public void setUserRequests(Collection<User> userRequests) {
+		this.userRequests = userRequests;
+	}
+	
 	
 	
 }
