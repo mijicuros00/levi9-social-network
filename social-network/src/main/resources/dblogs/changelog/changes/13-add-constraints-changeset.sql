@@ -18,9 +18,9 @@ ALTER TABLE "event" ADD FOREIGN KEY ("id_location") REFERENCES "address" ("id");
 
 ALTER TABLE "event" ADD FOREIGN KEY ("id_group") REFERENCES "group" ("id");
 
-ALTER TABLE "member" ADD FOREIGN KEY ("id_user") REFERENCES "mute_group" ("id_user");
+ALTER TABLE "member" ADD FOREIGN KEY ("id_user") REFERENCES "user" ("id");
 
-ALTER TABLE "member" ADD FOREIGN KEY ("id_group") REFERENCES "mute_group" ("id_group");
+ALTER TABLE "member" ADD FOREIGN KEY ("id_group") REFERENCES "group" ("id");
 
 ALTER TABLE "request" ADD FOREIGN KEY ("id_user") REFERENCES "user" ("id");
 
