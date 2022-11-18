@@ -59,8 +59,8 @@ public class User implements Serializable, UserDetails {
 	@JoinTable(joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
 	private Set<Role> roles;
 
-    @ManyToMany(mappedBy = "userRequests", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Collection<Group> groupRequests = new ArrayList<>();
+//    @ManyToMany(mappedBy = "userRequests", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    private Collection<Group> groupRequests = new ArrayList<>();
     
 	public User(Long id, String name, String surname, String email, String password) {
 		super();
@@ -163,13 +163,13 @@ public class User implements Serializable, UserDetails {
 		return true;
 	}
 
-	public Collection<Group> getGroupRequests() {
-		return groupRequests;
-	}
-
-	public void setGroupRequests(Collection<Group> groupRequests) {
-		this.groupRequests = groupRequests;
-	}
+//	public Collection<Group> getGroupRequests() {
+//		return groupRequests;
+//	}
+//
+//	public void setGroupRequests(Collection<Group> groupRequests) {
+//		this.groupRequests = groupRequests;
+//	}
 
 
 }
