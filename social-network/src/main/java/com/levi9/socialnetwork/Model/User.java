@@ -2,6 +2,7 @@ package com.levi9.socialnetwork.Model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
@@ -22,8 +23,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import lombok.Getter;
+
+
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -63,6 +65,9 @@ public class User implements Serializable, UserDetails {
 	@JoinTable(joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
 	private Set<Role> roles;
 
+    @ManyToMany(mappedBy = "userRequests", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Collection<Group> groupRequests = new ArrayList<>();
+    
 	public User(Long id, String name, String surname, String email, String password) {
 		super();
 		this.id = id;
@@ -163,5 +168,14 @@ public class User implements Serializable, UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
+
+	public Collection<Group> getGroupRequests() {
+		return groupRequests;
+	}
+
+	public void setGroupRequests(Collection<Group> groupRequests) {
+		this.groupRequests = groupRequests;
+	}
+
 
 }
