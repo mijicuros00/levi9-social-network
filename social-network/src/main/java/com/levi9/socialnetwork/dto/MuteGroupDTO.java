@@ -25,7 +25,7 @@ public class MuteGroupDTO {
     public MuteGroupDTO(MuteGroup muteGroup) {
         this.userId = muteGroup.getUserId();
         this.groupId = muteGroup.getGroupId();
-        this.isPermanent = muteGroup.getPermanent();
+        this.isPermanent = muteGroup.getIsPermanent();
         this.endOfMute = muteGroup.getEndOfMute();
     }
 
