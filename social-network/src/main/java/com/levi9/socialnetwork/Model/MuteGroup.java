@@ -30,6 +30,13 @@ public class MuteGroup {
     @Column(name = "end_of_mute")
     private LocalDateTime endOfMute;
 
+    public MuteGroup(Long userId, Long groupId, Boolean isPermanent, LocalDateTime endOfMute) {
+        this.userId = userId;
+        this.groupId = groupId;
+        this.isPermanent = isPermanent;
+        this.endOfMute = endOfMute;
+    }
+
     public MuteGroup(MuteGroupDTO muteGroupDTO) {
         this.userId = muteGroupDTO.getUserId();
         this.groupId = muteGroupDTO.getGroupId();

@@ -67,6 +67,8 @@ public class WebSecurityConfig {
 				// .antMatchers("/admin").hasAuthority("ROLE_ADMIN")
 				.authorizeRequests().antMatchers("/api/auth/**").permitAll()
 				.antMatchers("/api/users/**").permitAll()
+
+				.antMatchers("/api/mute_groups/**").permitAll()
 				.antMatchers("/api/groups/**").permitAll()
 				.antMatchers("/api/comments/**").permitAll()
 				

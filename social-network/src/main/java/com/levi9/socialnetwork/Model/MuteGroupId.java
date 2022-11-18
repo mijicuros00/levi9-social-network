@@ -6,6 +6,9 @@ public class MuteGroupId implements Serializable {
     private Long userId;
     private Long groupId;
 
+    public MuteGroupId() {
+    }
+
     public MuteGroupId(Long userId, Long groupId) {
         this.userId = userId;
         this.groupId = groupId;
