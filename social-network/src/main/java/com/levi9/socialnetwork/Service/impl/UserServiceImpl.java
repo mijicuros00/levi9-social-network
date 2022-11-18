@@ -1,7 +1,10 @@
 package com.levi9.socialnetwork.Service.impl;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,9 +14,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
+import com.levi9.socialnetwork.Model.Group;
 import com.levi9.socialnetwork.Model.User;
+import com.levi9.socialnetwork.Repository.GroupRepository;
 import com.levi9.socialnetwork.Repository.UserRepository;
+import com.levi9.socialnetwork.Service.GroupService;
 import com.levi9.socialnetwork.Service.UserService;
+import com.levi9.socialnetwork.dto.RequestDTO;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -21,6 +28,12 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private GroupRepository groupRepository;
+	
+	@Autowired
+	private GroupService groupService;
 	
 	public java.util.List<User> getAllUsers(){
 		return this.userRepository.findAll();
@@ -47,7 +60,6 @@ public class UserServiceImpl implements UserService {
 		user.setSurname(userDetails.getSurname());
 		user.setEmail(userDetails.getEmail());
 		user.setPassword(userDetails.getPassword());
-		
 	
 		final User updatedUser = userRepository.save(user);
 		return ResponseEntity.ok(updatedUser);
@@ -62,6 +74,25 @@ public class UserServiceImpl implements UserService {
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;
+	}
+	
+	@Transactional
+	public User createGroupRequest(RequestDTO requestDTO) throws ResourceNotFoundException, SQLException {
+		
+		Group group = groupService.getGroupById(requestDTO.getIdGroup());
+		User user = userRepository.findById(requestDTO.getIdUser()).orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + requestDTO.getIdUser()));
+		
+		try {
+			user.getGroupRequests().add(group);	
+			group.getUserRequests().add(user);
+			userRepository.save(user);
+			groupRepository.save(group);
+		} catch (Exception ex) {
+			throw new SQLException("Request already exists");
+		}
+		
+		
+		return user;
 	}
 
 	@Override
