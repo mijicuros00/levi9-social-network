@@ -17,6 +17,7 @@ import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Address;
 import com.levi9.socialnetwork.Service.AddressService;
 import com.levi9.socialnetwork.Service.UserService;
+import com.levi9.socialnetwork.Service.impl.AddressServiceImpl;
 
 
 @RestController
