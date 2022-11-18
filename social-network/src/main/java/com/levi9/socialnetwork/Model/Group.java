@@ -2,6 +2,8 @@ package com.levi9.socialnetwork.Model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -46,6 +48,13 @@ public class Group {
     )
     @JsonIgnore
     private Collection<User> userRequests = new ArrayList<>();
+
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(name = "member",
+			joinColumns = @JoinColumn(name = "id_group"),
+			inverseJoinColumns = @JoinColumn(name = "id_user")
+	)
+	private Set<User> members = new HashSet<>();
 
 	public Group(boolean isPrivate, Long idAdmin) {
 		super();

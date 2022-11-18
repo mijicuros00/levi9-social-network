@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -82,6 +83,17 @@ public class UserController {
 			return ResponseEntity.badRequest().build();
 		}
 		return ResponseEntity.ok().body(user);
+	}
+
+	@PostMapping("/accept-member/groups/{groupId}")
+	public ResponseEntity<Boolean> acceptMember(@PathVariable Long groupId) throws ResourceNotFoundException {
+		// User is hardcoded for now, it will be a user that sent the request when RBAC is implemented
+		try{
+			boolean success = userService.acceptMember(10L, groupId);
+			return new ResponseEntity<>(success, HttpStatus.OK);
+		}catch (ResourceNotFoundException e){
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 	
 }

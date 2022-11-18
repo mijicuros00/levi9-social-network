@@ -28,4 +28,7 @@ public interface UserService  extends UserDetailsService {
 	public User createGroupRequest(RequestDTO requestDTO) throws ResourceNotFoundException, ResourceDuplicateException;
 
 	public Map<String, Boolean> deleteUser(Long userId) throws ResourceNotFoundException;
+
+	public boolean acceptMember(Long userId, Long groupId) throws ResourceNotFoundException;
+
 }
