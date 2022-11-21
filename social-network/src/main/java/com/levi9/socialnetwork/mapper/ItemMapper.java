@@ -6,11 +6,11 @@ import com.levi9.socialnetwork.dto.ItemDTO;
 public class ItemMapper {
 
     public static ItemDTO mapEntityToDTO(Item item){
-        return new ItemDTO(item.getId(), item.getLink(), item.getPostId());
+        return new ItemDTO(item.getId(), item.getLink());
     }
 
     public static Item mapDTOToEntity(ItemDTO item){
-        return new Item(item.getId(), item.getLink(), item.getPostId());
+        return new Item(item.getId(), item.getLink());
 
     }
 }

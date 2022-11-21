@@ -5,18 +5,16 @@ import lombok.Data;
 
 import javax.persistence.Column;
 
-
+@Data
 public class ItemDTO {
 
-    public ItemDTO(Long id, String link, Long postId) {
+    public ItemDTO(Long id, String link) {
         this.id = id;
         this.link = link;
-        this.postId = postId;
     }
 
-    public ItemDTO( String link, Long postId) {
+    public ItemDTO( String link) {
         this.link = link;
-        this.postId = postId;
     }
 
     public ItemDTO() {
@@ -38,15 +36,7 @@ public class ItemDTO {
         this.link = link;
     }
 
-    public Long getPostId() {
-        return postId;
-    }
-
-    public void setPostId(Long postId) {
-        this.postId = postId;
-    }
 
     private Long id;
     private String link;
-    private Long postId;
 }
