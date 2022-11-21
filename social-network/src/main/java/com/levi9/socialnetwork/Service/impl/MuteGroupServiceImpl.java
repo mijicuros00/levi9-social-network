@@ -43,7 +43,7 @@ public class MuteGroupServiceImpl implements MuteGroupService {
         return muteGroupRepository.save(muteGroup);
     }
 
-    public MuteGroup updateMuteGroup(Long userId, Long groupId, MuteDuration muteDuration) throws ResourceNotFoundException {
+    public MuteGroup muteGroup(Long userId, Long groupId, MuteDuration muteDuration) throws ResourceNotFoundException {
         MuteGroupId muteGroupId = new MuteGroupId(userId, groupId);
 
         MuteGroup muteGroup = muteGroupRepository.findById(muteGroupId)
@@ -53,6 +53,19 @@ public class MuteGroupServiceImpl implements MuteGroupService {
         LocalDateTime endOfMute = LocalDateTime.now().plus(muteDuration.getDuration());
         muteGroup.setIsPermanent(isPermanent);
         muteGroup.setEndOfMute(endOfMute);
+        return muteGroupRepository.save(muteGroup);
+    }
+
+    public MuteGroup unmuteGroup(Long userId, Long groupId) throws ResourceNotFoundException {
+        MuteGroupId muteGroupId = new MuteGroupId(userId, groupId);
+
+        MuteGroup muteGroup = muteGroupRepository.findById(muteGroupId)
+                .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND_MESSAGE + muteGroupId));
+
+        muteGroup.setIsPermanent(false);
+        if (muteGroup.getEndOfMute().isAfter(LocalDateTime.now())) {
+            muteGroup.setEndOfMute(LocalDateTime.now());
+        }
         return muteGroupRepository.save(muteGroup);
     }
 
