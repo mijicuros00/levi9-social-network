@@ -95,17 +95,6 @@ public class UserServiceImpl implements UserService {
 		return response;
 	}
 
-	@Override
-	public boolean acceptMember(Long userId, Long groupId) throws ResourceNotFoundException {
-
-		Group group = groupService.getGroupById(groupId);
-		group.getUserRequests().removeIf(user -> user.getId().equals(userId));
-		User user = userRepository.findById(userId).map(u -> u).orElseThrow();
-		group.getMembers().add(user);
-		groupRepository.save(group);
-
-		return true;
-	}
 
 	@Transactional
 	public User createGroupRequest(RequestDTO requestDTO) throws ResourceNotFoundException, ResourceDuplicateException {
