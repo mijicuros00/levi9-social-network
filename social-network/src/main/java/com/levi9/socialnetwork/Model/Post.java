@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="post", schema="public")
@@ -33,6 +35,12 @@ public class Post {
 
     @Column(name = "id_group")
     private Long groupId;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "hidden_from",
+            joinColumns = @JoinColumn(name = "id_post"),
+            inverseJoinColumns = @JoinColumn(name = "id_user"))
+    private Set<User> hiddenFrom = new HashSet<>();
 
     public Post(Long id, boolean isPrivate, String text, LocalDateTime createdDate, boolean deleted, Long userId, Long groupId) {
         this.id = id;
