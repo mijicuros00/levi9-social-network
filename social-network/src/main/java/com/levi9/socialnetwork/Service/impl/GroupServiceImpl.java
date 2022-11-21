@@ -1,9 +1,13 @@
 package com.levi9.socialnetwork.Service.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import com.levi9.socialnetwork.Exception.ResourceExistsException;
+import com.levi9.socialnetwork.Model.MuteGroup;
 import com.levi9.socialnetwork.Model.User;
 import com.levi9.socialnetwork.Repository.UserRepository;
+import com.levi9.socialnetwork.Service.MuteGroupService;
 import com.levi9.socialnetwork.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +27,9 @@ public class GroupServiceImpl implements GroupService {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private MuteGroupService muteGroupService;
 	
 	public List<Group> getAllGroups() {
 		return groupRepository.findAll();
@@ -53,7 +60,7 @@ public class GroupServiceImpl implements GroupService {
 	}
 
 	@Override
-	public boolean acceptMember(Long userId, Long groupId) throws ResourceNotFoundException {
+	public boolean acceptMember(Long userId, Long groupId) throws ResourceNotFoundException, ResourceExistsException {
 
 		Group group = getGroupById(groupId);
 		boolean removed = group.getUserRequests().removeIf(user -> user.getId().equals(userId));
@@ -64,7 +71,21 @@ public class GroupServiceImpl implements GroupService {
 		group.getMembers().add(user);
 		groupRepository.save(group);
 
+		MuteGroup muteGroup = new MuteGroup(userId, groupId, false, LocalDateTime.now());
+		muteGroupService.createMuteGroup(muteGroup);
+
 		return true;
 	}
-	
+
+	@Override
+	public boolean removeMember(Long userId, Long groupId) throws ResourceNotFoundException {
+		Group group = getGroupById(groupId);
+		boolean removed = group.getMembers().removeIf(user -> user.getId().equals(userId));
+		if(!removed){
+			throw new ResourceNotFoundException("User with id " + userId + " did not request joining this group!");
+		}
+		groupRepository.save(group);
+		return true;
+	}
+
 }
