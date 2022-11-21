@@ -21,7 +21,7 @@ public class PostServiceImpl implements PostService {
     public PostDTO getPostById(Long id) throws ResourceNotFoundException {
             return postRepository.findPostById(id)
                     .map(PostMapper::MapEntityToDTO)
-                    .orElseThrow(() -> new ResourceNotFoundException("Post with id " + id + "was not foung"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Post with id " + id + "was not found"));
     }
 
     public Long createPost(CreatePostDTO postDTO){

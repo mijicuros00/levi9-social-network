@@ -1,14 +1,15 @@
 package com.levi9.socialnetwork.dto;
 
+import com.levi9.socialnetwork.Model.Item;
+import com.levi9.socialnetwork.Model.User;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
-
+@Data
 public class PostDTO {
 
     private Long id;
@@ -19,7 +20,11 @@ public class PostDTO {
     private Long userId;
     private Long groupId;
 
-    public PostDTO(Long id, boolean isPrivate, String text, LocalDateTime createdDate, boolean deleted, Long userId, Long groupId) {
+    private Set<User> hiddenFrom = new HashSet<>();
+
+    private Set<Item> items = new HashSet<>();
+
+    public PostDTO(Long id, boolean isPrivate, String text, LocalDateTime createdDate, boolean deleted, Long userId, Long groupId, Set<User> hiddenFrom, Set<Item> items) {
         this.id = id;
         this.isPrivate = isPrivate;
         this.text = text;
@@ -32,7 +37,7 @@ public class PostDTO {
     public PostDTO() {
     }
 
-    public PostDTO(boolean isPrivate, String text, LocalDateTime createdDate, boolean deleted, Long userId, Long groupId) {
+    public PostDTO(boolean isPrivate, String text, LocalDateTime createdDate, boolean deleted, Long userId, Long groupId, Set<User> hiddenFrom, Set<Item> item) {
         this.isPrivate = isPrivate;
         this.text = text;
         this.createdDate = createdDate;

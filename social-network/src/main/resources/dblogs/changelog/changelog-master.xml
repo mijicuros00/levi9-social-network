@@ -22,6 +22,7 @@
     <include file="dblogs/changelog/changes/12-create-address-table-changeset.sql"/>
     <include file="dblogs/changelog/changes/13-create-hidden-from-table-changeset.sql"/>
     <include file="dblogs/changelog/changes/14-add-constraints-changeset.sql"/>
+    <include file="dblogs/changelog/changes/29-create-post-item-table-changeset.sql"/>
 
     <!-- Inserting random test data into db -->
     <include file="dblogs/changelog/changes/15-insert-user-table-changeset.sql"/>
