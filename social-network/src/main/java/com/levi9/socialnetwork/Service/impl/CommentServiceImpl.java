@@ -29,6 +29,12 @@ public class CommentServiceImpl implements CommentService {
 	}
 	
 	
+	public List<Comment> getRepliesByComment(Long commentId) {
+		return commentRepository.getRepliesByComment(commentId);
+	}
+	
+	
+	
 	public Comment getCommentById(Long id) throws ResourceNotFoundException {
 		return commentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Comment not found for this id :: " + id));
 	}

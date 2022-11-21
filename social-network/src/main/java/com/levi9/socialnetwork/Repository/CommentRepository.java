@@ -14,5 +14,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long>{
 	@Query(value = "Select * from comment where id_post = :postId", nativeQuery = true)
 	List<Comment> getCommentsByPost(Long postId);
 	
+	@Query(value = "Select * from comment where id_replied_to = :commentId", nativeQuery = true)
+	List<Comment> getRepliesByComment(Long commentId);
+	
 
 }

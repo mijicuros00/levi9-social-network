@@ -51,6 +51,12 @@ public class CommentController {
 	public ResponseEntity<List<Comment>> getCommentsByPost(@RequestParam (value="postId") Long postId){
 		return new ResponseEntity<>(commentService.getCommentsByPost(postId), HttpStatus.OK);
 		}
+	
+	@GetMapping("/replies")
+	public ResponseEntity<List<Comment>> getRepliesByComment(@RequestParam (value="commentId") Long commentId){
+		return new ResponseEntity<>(commentService.getRepliesByComment(commentId), HttpStatus.OK);
+		}
+	
 	    
 	
 	@PostMapping
