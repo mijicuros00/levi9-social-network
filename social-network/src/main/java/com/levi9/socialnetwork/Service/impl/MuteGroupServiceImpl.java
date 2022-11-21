@@ -49,7 +49,7 @@ public class MuteGroupServiceImpl implements MuteGroupService {
         MuteGroup muteGroup = muteGroupRepository.findById(muteGroupId).orElse(null);
 
         if (muteGroup != null) {
-            muteGroup.setPermanent(isPermanent);
+            muteGroup.setIsPermanent(isPermanent);
             muteGroup.setEndOfMute(endOfMute);
             return muteGroupRepository.save(muteGroup);
         }
