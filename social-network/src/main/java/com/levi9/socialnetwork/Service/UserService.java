@@ -29,6 +29,5 @@ public interface UserService  extends UserDetailsService {
 
 	public Map<String, Boolean> deleteUser(Long userId) throws ResourceNotFoundException;
 
-	public boolean acceptMember(Long userId, Long groupId) throws ResourceNotFoundException;
 
 }
