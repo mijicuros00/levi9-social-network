@@ -1,6 +1,7 @@
 package com.levi9.socialnetwork.Controller;
 
-import java.sql.SQLException;
+
+import java.util.List;
 import java.util.Map;
 
 import com.levi9.socialnetwork.Model.MuteDuration;
@@ -29,10 +30,13 @@ import com.levi9.socialnetwork.dto.RequestDTO;
 
 
 
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
+
+	
 	@Autowired
 	private UserService userService;
 
@@ -61,7 +65,10 @@ public class UserController {
 		return userService.addFriend(userId,friendId);
 	}
 	
-
+	@GetMapping("/notify")
+	public ResponseEntity<List<User>> notifyUsersForGroupPosts(@RequestParam (value="groupId") Long groupId) throws Exception {
+		return new ResponseEntity<>(userService.notifyUsersForGroupPosts(groupId), HttpStatus.OK);
+	}
 	
 
 	@PostMapping()
