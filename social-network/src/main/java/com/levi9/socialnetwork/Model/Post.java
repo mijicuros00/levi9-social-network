@@ -64,5 +64,4 @@ public class Post {
         this.groupId = groupId;
     }
 
-   
 }
