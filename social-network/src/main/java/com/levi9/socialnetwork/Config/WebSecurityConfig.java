@@ -67,6 +67,7 @@ public class WebSecurityConfig {
 				// .antMatchers("/admin").hasAuthority("ROLE_ADMIN")
 				.authorizeRequests().antMatchers("/api/auth/**").permitAll()
 				.antMatchers("/api/users/**").permitAll()
+				.antMatchers("/api/events/**").permitAll()
 				
 				.anyRequest().authenticated().and()
 

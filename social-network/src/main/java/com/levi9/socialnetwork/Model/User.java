@@ -23,11 +23,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "user", schema = "public")
 @NoArgsConstructor
+@Getter
+@Setter
 public class User implements Serializable, UserDetails {
 
 	@Id
@@ -68,66 +72,11 @@ public class User implements Serializable, UserDetails {
 		this.email = email;
 		this.password = password;
 	}
-	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getSurname() {
-		return surname;
-	}
-
-	public void setSurname(String surname) {
-		this.surname = surname;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public void setUserame(String username) {
-		this.username = username;
-	}
-	public String getPassword() {
-		return password;
-	}
 
 	public void setPassword(String password) {
 		Timestamp now = new Timestamp(new Date().getTime());
 		this.setLastPasswordResetDate(now);
 		this.password = password;
-	}
-
-	public Timestamp getLastPasswordResetDate() {
-		return lastPasswordResetDate;
-	}
-
-	public void setLastPasswordResetDate(Timestamp lastPasswordResetDate) {
-		this.lastPasswordResetDate = lastPasswordResetDate;
-	}
-
-	public Set<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Set<Role> param) {
-		this.roles = param;
 	}
 
 	@Override

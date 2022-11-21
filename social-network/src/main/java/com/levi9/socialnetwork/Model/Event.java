@@ -1,14 +1,31 @@
 package com.levi9.socialnetwork.Model;
 
-import com.levi9.socialnetwork.dto.EventDTO;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
+import com.levi9.socialnetwork.dto.EventDTO;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "event", schema = "public")
 @NoArgsConstructor
+@Getter
+@Setter
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +47,16 @@ public class Event {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE,targetEntity = Member.class)
+    @JoinTable(name = "member_event",
+    joinColumns = 
+    @JoinColumn(name = "id_event", referencedColumnName = "id",nullable = false, updatable = false),
+    inverseJoinColumns ={
+    	    @JoinColumn(name="id_user", referencedColumnName="id_user"),
+    	    @JoinColumn(name="id_group", referencedColumnName="id_group")
+    	  })
+	private Set<Member> memberUsers;
+    
     public Event(EventDTO eventDTO) {
         this.id = eventDTO.getId();
         this.locationId = eventDTO.getLocationId();
@@ -37,6 +64,7 @@ public class Event {
         this.groupId = eventDTO.getGroupId();
         this.startDate = eventDTO.getStartDate();
         this.endDate = eventDTO.getEndDate();
+        this.memberUsers = eventDTO.getMemberUsers();
     }
 
     public Long getId() {

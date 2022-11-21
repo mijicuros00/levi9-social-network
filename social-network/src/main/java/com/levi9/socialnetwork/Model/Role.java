@@ -10,8 +10,13 @@ import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 @Table(name = "Role")
+@Getter
+@Setter
 public class Role implements Serializable, GrantedAuthority {
 
 	private static final long serialVersionUID = 1L;
@@ -24,22 +29,6 @@ public class Role implements Serializable, GrantedAuthority {
 	private Long id;
 	private String name;
 	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String param) {
-		this.name = param;
-	}
-
 	@Override
 	public String getAuthority() {
 		return name;
