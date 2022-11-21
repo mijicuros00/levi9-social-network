@@ -11,6 +11,6 @@ public interface MuteGroupService {
     public List<MuteGroup> getAllMuteGroups();
     public MuteGroup getMuteGroupByIds(Long userId, Long groupId) throws ResourceNotFoundException;
     public MuteGroup createMuteGroup(MuteGroup muteGroup) throws ResourceExistsException;
-    public MuteGroup updateMuteGroup(Long userId, Long groupId, MuteDuration muteDuration) throws ResourceExistsException;
+    public MuteGroup updateMuteGroup(Long userId, Long groupId, MuteDuration muteDuration) throws ResourceExistsException, ResourceNotFoundException;
     public void deleteMuteGroup(Long userId, Long groupId) throws ResourceNotFoundException;
 }

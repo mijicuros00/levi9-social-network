@@ -1,5 +1,7 @@
 package com.levi9.socialnetwork.Service.impl;
 
+import com.levi9.socialnetwork.Exception.BadRequestException;
+import com.levi9.socialnetwork.Exception.ResourceConflictException;
 import com.levi9.socialnetwork.Exception.ResourceExistsException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.MuteDuration;
@@ -41,21 +43,17 @@ public class MuteGroupServiceImpl implements MuteGroupService {
         return muteGroupRepository.save(muteGroup);
     }
 
-    public MuteGroup updateMuteGroup(Long userId, Long groupId, MuteDuration muteDuration) throws ResourceExistsException {
+    public MuteGroup updateMuteGroup(Long userId, Long groupId, MuteDuration muteDuration) throws ResourceNotFoundException {
         MuteGroupId muteGroupId = new MuteGroupId(userId, groupId);
+
+        MuteGroup muteGroup = muteGroupRepository.findById(muteGroupId)
+                .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND_MESSAGE + muteGroupId));
+
         Boolean isPermanent = muteDuration.isPermanent();
         LocalDateTime endOfMute = LocalDateTime.now().plus(muteDuration.getDuration());
-
-        MuteGroup muteGroup = muteGroupRepository.findById(muteGroupId).orElse(null);
-
-        if (muteGroup != null) {
-            muteGroup.setIsPermanent(isPermanent);
-            muteGroup.setEndOfMute(endOfMute);
-            return muteGroupRepository.save(muteGroup);
-        }
-
-        muteGroup = new MuteGroup(userId, groupId, isPermanent, endOfMute);
-        return createMuteGroup(muteGroup);
+        muteGroup.setIsPermanent(isPermanent);
+        muteGroup.setEndOfMute(endOfMute);
+        return muteGroupRepository.save(muteGroup);
     }
 
     public void deleteMuteGroup(Long userId, Long groupId) throws ResourceNotFoundException {
@@ -64,5 +62,13 @@ public class MuteGroupServiceImpl implements MuteGroupService {
                 .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND_MESSAGE + muteGroupId));
 
         muteGroupRepository.delete(muteGroup);
+    }
+
+    public MuteDuration getMuteDurationFromString(String muteDurationName) {
+        try {
+            return MuteDuration.valueOf(muteDurationName);
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("Invalid mute duration string.");
+        }
     }
 }
