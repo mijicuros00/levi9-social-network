@@ -1,27 +1,30 @@
 package com.levi9.socialnetwork.Service.impl;
 
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
+
 
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
+
+import com.levi9.socialnetwork.Controller.UserController;
 import com.levi9.socialnetwork.Exception.ResourceDuplicateException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Group;
 import com.levi9.socialnetwork.Model.User;
 import com.levi9.socialnetwork.Repository.GroupRepository;
 import com.levi9.socialnetwork.Repository.UserRepository;
+import com.levi9.socialnetwork.Service.EmailService;
 import com.levi9.socialnetwork.Service.GroupService;
 import com.levi9.socialnetwork.Service.UserService;
 import com.levi9.socialnetwork.dto.RequestDTO;
@@ -30,6 +33,10 @@ import com.levi9.socialnetwork.dto.RequestDTO;
 @Service
 public class UserServiceImpl implements UserService {
 
+	private Logger logger = org.slf4j.LoggerFactory.getLogger(UserController.class);
+	
+	@Autowired
+	private EmailService emailService;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -49,6 +56,14 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
 	 return ResponseEntity.ok().body(user);
 	}
+	
+	public List<User> getNotMutedUsers(Long groupId)
+	{
+		return this.userRepository.getNotMutedUsers(groupId);
+	}
+	
+	
+	
 	
 	public int addFriend( Long userId, Long friendId )
 	{
