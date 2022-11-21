@@ -31,7 +31,8 @@ public class PostController {
 
         return new ResponseEntity<>(postDTO, HttpStatus.OK);
     }
-
+    
+ 
     @PostMapping
     public ResponseEntity<Long> createPost(@RequestBody PostDTO postDTO){
 
