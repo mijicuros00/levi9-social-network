@@ -73,6 +73,8 @@ public class WebSecurityConfig {
 				.antMatchers("/api/comments/**").permitAll()
 				.antMatchers("/api/posts/**").permitAll()
 
+				.antMatchers("/api/events/**").permitAll()
+				
 				.anyRequest().authenticated().and()
 
 				.cors().and()

@@ -1,9 +1,16 @@
 package com.levi9.socialnetwork.dto;
 
-import com.levi9.socialnetwork.Model.Event;
-
 import java.time.LocalDateTime;
+import java.util.Set;
 
+import com.levi9.socialnetwork.Model.Event;
+import com.levi9.socialnetwork.Model.Member;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class EventDTO {
     private Long id;
     private Long locationId;
@@ -11,7 +18,8 @@ public class EventDTO {
     private Long groupId;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-
+    private Set<Member> memberUsers;
+    
     public EventDTO() {
     }
 
@@ -33,54 +41,7 @@ public class EventDTO {
         this.endDate = event.getEndDate();
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getLocationId() {
-        return locationId;
-    }
-
-    public void setLocationId(Long locationId) {
-        this.locationId = locationId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Long getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
-    }
-
-    public LocalDateTime getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDateTime startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDateTime getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDateTime endDate) {
-        this.endDate = endDate;
-    }
-
+   
     @Override
     public String toString() {
         return "EventDTO{" +
