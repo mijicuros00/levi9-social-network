@@ -1,10 +1,8 @@
 package com.levi9.socialnetwork.Service.impl;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -14,9 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import com.levi9.socialnetwork.Exception.ResourceDuplicateException;
+import com.levi9.socialnetwork.Exception.ResourceExistsException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Group;
 import com.levi9.socialnetwork.Model.User;
@@ -108,19 +105,16 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Transactional
-	public User createGroupRequest(RequestDTO requestDTO) throws ResourceNotFoundException, ResourceDuplicateException {
+	public User createGroupRequest(RequestDTO requestDTO) throws ResourceNotFoundException, ResourceExistsException {
 		
 		Group group = groupService.getGroupById(requestDTO.getIdGroup());
 		User user = userRepository.findById(requestDTO.getIdUser()).orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + requestDTO.getIdUser()));
 		
-		try {
-			//user.getGroupRequests().add(group);	
-			group.getUserRequests().add(user);
-			userRepository.save(user);
-			groupRepository.save(group);
-		} catch (Exception ex) {
-			throw new ResourceDuplicateException("Request already exists");
+		if(group.getUserRequests().contains(user)) {
+			throw new ResourceExistsException("Resource already exists.");
 		}
+		group.getUserRequests().add(user);
+		groupRepository.save(group);
 		
 		
 		return user;
