@@ -85,15 +85,5 @@ public class UserController {
 		return ResponseEntity.ok().body(user);
 	}
 
-	@PostMapping("/accept-member/groups/{groupId}")
-	public ResponseEntity<Boolean> acceptMember(@PathVariable Long groupId) throws ResourceNotFoundException {
-		// User is hardcoded for now, it will be a user that sent the request when RBAC is implemented
-		try{
-			boolean success = userService.acceptMember(10L, groupId);
-			return new ResponseEntity<>(success, HttpStatus.OK);
-		}catch (ResourceNotFoundException e){
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-	}
 	
 }

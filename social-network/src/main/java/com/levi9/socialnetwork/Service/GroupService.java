@@ -19,5 +19,7 @@ public interface GroupService {
 	public Group updateGroup(Long groupId, @RequestBody GroupDTO groupDTO) throws ResourceNotFoundException;
 	
 	public Group deleteGroup(Long groupId) throws ResourceNotFoundException;
+
+	public boolean acceptMember(Long userId, Long groupId) throws ResourceNotFoundException;
 	
 }

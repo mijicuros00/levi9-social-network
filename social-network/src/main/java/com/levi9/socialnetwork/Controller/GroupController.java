@@ -2,7 +2,9 @@ package com.levi9.socialnetwork.Controller;
 
 import java.util.List;
 
+import com.levi9.socialnetwork.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +26,9 @@ public class GroupController {
 	
 	@Autowired
 	private GroupService groupService;
+
+	@Autowired
+	private UserService userService;
 	
 	@GetMapping
 	public ResponseEntity<List<Group>> getAllGroups() {
@@ -70,5 +75,23 @@ public class GroupController {
 			return ResponseEntity.notFound().build();
 		}
 		return ResponseEntity.ok().body(group);
+	}
+
+	@PostMapping("/{groupId}/accept-member/{userId}")
+	public ResponseEntity<Boolean> acceptMember(@PathVariable Long groupId, @PathVariable Long userId) throws ResourceNotFoundException {
+		//TODO: Check if user that sent request is really group admin
+		try{
+			boolean success = groupService.acceptMember(userId, groupId);
+			return new ResponseEntity<>(success, HttpStatus.OK);
+		}catch (ResourceNotFoundException e){
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@DeleteMapping("/{groupId}/remove-member")
+	public ResponseEntity<Boolean> removeMember(@PathVariable Long groupId){
+		//TODO: Check if user that sent request is really group admin
+
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }
