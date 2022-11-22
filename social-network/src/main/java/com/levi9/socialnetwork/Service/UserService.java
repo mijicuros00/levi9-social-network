@@ -20,6 +20,8 @@ public interface UserService  extends UserDetailsService {
 	public java.util.List<User> getAllUsers();
 
 	public ResponseEntity<User> getUserById(Long userId)throws ResourceNotFoundException;
+
+	public User findUserById(Long userId) throws ResourceNotFoundException;
 	
 	User save(User user);
 	

@@ -1,5 +1,6 @@
 package com.levi9.socialnetwork.Service.impl;
 
+import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.ConfirmationToken;
 import com.levi9.socialnetwork.Model.EStatus;
 import com.levi9.socialnetwork.Model.User;
@@ -16,6 +17,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -58,6 +61,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         return validate(registrationRequestDTO.getEmail());
     }
 
+    @Transactional
     @Override
     public String register(RegistrationRequestDTO registrationRequestDTO) {
         boolean isRequestValid = validateRegistrationRequest(registrationRequestDTO);
@@ -89,14 +93,29 @@ public class RegistrationServiceImpl implements RegistrationService {
         ConfirmationToken confirmationToken = new ConfirmationToken(token, null, registeredUser.getId());
         confirmationTokenService.save(confirmationToken);
 
-        String link = "http://localhost:8080/api/auth/confirm?token=" + confirmationToken.getToken();
+        String link = "http://localhost:8081/api/auth/confirm?token=" + confirmationToken.getToken();
         emailService.sendEmail(registeredUser.getEmail(), emailService.registerEmail(registeredUser.getName(), link), "Verify your email");
 
         return token;
     }
 
+    @Transactional
     @Override
-    public String confirmToken(String token) {
-        return null;
+    public String confirmToken(String token) throws ResourceNotFoundException {
+        ConfirmationToken confirmationToken = confirmationTokenService.findByToken(token);
+        User user = userService.findUserById(confirmationToken.getUserId());
+
+        if (confirmationToken.getConfirmedAt() != null) {
+            throw new IllegalStateException("email already confirmed");
+        }
+
+        confirmationToken.setConfirmedAt(LocalDateTime.now());
+
+        confirmationTokenService.save(confirmationToken);
+
+        user.setStatus(EStatus.VERIFIED);
+        userService.save(user);
+
+        return "Email " + user.getEmail() + " successfully confirmed!";
     }
 }
