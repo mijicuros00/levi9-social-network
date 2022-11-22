@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.levi9.socialnetwork.Exception.BadRequestException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Comment;
 import com.levi9.socialnetwork.dto.CommentDTO;
@@ -19,9 +20,9 @@ public interface CommentService {
 	
 	public Comment getCommentById(Long id) throws ResourceNotFoundException;
 
-	public Comment createComment(CommentDTO commentDTO);
+	public Comment createComment(CommentDTO commentDTO) throws ResourceNotFoundException, BadRequestException;
 	
-	public Comment replyToComment(ReplyDTO replyDTO);
+	public Comment replyToComment(ReplyDTO replyDTO) throws ResourceNotFoundException, BadRequestException;
 	
 	public Comment updateComment(Long commentId, @RequestBody CommentDTO commentDTO) throws ResourceNotFoundException;
 	

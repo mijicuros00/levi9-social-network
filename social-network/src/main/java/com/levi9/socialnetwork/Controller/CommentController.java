@@ -61,13 +61,13 @@ public class CommentController {
 	    
 	
 	@PostMapping
-	public ResponseEntity<Comment> createComment(@RequestBody CommentDTO commentDTO) {
+	public ResponseEntity<Comment> createComment(@RequestBody CommentDTO commentDTO) throws ResourceNotFoundException{
 		commentService.createComment(commentDTO);
 		return ResponseEntity.status(200).build();
 	}
 	
 	@PostMapping("/reply")
-	public ResponseEntity<Comment> replyToComment(@RequestBody ReplyDTO replyDTO) {
+	public ResponseEntity<Comment> replyToComment(@RequestBody ReplyDTO replyDTO) throws ResourceNotFoundException{
 		commentService.replyToComment(replyDTO);
 		return ResponseEntity.status(200).build();
 	}
