@@ -69,6 +69,12 @@ public class PostServiceImpl implements PostService {
     	return 0L;
         
     }
+    
+    public List<Post> getAllPostsFromFriends(Long userId) throws ResourceNotFoundException
+    {
+    	return postRepository.getAllPostsFromFriends(userId);
+    }
+    
 
     @Transactional
     public PostDTO updatePost(Long id, PostDTO postDTO) throws ResourceNotFoundException {

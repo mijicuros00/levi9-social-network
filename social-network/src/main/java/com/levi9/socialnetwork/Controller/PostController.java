@@ -2,11 +2,13 @@ package com.levi9.socialnetwork.Controller;
 
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Group;
+import com.levi9.socialnetwork.Model.Post;
 import com.levi9.socialnetwork.Model.User;
 import com.levi9.socialnetwork.Service.GroupService;
 import com.levi9.socialnetwork.Service.PostService;
 import com.levi9.socialnetwork.Service.impl.PostServiceImpl;
 import com.levi9.socialnetwork.dto.CreatePostDTO;
+import com.levi9.socialnetwork.dto.MuteGroupDTO;
 import com.levi9.socialnetwork.dto.PostDTO;
 
 import java.util.List;
@@ -40,6 +42,13 @@ public class PostController {
         }
 
         return new ResponseEntity<>(postDTO, HttpStatus.OK);
+    }
+    
+    
+    @GetMapping(value = "/friendPosts/{userId}")
+    public ResponseEntity<List<Post>> getAllPostsFromFriends(@PathVariable Long userId) throws ResourceNotFoundException {
+    	
+		return new ResponseEntity<>(postService.getAllPostsFromFriends(userId), HttpStatus.OK);
     }
     
  
