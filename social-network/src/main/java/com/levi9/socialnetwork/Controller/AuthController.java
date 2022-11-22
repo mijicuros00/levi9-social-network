@@ -16,7 +16,7 @@ public class AuthController {
     private RegistrationService registrationService;
 
     @PostMapping(value = "/registration")
-    public ResponseEntity<Void> registration(@RequestBody RegistrationRequestDTO registrationRequestDTO){
+    public ResponseEntity<Void> registration(@RequestBody RegistrationRequestDTO registrationRequestDTO) {
 
         try {
             registrationService.register(registrationRequestDTO);
