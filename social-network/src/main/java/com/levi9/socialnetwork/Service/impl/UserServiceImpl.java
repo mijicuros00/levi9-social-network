@@ -37,7 +37,9 @@ import com.levi9.socialnetwork.dto.RequestDTO;
 public class UserServiceImpl implements UserService {
 
 	private Logger logger = org.slf4j.LoggerFactory.getLogger(UserController.class);
-	
+
+	public static String USER_NOT_FOUND_EXCEPTION_MESSAGE = "User not found for this id : ";
+
 	@Autowired
 	private EmailService emailService;
 
@@ -56,13 +58,13 @@ public class UserServiceImpl implements UserService {
 		
 	public ResponseEntity<User> getUserById(Long userId)
 		throws ResourceNotFoundException{
-		User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
+		User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_EXCEPTION_MESSAGE + userId));
 	 return ResponseEntity.ok().body(user);
 	}
 
 	@Override
 	public User findUserById(Long userId) throws ResourceNotFoundException {
-		return userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
+		return userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_EXCEPTION_MESSAGE + userId));
 	}
 
 	@Override
@@ -116,7 +118,7 @@ public class UserServiceImpl implements UserService {
 	public ResponseEntity<User> updateUser(Long userId,
 			 @RequestBody User userDetails) throws ResourceNotFoundException {
 		User user = userRepository.findById(userId)
-				.orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
+				.orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_EXCEPTION_MESSAGE + userId));
 		
 		user.setName(userDetails.getName());
 		user.setSurname(userDetails.getSurname());
@@ -130,7 +132,7 @@ public class UserServiceImpl implements UserService {
 	public Map<String, Boolean> deleteUser(Long userId)
 			throws ResourceNotFoundException {
 		User user = userRepository.findById(userId)
-				.orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
+				.orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_EXCEPTION_MESSAGE + userId));
 
 		userRepository.delete(user);
 		Map<String, Boolean> response = new HashMap<>();
