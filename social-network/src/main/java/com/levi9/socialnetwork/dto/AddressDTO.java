@@ -1,11 +1,6 @@
 package com.levi9.socialnetwork.dto;
 
 import com.levi9.socialnetwork.Model.Address;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import javax.persistence.*;
 
 public class AddressDTO {
 	private Long id;
