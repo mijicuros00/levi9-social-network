@@ -65,9 +65,6 @@ public class WebSecurityConfig {
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 
 				.exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
-
-				// .antMatchers("/admin").hasRole("ADMIN") ili
-				// .antMatchers("/admin").hasAuthority("ROLE_ADMIN")
 				.authorizeRequests().antMatchers("/api/auth/**").permitAll()
 				.antMatchers("/api/users/**").permitAll()
 				.antMatchers("/api/auth/**").permitAll()
