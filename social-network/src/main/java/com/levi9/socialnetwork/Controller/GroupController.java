@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Group;
+import com.levi9.socialnetwork.Model.Post;
 import com.levi9.socialnetwork.Service.GroupService;
+import com.levi9.socialnetwork.Service.PostService;
 import com.levi9.socialnetwork.dto.GroupDTO;
 
 @RestController
@@ -24,6 +26,9 @@ public class GroupController {
 	
 	@Autowired
 	private GroupService groupService;
+	
+	@Autowired
+	private PostService postService;
 	
 	@GetMapping
 	public ResponseEntity<List<Group>> getAllGroups() {
@@ -71,4 +76,14 @@ public class GroupController {
 		}
 		return ResponseEntity.ok().body(group);
 	}
+	
+    @GetMapping(value = "/{id-group}/posts")
+    public ResponseEntity<List<Post>> getAllPosts(@PathVariable(value = "id-group") Long groupId) throws ResourceNotFoundException {
+    
+    	List<Post> visiblePosts = postService.getAllPostsFromGroup(groupId);
+    	
+		return ResponseEntity.ok().body(visiblePosts);
+    	
+    }
+    
 }
