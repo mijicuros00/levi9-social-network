@@ -1,12 +1,13 @@
 package com.levi9.socialnetwork.dto;
 
+import com.levi9.socialnetwork.Model.Address;
 import com.levi9.socialnetwork.Model.Event;
 
 import java.time.LocalDateTime;
 
 public class EventDTO {
     private Long id;
-    private Long locationId;
+    private AddressDTO location;
     private Long userId;
     private Long groupId;
     private LocalDateTime startDate;
@@ -15,18 +16,18 @@ public class EventDTO {
     public EventDTO() {
     }
 
-    public EventDTO(Long id, Long locationId, Long userId, Long groupId, LocalDateTime startDate, LocalDateTime endDate) {
+    public EventDTO(Long id, AddressDTO location, Long userId, Long groupId, LocalDateTime startDate, LocalDateTime endDate) {
         this.id = id;
-        this.locationId = locationId;
+        this.location = location;
         this.userId = userId;
         this.groupId = groupId;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
-    public EventDTO(Event event) {
+    public EventDTO(Event event, Address location) {
         this.id = event.getId();
-        this.locationId = event.getLocationId();
+        this.location = new AddressDTO(location);
         this.userId = event.getUserId();
         this.groupId = event.getGroupId();
         this.startDate = event.getStartDate();
@@ -41,12 +42,12 @@ public class EventDTO {
         this.id = id;
     }
 
-    public Long getLocationId() {
-        return locationId;
+    public AddressDTO getLocation() {
+        return location;
     }
 
-    public void setLocationId(Long locationId) {
-        this.locationId = locationId;
+    public void setLocation(AddressDTO location) {
+        this.location = location;
     }
 
     public Long getUserId() {
@@ -79,17 +80,5 @@ public class EventDTO {
 
     public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
-    }
-
-    @Override
-    public String toString() {
-        return "EventDTO{" +
-                "id=" + id +
-                ", locationId=" + locationId +
-                ", userId=" + userId +
-                ", groupId=" + groupId +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                '}';
     }
 }
