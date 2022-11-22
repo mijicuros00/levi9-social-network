@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import lombok.Getter;
 
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -128,22 +129,6 @@ public class User implements Serializable, UserDetails {
 		Timestamp now = new Timestamp(new Date().getTime());
 		this.setLastPasswordResetDate(now);
 		this.password = password;
-	}
-
-	public Timestamp getLastPasswordResetDate() {
-		return lastPasswordResetDate;
-	}
-
-	public void setLastPasswordResetDate(Timestamp lastPasswordResetDate) {
-		this.lastPasswordResetDate = lastPasswordResetDate;
-	}
-
-	public Set<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Set<Role> param) {
-		this.roles = param;
 	}
 
 	@Override

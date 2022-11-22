@@ -4,11 +4,12 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.levi9.socialnetwork.Exception.BadRequestException;
 import com.levi9.socialnetwork.Controller.UserController;
+import com.levi9.socialnetwork.Exception.BadRequestException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Group;
 import com.levi9.socialnetwork.Model.Post;
@@ -70,6 +71,20 @@ public class PostServiceImpl implements PostService {
     	return 0L;
         
     }
+    
+    
+    public List<Post> getAllPostsFromFriends(Long userId) throws ResourceNotFoundException{
+    	return postRepository.getAllPostsFromFriends(userId);
+    }
+    
+    public List<Post> getAllPostsOfMyFriendsFromPublicGroups(Long userId) throws ResourceNotFoundException{
+    	return postRepository.getAllPostsOfMyFriendsFromPublicGroups(userId);
+    }
+    
+    public List<Post> getAllPostsOfMyFriendsFromPrivateGroups(Long userId) throws ResourceNotFoundException{
+    	return postRepository.getAllPostsOfMyFriendsFromPrivateGroups(userId);
+    }
+    
 
     @Transactional
     public PostDTO updatePost(Long id, PostDTO postDTO) throws ResourceNotFoundException {
@@ -104,22 +119,12 @@ public class PostServiceImpl implements PostService {
     	// Hard-coded until log-in is not implemented, when it's done add id of logged in user
     	Long idLoggedUser = 5L;
     	Group group = groupRepository.findById(groupId).orElseThrow(() -> new ResourceNotFoundException("group with id " + groupId + " does not exists"));
-    	User user = userRepository.findById(idLoggedUser).orElseThrow(() -> new ResourceNotFoundException("user with id " + idLoggedUser +  " does not exists"));
-    		
-    	// Replace this with function in Group model after git pull
-    	boolean flag = false;
-    	for (User u : group.getMembers()) {
-			if(u.getId().equals(user.getId())) {
-				flag = true;
-			}
-		}
-    	if(!flag) {
+    	
+    	if(!group.containsUser(idLoggedUser)) {
     		throw new BadRequestException("User is not member of group.");
     	}
-    			
-    	List<Post> visiblePosts = postRepository.getAllPostsFromGroup(groupId);
     	
-    	return visiblePosts;
+    	return postRepository.getAllPostsFromGroup(groupId);
     	
     }
 }

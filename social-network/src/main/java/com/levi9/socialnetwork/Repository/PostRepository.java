@@ -15,5 +15,29 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     
 	@Query(value = "Select * from post inner join public.group on post.id_group = :groupId WHERE public.group.id = :groupId AND post.private = false", nativeQuery = true)
 	List<Post> getAllPostsFromGroup(Long groupId);
+	
     
+	
+	@Query(value = "SELECT * FROM post\r\n"
+			+ "INNER JOIN user_friends on post.id_user = user_friends.id_friend\r\n"
+			+ "INNER JOIN public.user on public.user.id = user_friends.id_user\r\n"
+			+ "WHERE public.user.id = :userId and post.id_group is null", nativeQuery = true)
+	List<Post> getAllPostsFromFriends(Long userId);
+	
+	@Query(value = "SELECT * FROM post\r\n"
+			+ "INNER JOIN user_friends on post.id_user = user_friends.id_friend\r\n"
+			+ "INNER JOIN public.user on public.user.id = user_friends.id_user\r\n"
+			+ "INNER JOIN public.group on public.group.id = post.id_group\r\n"
+			+ "WHERE public.user.id = :userId and public.group.private = false", nativeQuery = true)
+	List<Post> getAllPostsOfMyFriendsFromPublicGroups(Long userId);
+	
+	@Query(value = "SELECT * FROM post\r\n"
+			+ "INNER JOIN user_friends on post.id_user = user_friends.id_friend\r\n"
+			+ "INNER JOIN public.user on public.user.id = user_friends.id_user\r\n"
+			+ "INNER JOIN public.group on public.group.id = post.id_group\r\n"
+			+ "INNER JOIN public.member on public.group.id = public.member.id_group\r\n"
+			+ "WHERE public.user.id = 9 and public.member.id_user = 9 and public.group.private = true"
+			+ "", nativeQuery = true)
+	List<Post> getAllPostsOfMyFriendsFromPrivateGroups(Long userId);
+	
 }
