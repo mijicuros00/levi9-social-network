@@ -7,7 +7,6 @@ import com.levi9.socialnetwork.Model.Event;
 import com.levi9.socialnetwork.Model.Group;
 import com.levi9.socialnetwork.Repository.EventRepository;
 import com.levi9.socialnetwork.Service.EventService;
-import com.levi9.socialnetwork.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,5 +58,9 @@ public class EventServiceImpl implements EventService {
         event.setGroupId(group.getId());
         event.setLocationId(address.getId());
         return createEvent(event);
+    }
+
+    public List<Event> getAllEventsInGroup(Long groupId) {
+        return eventRepository.findAllInGroup(groupId);
     }
 }

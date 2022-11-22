@@ -15,4 +15,5 @@ public interface EventService {
     public Event updateEvent(Long eventId, Event eventDetails) throws ResourceNotFoundException;
     public void deleteEvent(Long eventId) throws ResourceNotFoundException;
     Event createEventInGroup(Event event, Address address, Group group) throws ResourceExistsException;
+    List<Event> getAllEventsInGroup(Long groupId);
 }

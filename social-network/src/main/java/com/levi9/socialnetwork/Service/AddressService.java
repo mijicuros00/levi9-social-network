@@ -1,19 +1,17 @@
 package com.levi9.socialnetwork.Service;
 
-import java.util.Map;
-
-import com.levi9.socialnetwork.dto.AddressDTO;
+import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
+import com.levi9.socialnetwork.Model.Address;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
-import com.levi9.socialnetwork.Model.Address;
+import java.util.Map;
 
 public interface AddressService {
 
 	public java.util.List<Address> getAllAddresses();
 	
-	public ResponseEntity<Address> getAddressById(Long addressId) throws ResourceNotFoundException;
+	public Address getAddressById(Long addressId) throws ResourceNotFoundException;
 	
 	public Address createAddress(Address address);
 	
