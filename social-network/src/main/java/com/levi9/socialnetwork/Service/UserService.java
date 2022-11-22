@@ -21,7 +21,7 @@ public interface UserService  extends UserDetailsService {
 
 	public ResponseEntity<User> getUserById(Long userId)throws ResourceNotFoundException;
 	
-
+	User save(User user);
 	
 	public User createUser(User user);
 

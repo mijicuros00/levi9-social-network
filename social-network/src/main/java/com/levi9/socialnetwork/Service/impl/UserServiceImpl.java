@@ -59,7 +59,12 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
 	 return ResponseEntity.ok().body(user);
 	}
-	
+
+	@Override
+	public User save(User user) {
+		return userRepository.save(user);
+	}
+
 
 	@Override
 	public boolean removeFriend(Long userId, Long friendId) throws ResourceNotFoundException, ResourceExistsException {

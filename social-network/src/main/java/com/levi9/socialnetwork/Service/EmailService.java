@@ -19,6 +19,10 @@ public interface EmailService  {
 
 	@Async
 	public void sendNotificaitionAsync(User user) throws MailException, InterruptedException;
+
+	void sendEmail(String to, String email, String subject);
+
+	String registerEmail(String name, String link);
 	
 	
 }

@@ -7,17 +7,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -70,8 +60,9 @@ public class User implements Serializable, UserDetails {
 	@JoinTable(joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "id_friend", referencedColumnName = "id"))
 	private Set<User> friends;
 
-//    @ManyToMany(mappedBy = "userRequests", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    private Collection<Group> groupRequests = new ArrayList<>();
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status", nullable = false)
+	private EStatus status;
     
 	public User(Long id, String name, String surname, String email, String password) {
 		super();
@@ -81,7 +72,24 @@ public class User implements Serializable, UserDetails {
 		this.email = email;
 		this.password = password;
 	}
-	
+
+	public User(String name, String surname, String email, String username, String password) {
+		this.name = name;
+		this.surname = surname;
+		this.email = email;
+		this.username = username;
+		this.password = password;
+	}
+
+	public User(String name, String surname, String email, String username, String password, EStatus status) {
+		this.name = name;
+		this.surname = surname;
+		this.email = email;
+		this.username = username;
+		this.password = password;
+		this.status = status;
+	}
+
 	public Long getId() {
 		return id;
 	}
