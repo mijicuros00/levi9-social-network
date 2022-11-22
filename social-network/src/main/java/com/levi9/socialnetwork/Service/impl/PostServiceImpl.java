@@ -70,9 +70,17 @@ public class PostServiceImpl implements PostService {
         
     }
     
-    public List<Post> getAllPostsFromFriends(Long userId) throws ResourceNotFoundException
-    {
+    
+    public List<Post> getAllPostsFromFriends(Long userId) throws ResourceNotFoundException{
     	return postRepository.getAllPostsFromFriends(userId);
+    }
+    
+    public List<Post> getAllPostsOfMyFriendsFromPublicGroups(Long userId) throws ResourceNotFoundException{
+    	return postRepository.getAllPostsOfMyFriendsFromPublicGroups(userId);
+    }
+    
+    public List<Post> getAllPostsOfMyFriendsFromPrivateGroups(Long userId) throws ResourceNotFoundException{
+    	return postRepository.getAllPostsOfMyFriendsFromPrivateGroups(userId);
     }
     
 

@@ -44,14 +44,27 @@ public class PostController {
         return new ResponseEntity<>(postDTO, HttpStatus.OK);
     }
     
-    
+
     @GetMapping(value = "/friendPosts/{userId}")
     public ResponseEntity<List<Post>> getAllPostsFromFriends(@PathVariable Long userId) throws ResourceNotFoundException {
     	
 		return new ResponseEntity<>(postService.getAllPostsFromFriends(userId), HttpStatus.OK);
     }
     
- 
+    
+    @GetMapping(value = "/friendPostsPublicGroups/{userId}")
+    public ResponseEntity<List<Post>> getAllPostsOfMyFriendsFromPublicGroups(@PathVariable Long userId) throws ResourceNotFoundException {
+    	
+		return new ResponseEntity<>(postService.getAllPostsOfMyFriendsFromPublicGroups(userId), HttpStatus.OK);
+    }
+    
+    @GetMapping(value = "/friendPostsPrivateGroups/{userId}")
+    public ResponseEntity<List<Post>> getAllPostsOfMyFriendsFromPrivateGroups(@PathVariable Long userId) throws ResourceNotFoundException {
+    	
+		return new ResponseEntity<>(postService.getAllPostsOfMyFriendsFromPrivateGroups(userId), HttpStatus.OK);
+    }
+    
+    
     @PostMapping
     public ResponseEntity<Long> createPost(@RequestBody CreatePostDTO postDTO) throws ResourceNotFoundException {
         // Logged user will be used to set which user created post
