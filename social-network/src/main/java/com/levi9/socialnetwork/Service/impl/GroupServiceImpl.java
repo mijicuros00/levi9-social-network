@@ -3,12 +3,6 @@ package com.levi9.socialnetwork.Service.impl;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.levi9.socialnetwork.Exception.ResourceExistsException;
-import com.levi9.socialnetwork.Model.MuteGroup;
-import com.levi9.socialnetwork.Model.User;
-import com.levi9.socialnetwork.Repository.UserRepository;
-import com.levi9.socialnetwork.Service.MuteGroupService;
-import com.levi9.socialnetwork.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,16 +10,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.levi9.socialnetwork.Exception.ResourceExistsException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Group;
+import com.levi9.socialnetwork.Model.MuteGroup;
 import com.levi9.socialnetwork.Model.User;
 import com.levi9.socialnetwork.Repository.GroupRepository;
 import com.levi9.socialnetwork.Repository.UserRepository;
 import com.levi9.socialnetwork.Service.GroupService;
+import com.levi9.socialnetwork.Service.MuteGroupService;
 import com.levi9.socialnetwork.dto.GroupDTO;
 import com.levi9.socialnetwork.dto.RequestDTO;
 
 @Service
 public class GroupServiceImpl implements GroupService {
-
+	private static final String RESOURCE_NOT_FOUND_MESSAGE = "Group is not found for this id ::";
+	
 	@Autowired
 	private GroupRepository groupRepository;
 
@@ -40,7 +37,7 @@ public class GroupServiceImpl implements GroupService {
 	}
 	
 	public Group getGroupById(Long id) throws ResourceNotFoundException {
-		return groupRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Group is not found for this id ::" + id));
+		return groupRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE + id));
 	}
 
 	public Group createGroup(GroupDTO groupDTO) {
@@ -49,7 +46,7 @@ public class GroupServiceImpl implements GroupService {
 	}
 	
 	public Group updateGroup(Long groupId, @RequestBody GroupDTO groupDTO) throws ResourceNotFoundException {
-		Group group = groupRepository.findById(groupId).orElseThrow(() -> new ResourceNotFoundException("Group is not found for this id ::" + groupId));
+		Group group = groupRepository.findById(groupId).orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE + groupId));
 		group.setPrivate(groupDTO.isPrivate());
 		groupRepository.save(group);
 		
@@ -57,15 +54,15 @@ public class GroupServiceImpl implements GroupService {
 	}
 	
 	public Group deleteGroup(Long groupId) throws ResourceNotFoundException{
-		Group group = groupRepository.findById(groupId).orElseThrow(() -> new ResourceNotFoundException("Group is not found for this id ::" + groupId));
+		Group group = groupRepository.findById(groupId).orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE + groupId));
 		groupRepository.delete(group);
 		
 		return group;
 	}
 	
 	public User addUserToGroup(RequestDTO requestDTO) throws ResourceNotFoundException, ResourceExistsException {
-		Group group = groupRepository.findById(requestDTO.getIdGroup()).orElseThrow(() -> new ResourceNotFoundException("Group is not found for this id ::" + requestDTO.getIdGroup()));
-		User user = userRepository.findById(requestDTO.getIdUser()).orElseThrow(() -> new ResourceNotFoundException("Group is not found for this id ::" + requestDTO.getIdGroup()));
+		Group group = groupRepository.findById(requestDTO.getIdGroup()).orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE + requestDTO.getIdGroup()));
+		User user = userRepository.findById(requestDTO.getIdUser()).orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE + requestDTO.getIdGroup()));
 	
 		if(group.getUserRequests().contains(user)) {
 			throw new ResourceExistsException("Request for group already exists.");
