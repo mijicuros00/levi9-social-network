@@ -79,11 +79,13 @@ public class GroupServiceImpl implements GroupService {
 
 	@Override
 	public boolean removeMember(Long userId, Long groupId) throws ResourceNotFoundException {
+		groupRepository.removeMembersFromEvents(groupId, userId);
 		Group group = getGroupById(groupId);
 		boolean removed = group.getMembers().removeIf(user -> user.getId().equals(userId));
-		if(!removed){
+		if(!removed) {
 			throw new ResourceNotFoundException("User with id " + userId + " did not request joining this group!");
 		}
+		group.setUserRequests(null);
 		groupRepository.save(group);
 		return true;
 	}

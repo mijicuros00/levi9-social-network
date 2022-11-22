@@ -105,4 +105,14 @@ public class GroupController {
 
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
+
+	@DeleteMapping("/{groupId}/leave")
+	public ResponseEntity<Void> leaveGroup(@PathVariable Long groupId) throws ResourceNotFoundException {
+		//TODO: Get id of logged in user
+		Long userId = 1L;
+		muteGroupService.deleteMuteGroup(userId, groupId);
+		groupService.removeMember(userId, groupId);
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 }
