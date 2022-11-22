@@ -68,7 +68,7 @@ public class UserController {
 	
 	@PutMapping("/{userId}/remove-friend/{friendId}")
 	public ResponseEntity<Boolean> removeFriend(@PathVariable Long userId, @PathVariable Long friendId) throws ResourceNotFoundException {
-		//TODO: userId - remove when you complete autentification
+		//TODO: userId - remove when you complete autenfication
 		try{
 			boolean success = userService.removeFriend(userId, friendId);
 			return new ResponseEntity<>(success, HttpStatus.OK);
