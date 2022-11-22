@@ -2,6 +2,9 @@ package com.levi9.socialnetwork.Service;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+
 import com.levi9.socialnetwork.Exception.BadRequestException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Post;

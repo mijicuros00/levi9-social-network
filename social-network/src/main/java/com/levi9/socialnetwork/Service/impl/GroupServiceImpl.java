@@ -31,9 +31,7 @@ public class GroupServiceImpl implements GroupService {
 
 	@Autowired
 	private MuteGroupService muteGroupService;
-	
 
-	
 	public List<Group> getAllGroups() {
 		return groupRepository.findAll();
 	}

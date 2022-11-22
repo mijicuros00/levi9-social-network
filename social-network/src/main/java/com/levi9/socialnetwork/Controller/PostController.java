@@ -8,6 +8,7 @@ import com.levi9.socialnetwork.Service.GroupService;
 import com.levi9.socialnetwork.Service.PostService;
 import com.levi9.socialnetwork.Service.impl.PostServiceImpl;
 import com.levi9.socialnetwork.dto.CreatePostDTO;
+import com.levi9.socialnetwork.dto.MuteGroupDTO;
 import com.levi9.socialnetwork.dto.PostDTO;
 
 import java.util.List;
@@ -64,7 +65,6 @@ public class PostController {
     }
     
     
-
     @PostMapping
     public ResponseEntity<Long> createPost(@RequestBody CreatePostDTO postDTO) throws ResourceNotFoundException {
         // Logged user will be used to set which user created post
