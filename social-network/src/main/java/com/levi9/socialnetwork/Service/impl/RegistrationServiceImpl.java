@@ -66,18 +66,18 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     public String register(RegistrationRequestDTO registrationRequestDTO) {
         boolean isRequestValid = validateRegistrationRequest(registrationRequestDTO);
-        if(!isRequestValid){
+        if(!isRequestValid) {
             throw new IllegalStateException("Registration request is not valid!");
         }
 
         User user;
-        try{
+        try {
             user = (User) userDetailsService.loadUserByUsername(registrationRequestDTO.getUsername());
-        }catch (UsernameNotFoundException e){
+        } catch (UsernameNotFoundException e){
             user = null;
         }
 
-        if(user != null){
+        if(user != null) {
             throw new IllegalStateException("User already exists!");
         }
 
