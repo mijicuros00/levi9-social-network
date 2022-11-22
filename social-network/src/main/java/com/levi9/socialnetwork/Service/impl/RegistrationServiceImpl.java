@@ -54,7 +54,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     public static boolean validateRegistrationRequest(RegistrationRequestDTO registrationRequestDTO){
         if (registrationRequestDTO.getName().isBlank() || registrationRequestDTO.getSurname().isBlank() ||
-                registrationRequestDTO.getPassword().length() < PASSWORD_MIN_LENGTH || registrationRequestDTO.getRepeatedPassword().length() < 6 ||
+                registrationRequestDTO.getPassword().length() < PASSWORD_MIN_LENGTH || registrationRequestDTO.getRepeatedPassword().length() < PASSWORD_MIN_LENGTH ||
                 !registrationRequestDTO.getPassword().equals(registrationRequestDTO.getRepeatedPassword())){
             return false;
         }
