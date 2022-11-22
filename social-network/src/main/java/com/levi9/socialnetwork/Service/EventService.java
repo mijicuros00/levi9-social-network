@@ -1,12 +1,12 @@
 package com.levi9.socialnetwork.Service;
 
+import java.util.List;
+
 import com.levi9.socialnetwork.Exception.ResourceExistsException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Address;
 import com.levi9.socialnetwork.Model.Event;
 import com.levi9.socialnetwork.Model.Group;
-
-import java.util.List;
 
 public interface EventService {
     public List<Event> getAllEvents();
