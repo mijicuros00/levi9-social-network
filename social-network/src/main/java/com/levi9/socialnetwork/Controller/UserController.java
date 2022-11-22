@@ -65,11 +65,18 @@ public class UserController {
 		return userService.addFriend(userId,friendId);
 	}
 	
-	@GetMapping("/notify")
-	public ResponseEntity<List<User>> notifyUsersForGroupPosts(@RequestParam (value="groupId") Long groupId) throws Exception {
-		return new ResponseEntity<>(userService.notifyUsersForGroupPosts(groupId), HttpStatus.OK);
+	@PutMapping("/{userId}/remove-friend/{friendId}")
+	public ResponseEntity<Boolean> removeFriend(@PathVariable Long userId, @PathVariable Long friendId) throws ResourceNotFoundException {
+		//TODO: userId - remove when you complete autentification
+		try{
+			boolean success = userService.removeFriend(userId, friendId);
+			return new ResponseEntity<>(success, HttpStatus.OK);
+		}catch (ResourceNotFoundException e){
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} catch (ResourceExistsException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 	}
-	
 
 	@PostMapping()
 	public User createUser(@RequestBody User user) {
