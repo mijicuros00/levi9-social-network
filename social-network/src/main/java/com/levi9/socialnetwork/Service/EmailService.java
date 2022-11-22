@@ -12,6 +12,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 
 
 public interface EmailService  {
@@ -22,7 +23,7 @@ public interface EmailService  {
 
 	void sendEmail(String to, String email, String subject);
 
-	String registerEmail(String name, String link);
+	String registerEmail(String name, String link) throws IOException;
 	
 	
 }

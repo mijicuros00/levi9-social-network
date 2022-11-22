@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("api/auth")
 public class AuthController {
@@ -22,6 +24,8 @@ public class AuthController {
             registrationService.register(registrationRequestDTO);
         } catch(IllegalStateException illegalStateException){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return new ResponseEntity<>(HttpStatus.OK);

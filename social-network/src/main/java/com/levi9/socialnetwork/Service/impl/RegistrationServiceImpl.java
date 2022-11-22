@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -64,7 +65,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Transactional
     @Override
-    public String register(RegistrationRequestDTO registrationRequestDTO) {
+    public String register(RegistrationRequestDTO registrationRequestDTO) throws IOException {
         boolean isRequestValid = validateRegistrationRequest(registrationRequestDTO);
         if(!isRequestValid) {
             throw new IllegalStateException("Registration request is not valid!");
