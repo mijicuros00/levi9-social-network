@@ -2,11 +2,15 @@ package com.levi9.socialnetwork.Controller;
 
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Group;
+import com.levi9.socialnetwork.Model.User;
 import com.levi9.socialnetwork.Service.GroupService;
 import com.levi9.socialnetwork.Service.PostService;
 import com.levi9.socialnetwork.Service.impl.PostServiceImpl;
 import com.levi9.socialnetwork.dto.CreatePostDTO;
 import com.levi9.socialnetwork.dto.PostDTO;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -52,6 +56,7 @@ public class PostController {
         Long id;
         try{
             id = postService.createPost(postDTO);
+                       
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

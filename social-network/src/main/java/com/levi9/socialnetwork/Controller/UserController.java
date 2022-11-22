@@ -1,6 +1,5 @@
 package com.levi9.socialnetwork.Controller;
 
-
 import java.util.List;
 import java.util.Map;
 
@@ -18,16 +17,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.levi9.socialnetwork.Exception.ResourceDuplicateException;
 import com.levi9.socialnetwork.Exception.ResourceExistsException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
+import com.levi9.socialnetwork.Model.Group;
 import com.levi9.socialnetwork.Model.User;
+import com.levi9.socialnetwork.Service.GroupService;
 import com.levi9.socialnetwork.Service.UserService;
 import com.levi9.socialnetwork.dto.RequestDTO;
-
 
 
 
@@ -39,6 +37,9 @@ public class UserController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private GroupService groupService;
 
 	@Autowired
 	MuteGroupService muteGroupService;
@@ -95,14 +96,17 @@ public class UserController {
 		return userService.deleteUser(userId);
 	}
 	
-	@PostMapping("/create-request")
-	public ResponseEntity<User> createGroupRequest(@RequestBody RequestDTO requestDTO) throws ResourceNotFoundException, ResourceDuplicateException {
+	@PostMapping("/group-request")
+	public ResponseEntity<User> createGroupRequest(@RequestBody RequestDTO requestDTO) throws ResourceNotFoundException, ResourceExistsException {
 		User user;
-		try {
+		
+		Group group = groupService.getGroupById(requestDTO.getIdGroup());
+		if(group.isPrivate()) {
 			user = userService.createGroupRequest(requestDTO);
-		} catch (ResourceNotFoundException | ResourceDuplicateException e) {
-			return ResponseEntity.badRequest().build();
+		} else {
+			user = groupService.addUserToGroup(requestDTO);
 		}
+		
 		return ResponseEntity.ok().body(user);
 	}
 
