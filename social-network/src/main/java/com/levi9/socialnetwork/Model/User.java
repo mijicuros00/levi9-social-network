@@ -57,7 +57,7 @@ public class User implements Serializable, UserDetails {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status", nullable = false)
-	private EUserVerifiedRegistration status;
+	private UserVerificationStatus status;
     
 	public User(Long id, String name, String surname, String email, String password) {
 		super();
@@ -76,7 +76,7 @@ public class User implements Serializable, UserDetails {
 		this.password = password;
 	}
 
-	public User(String name, String surname, String email, String username, String password, EUserVerifiedRegistration status) {
+	public User(String name, String surname, String email, String username, String password, UserVerificationStatus status) {
 		this.name = name;
 		this.surname = surname;
 		this.email = email;
