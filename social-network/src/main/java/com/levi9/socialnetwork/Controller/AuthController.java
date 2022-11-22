@@ -16,11 +16,11 @@ public class AuthController {
     private RegistrationService registrationService;
 
     @PostMapping(value = "/registration")
-    public ResponseEntity<Void> registration(@RequestBody RegistrationRequestDTO registrationRequestDTO){
+    public ResponseEntity<Void> registration(@RequestBody RegistrationRequestDTO registrationRequestDTO) {
 
-        try{
+        try {
             registrationService.register(registrationRequestDTO);
-        }catch (IllegalStateException illegalStateException){
+        } catch(IllegalStateException illegalStateException){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
