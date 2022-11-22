@@ -162,4 +162,14 @@ public class JWToken {
 		return request.getHeader(AUTH_HEADER);
 	}
 
+	public String generateRegistrationToken(UserDetails userDetails) {
+		Date issuedAt = new Date();
+		return Jwts.builder()
+				.setIssuer(APP_NAME)
+				.setSubject(userDetails.getUsername())
+				.setIssuedAt(issuedAt)
+				.signWith(SIGNATURE_ALGORITHM, SECRET).compact();
+
+	}
+
 }

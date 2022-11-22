@@ -1,16 +1,24 @@
 package com.levi9.socialnetwork.Service.impl;
 
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.levi9.socialnetwork.Model.User;
 import com.levi9.socialnetwork.Service.EmailService;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.io.File;
+import java.io.IOException;
 
 @Service
 public class EmailServiceImpl implements EmailService{
@@ -18,6 +26,8 @@ public class EmailServiceImpl implements EmailService{
 	@Autowired
 	private JavaMailSender javaMailSender;
 
+	@Value("${spring.mail.username}")
+	private String from;
 
 	@Autowired
 	private Environment env;
@@ -30,15 +40,38 @@ public class EmailServiceImpl implements EmailService{
 
 		SimpleMailMessage mail = new SimpleMailMessage();
 		mail.setTo(user.getEmail());
-		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setFrom(from);
 		mail.setSubject("New post on your group");
 		mail.setText("Hi " + user.getName() + ",\n\nyou have new post on your group.");
 		javaMailSender.send(mail);
 
 		System.out.println("Email sended!");
 	}
-	
-	
-	
+
+	@Override
+	public void sendEmail(String to, String email, String subject) {
+		try {
+			MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+			helper.setSubject(subject);
+			helper.setTo(to);
+			helper.setText(email, true);
+			helper.setFrom(from);
+			javaMailSender.send(mimeMessage);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+			throw new IllegalStateException("Failed to send email");
+		}
+	}
+
+	@Override
+	public String registerEmail(String name, String link) throws IOException {
+		File htmlTemplateFile = new File("src/main/resources/static/EmailTemplate.html");
+		String htmlString = FileUtils.readFileToString(htmlTemplateFile);
+		htmlString = htmlString.replace("$name", name);
+		htmlString = htmlString.replace("$link", link);
+		return htmlString;
+	}
+
 
 }

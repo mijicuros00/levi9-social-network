@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -26,9 +27,6 @@ import com.levi9.socialnetwork.Service.UserService;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
 public class WebSecurityConfig {
-
-	@Autowired
-	private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	private UserService userService;
@@ -56,18 +54,20 @@ public class WebSecurityConfig {
 	            .build();
 	}
 
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 
 				.exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
-
-				// .antMatchers("/admin").hasRole("ADMIN") ili
-				// .antMatchers("/admin").hasAuthority("ROLE_ADMIN")
 				.authorizeRequests().antMatchers("/api/auth/**").permitAll()
 				.antMatchers("/api/users/**").permitAll()
-
+				.antMatchers("/api/auth/**").permitAll()
 				.antMatchers("/api/mute_groups/**").permitAll()
 				.antMatchers("/api/groups/**").permitAll()
 				.antMatchers("/api/comments/**").permitAll()
