@@ -18,18 +18,13 @@ public class Item {
     @Column(name = "link")
     private String link;
 
-    @Column(name = "id_post")
-    private Long postId;
-
-    public Item(Long id, String link, Long postId) {
+    public Item(Long id, String link) {
         this.id = id;
         this.link = link;
-        this.postId = postId;
     }
 
-    public Item( String link, Long postId) {
+    public Item( String link) {
         this.link = link;
-        this.postId = postId;
     }
 
     public Item() {

@@ -2,6 +2,10 @@ package com.levi9.socialnetwork.Controller;
 
 import java.util.Map;
 
+import com.levi9.socialnetwork.Model.MuteDuration;
+import com.levi9.socialnetwork.Model.MuteGroup;
+import com.levi9.socialnetwork.Service.MuteGroupService;
+import com.levi9.socialnetwork.dto.MuteGroupDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +37,9 @@ public class UserController {
 	
 	@Autowired
 	private GroupService groupService;
+
+	@Autowired
+	MuteGroupService muteGroupService;
 
 	@GetMapping
 	public java.util.List<User> getAllUsers() {
@@ -90,15 +97,19 @@ public class UserController {
 		return ResponseEntity.ok().body(user);
 	}
 
-	@PostMapping("/accept-member/groups/{groupId}")
-	public ResponseEntity<Boolean> acceptMember(@PathVariable Long groupId) throws ResourceNotFoundException {
-		// User is hardcoded for now, it will be a user that sent the request when RBAC is implemented
-		try{
-			boolean success = userService.acceptMember(10L, groupId);
-			return new ResponseEntity<>(success, HttpStatus.OK);
-		}catch (ResourceNotFoundException e){
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+	@PutMapping("/{userId}/groups/{groupId}/mute")  // Restful?
+	public ResponseEntity<MuteGroupDTO> muteGroupForDuration(@PathVariable(value = "userId") Long userId,
+															 @PathVariable(value = "groupId") Long groupId,
+															 @RequestBody String muteDurationName) throws ResourceNotFoundException, ResourceExistsException {
+		MuteDuration muteDuration = muteGroupService.getMuteDurationFromString(muteDurationName);
+		MuteGroup muteGroup = muteGroupService.muteGroup(userId, groupId, muteDuration);
+		return new ResponseEntity<>(new MuteGroupDTO(muteGroup), HttpStatus.OK);
 	}
-	
+
+	@PutMapping("/{userId}/groups/{groupId}/unmute")  // Restful?
+	public ResponseEntity<MuteGroupDTO> unmuteGroup(@PathVariable(value = "userId") Long userId,
+													@PathVariable(value = "groupId") Long groupId) throws ResourceNotFoundException {
+		MuteGroup muteGroup = muteGroupService.unmuteGroup(userId, groupId);
+		return new ResponseEntity<>(new MuteGroupDTO(muteGroup), HttpStatus.OK);
+	}
 }

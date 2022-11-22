@@ -11,5 +11,4 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     Optional<Item> findItemById(Long id);
     void deleteById(Long id);
-    boolean deleteByPostId(Long id);
 }

@@ -3,9 +3,13 @@ package com.levi9.socialnetwork.Service.impl;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,12 +17,15 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+
 import com.levi9.socialnetwork.Exception.ResourceExistsException;
+import com.levi9.socialnetwork.Controller.UserController;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Group;
 import com.levi9.socialnetwork.Model.User;
 import com.levi9.socialnetwork.Repository.GroupRepository;
 import com.levi9.socialnetwork.Repository.UserRepository;
+import com.levi9.socialnetwork.Service.EmailService;
 import com.levi9.socialnetwork.Service.GroupService;
 import com.levi9.socialnetwork.Service.UserService;
 import com.levi9.socialnetwork.dto.RequestDTO;
@@ -27,6 +34,10 @@ import com.levi9.socialnetwork.dto.RequestDTO;
 @Service
 public class UserServiceImpl implements UserService {
 
+	private Logger logger = org.slf4j.LoggerFactory.getLogger(UserController.class);
+	
+	@Autowired
+	private EmailService emailService;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -46,6 +57,14 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
 	 return ResponseEntity.ok().body(user);
 	}
+	
+	public List<User> getNotMutedUsers(Long groupId)
+	{
+		return this.userRepository.getNotMutedUsers(groupId);
+	}
+	
+	
+	
 	
 	public int addFriend( Long userId, Long friendId )
 	{
@@ -92,17 +111,6 @@ public class UserServiceImpl implements UserService {
 		return response;
 	}
 
-	@Override
-	public boolean acceptMember(Long userId, Long groupId) throws ResourceNotFoundException {
-
-		Group group = groupService.getGroupById(groupId);
-		group.getUserRequests().removeIf(user -> user.getId().equals(userId));
-		User user = userRepository.findById(userId).map(u -> u).orElseThrow();
-		group.getMembers().add(user);
-		groupRepository.save(group);
-
-		return true;
-	}
 
 	@Transactional
 	public User createGroupRequest(RequestDTO requestDTO) throws ResourceNotFoundException, ResourceExistsException {

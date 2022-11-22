@@ -3,7 +3,7 @@ package com.levi9.socialnetwork.Controller;
 import com.levi9.socialnetwork.Exception.ResourceExistsException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Event;
-import com.levi9.socialnetwork.Service.EventService;
+import com.levi9.socialnetwork.Service.impl.EventServiceImpl;
 import com.levi9.socialnetwork.dto.EventDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ import java.util.List;
 @RequestMapping("/api/events")
 public class EventController {
     @Autowired
-    private EventService eventService;
+    private EventServiceImpl eventService;
 
     @GetMapping
     public ResponseEntity<List<Event>> getAllEvents() {

@@ -62,6 +62,12 @@ public class Group {
 		this.idAdmin = idAdmin;
 	}
 
-	
+	public boolean containsUser(Long userId){
+		for (User user : getMembers()){
+			if(user.getId().equals(userId))
+				return true;
+		}
+		return false;
+	}
 	
 }
