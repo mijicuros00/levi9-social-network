@@ -9,6 +9,7 @@ CREATE TABLE "user" (
     "email" varchar,
     "username" varchar,
     "password" varchar,
-    "last_password_reset_date" timestamp
+    "last_password_reset_date" timestamp,
+    "status" varchar
 );
 -- rollback drop table applicationinfo

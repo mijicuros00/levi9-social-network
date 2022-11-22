@@ -35,7 +35,9 @@ import com.levi9.socialnetwork.dto.RequestDTO;
 public class UserServiceImpl implements UserService {
 
 	private Logger logger = org.slf4j.LoggerFactory.getLogger(UserController.class);
-	
+
+	public static final String USER_NOT_FOUND_EXCEPTION_MESSAGE = "User not found for this id : ";
+
 	@Autowired
 	private EmailService emailService;
 
@@ -53,11 +55,21 @@ public class UserServiceImpl implements UserService {
 	}
 		
 	public ResponseEntity<User> getUserById(Long userId)
-		throws ResourceNotFoundException{
-		User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
+		throws ResourceNotFoundException {
+		User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_EXCEPTION_MESSAGE + userId));
 	 return ResponseEntity.ok().body(user);
 	}
-	
+
+	@Override
+	public User findUserById(Long userId) throws ResourceNotFoundException {
+		return userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_EXCEPTION_MESSAGE + userId));
+	}
+
+	@Override
+	public User save(User user) {
+		return userRepository.save(user);
+	}
+
 
 	@Override
 	public boolean removeFriend(Long userId, Long friendId) throws ResourceNotFoundException, ResourceExistsException {
@@ -65,7 +77,7 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findById(userId).map(u -> u).orElseThrow();
 		boolean removed = user.getFriends().removeIf(f -> f.getId().equals(friendId));
 		
-		if(!removed){
+		if(!removed) {
 			throw new ResourceNotFoundException("Friend with id " + friendId + " does not exist !");
 		}
 		
@@ -81,8 +93,7 @@ public class UserServiceImpl implements UserService {
 	
 	
 
-	public int addFriend( Long userId, Long friendId )
-	{
+	public int addFriend( Long userId, Long friendId ) {
 		Optional<User> user1=  userRepository.findById(userId);
 		User user= user1.get();
 		
@@ -104,7 +115,7 @@ public class UserServiceImpl implements UserService {
 	public ResponseEntity<User> updateUser(Long userId,
 			 @RequestBody User userDetails) throws ResourceNotFoundException {
 		User user = userRepository.findById(userId)
-				.orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
+				.orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_EXCEPTION_MESSAGE + userId));
 		
 		user.setName(userDetails.getName());
 		user.setSurname(userDetails.getSurname());
@@ -118,7 +129,7 @@ public class UserServiceImpl implements UserService {
 	public Map<String, Boolean> deleteUser(Long userId)
 			throws ResourceNotFoundException {
 		User user = userRepository.findById(userId)
-				.orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
+				.orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_EXCEPTION_MESSAGE + userId));
 
 		userRepository.delete(user);
 		Map<String, Boolean> response = new HashMap<>();
@@ -131,7 +142,7 @@ public class UserServiceImpl implements UserService {
 	public User createGroupRequest(RequestDTO requestDTO) throws ResourceNotFoundException, ResourceExistsException {
 		
 		Group group = groupService.getGroupById(requestDTO.getIdGroup());
-		User user = userRepository.findById(requestDTO.getIdUser()).orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + requestDTO.getIdUser()));
+		User user = userRepository.findById(requestDTO.getIdUser()).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_EXCEPTION_MESSAGE + requestDTO.getIdUser()));
 		
 		if(group.getUserRequests().contains(user)) {
 			throw new ResourceExistsException("Resource already exists.");

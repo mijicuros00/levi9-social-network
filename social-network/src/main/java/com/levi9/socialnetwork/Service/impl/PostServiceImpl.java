@@ -23,6 +23,8 @@ import com.levi9.socialnetwork.dto.CreatePostDTO;
 import com.levi9.socialnetwork.dto.PostDTO;
 import com.levi9.socialnetwork.mapper.PostMapper;
 
+import org.slf4j.Logger;
+
 @Service
 public class PostServiceImpl implements PostService {
 
@@ -61,7 +63,7 @@ public class PostServiceImpl implements PostService {
     				System.out.println("Thread id: " + Thread.currentThread().getId());
     				emailService.sendNotificaitionAsync(user);
     				return id;
-    			}catch( Exception e ){
+    			} catch( Exception e ){
     				logger.info("Error sending email: " + e.getMessage());
     			} 
     		}
