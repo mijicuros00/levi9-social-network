@@ -1,8 +1,12 @@
 package com.levi9.socialnetwork.Controller;
 
-import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
+import com.levi9.socialnetwork.Model.MuteDuration;
+import com.levi9.socialnetwork.Model.MuteGroup;
+import com.levi9.socialnetwork.Service.MuteGroupService;
+import com.levi9.socialnetwork.dto.MuteGroupDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,13 +17,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.levi9.socialnetwork.Exception.ResourceDuplicateException;
 import com.levi9.socialnetwork.Exception.ResourceExistsException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
+import com.levi9.socialnetwork.Model.Group;
 import com.levi9.socialnetwork.Model.User;
+import com.levi9.socialnetwork.Service.GroupService;
 import com.levi9.socialnetwork.Service.UserService;
 import com.levi9.socialnetwork.dto.RequestDTO;
 
@@ -29,8 +33,16 @@ import com.levi9.socialnetwork.dto.RequestDTO;
 @RequestMapping("/api/users")
 public class UserController {
 
+
+	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private GroupService groupService;
+
+	@Autowired
+	MuteGroupService muteGroupService;
 
 	@GetMapping
 	public java.util.List<User> getAllUsers() {
@@ -54,8 +66,18 @@ public class UserController {
 		return userService.addFriend(userId,friendId);
 	}
 	
-
-	
+	@PutMapping("/{userId}/remove-friend/{friendId}")
+	public ResponseEntity<Boolean> removeFriend(@PathVariable Long userId, @PathVariable Long friendId) throws ResourceNotFoundException {
+		//TODO: userId - remove when you complete autentification
+		try{
+			boolean success = userService.removeFriend(userId, friendId);
+			return new ResponseEntity<>(success, HttpStatus.OK);
+		}catch (ResourceNotFoundException e){
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} catch (ResourceExistsException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
 
 	@PostMapping()
 	public User createUser(@RequestBody User user) {
@@ -74,26 +96,33 @@ public class UserController {
 		return userService.deleteUser(userId);
 	}
 	
-	@PostMapping("/create-request")
-	public ResponseEntity<User> createGroupRequest(@RequestBody RequestDTO requestDTO) throws ResourceNotFoundException, ResourceDuplicateException {
+	@PostMapping("/group-request")
+	public ResponseEntity<User> createGroupRequest(@RequestBody RequestDTO requestDTO) throws ResourceNotFoundException, ResourceExistsException {
 		User user;
-		try {
+		
+		Group group = groupService.getGroupById(requestDTO.getIdGroup());
+		if(group.isPrivate()) {
 			user = userService.createGroupRequest(requestDTO);
-		} catch (ResourceNotFoundException | ResourceDuplicateException e) {
-			return ResponseEntity.badRequest().build();
+		} else {
+			user = groupService.addUserToGroup(requestDTO);
 		}
+		
 		return ResponseEntity.ok().body(user);
 	}
 
-	@PostMapping("/accept-member/groups/{groupId}")
-	public ResponseEntity<Boolean> acceptMember(@PathVariable Long groupId) throws ResourceNotFoundException {
-		// User is hardcoded for now, it will be a user that sent the request when RBAC is implemented
-		try{
-			boolean success = userService.acceptMember(10L, groupId);
-			return new ResponseEntity<>(success, HttpStatus.OK);
-		}catch (ResourceNotFoundException e){
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+	@PutMapping("/{userId}/groups/{groupId}/mute")  // Restful?
+	public ResponseEntity<MuteGroupDTO> muteGroupForDuration(@PathVariable(value = "userId") Long userId,
+															 @PathVariable(value = "groupId") Long groupId,
+															 @RequestBody String muteDurationName) throws ResourceNotFoundException, ResourceExistsException {
+		MuteDuration muteDuration = muteGroupService.getMuteDurationFromString(muteDurationName);
+		MuteGroup muteGroup = muteGroupService.muteGroup(userId, groupId, muteDuration);
+		return new ResponseEntity<>(new MuteGroupDTO(muteGroup), HttpStatus.OK);
 	}
-	
+
+	@PutMapping("/{userId}/groups/{groupId}/unmute")  // Restful?
+	public ResponseEntity<MuteGroupDTO> unmuteGroup(@PathVariable(value = "userId") Long userId,
+													@PathVariable(value = "groupId") Long groupId) throws ResourceNotFoundException {
+		MuteGroup muteGroup = muteGroupService.unmuteGroup(userId, groupId);
+		return new ResponseEntity<>(new MuteGroupDTO(muteGroup), HttpStatus.OK);
+	}
 }

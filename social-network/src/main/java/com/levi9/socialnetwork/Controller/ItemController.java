@@ -30,13 +30,13 @@ public class ItemController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity deleteItem(@PathVariable Long id){
+    public ResponseEntity<Void> deleteItem(@PathVariable Long id){
         try{
             itemService.deleteItem(id);
         } catch (ResourceNotFoundException e) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

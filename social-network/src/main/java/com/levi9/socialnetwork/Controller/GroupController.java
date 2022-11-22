@@ -2,7 +2,11 @@ package com.levi9.socialnetwork.Controller;
 
 import java.util.List;
 
+import com.levi9.socialnetwork.Exception.ResourceExistsException;
+import com.levi9.socialnetwork.Service.MuteGroupService;
+import com.levi9.socialnetwork.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +30,12 @@ public class GroupController {
 	
 	@Autowired
 	private GroupService groupService;
+
+	@Autowired
+	private UserService userService;
+
+	@Autowired
+	private MuteGroupService muteGroupService;
 	
 	@Autowired
 	private PostService postService;
@@ -86,4 +96,29 @@ public class GroupController {
     	
     }
     
+
+	@PostMapping("/{groupId}/accept-member/{userId}")
+	public ResponseEntity<Boolean> acceptMember(@PathVariable Long groupId, @PathVariable Long userId) throws ResourceNotFoundException {
+		//TODO: Check if user that sent request is really group admin
+		try{
+			boolean success = groupService.acceptMember(userId, groupId);
+			return new ResponseEntity<>(success, HttpStatus.OK);
+		}catch (ResourceNotFoundException e){
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} catch (ResourceExistsException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@DeleteMapping("/{groupId}/remove-member/{userId}")
+	public ResponseEntity<Void> removeMember(@PathVariable Long groupId, @PathVariable Long userId) throws ResourceNotFoundException {
+		//TODO: Check if user that sent request is really group admin
+		//TODO: Remove data from member_event table when implemented
+		Group group = groupService.getGroupById(groupId);
+		muteGroupService.deleteMuteGroup(userId, groupId);
+		groupService.removeMember(userId, groupId);
+
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+
 }

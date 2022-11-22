@@ -31,8 +31,7 @@ public abstract class BaseExceptionHandler {
 		registerMapping(MethodArgumentTypeMismatchException.class, BAD_REQUEST);
 		registerMapping(HttpRequestMethodNotSupportedException.class, METHOD_NOT_ALLOWED);
 		registerMapping(ServletRequestBindingException.class, BAD_REQUEST);
-		registerMapping(BadRequestException.class, BAD_REQUEST);
-		registerMapping(ResourceDuplicateException.class, BAD_REQUEST);}
+		registerMapping(BadRequestException.class, BAD_REQUEST);}
 
 	@ExceptionHandler(Throwable.class)
 	@ResponseBody

@@ -4,8 +4,6 @@ ALTER TABLE "post" ADD FOREIGN KEY ("id_user") REFERENCES "user" ("id");
 
 ALTER TABLE "post" ADD FOREIGN KEY ("id_group") REFERENCES "group" ("id");
 
-ALTER TABLE "item" ADD FOREIGN KEY ("id_post") REFERENCES "post" ("id");
-
 ALTER TABLE "comment" ADD FOREIGN KEY ("id_replied_to") REFERENCES "comment" ("id");
 
 ALTER TABLE "comment" ADD FOREIGN KEY ("id_user") REFERENCES "user" ("id");
