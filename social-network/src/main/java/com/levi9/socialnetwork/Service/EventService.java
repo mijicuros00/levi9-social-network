@@ -13,6 +13,7 @@ public interface EventService {
     public Event getEventById(Long eventId) throws ResourceNotFoundException;
     public Event createEvent(Event event) throws ResourceExistsException;
     public Event updateEvent(Long eventId, Event eventDetails) throws ResourceNotFoundException;
+    public List<Event> deleteAllExpiredEvents() throws ResourceNotFoundException;
     public void deleteEvent(Long eventId) throws ResourceNotFoundException;
     Event createEventInGroup(Event event, Address address, Group group) throws ResourceExistsException;
 }
