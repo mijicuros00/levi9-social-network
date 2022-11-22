@@ -11,10 +11,12 @@ import com.levi9.socialnetwork.Model.Comment;
 import com.levi9.socialnetwork.Repository.CommentRepository;
 import com.levi9.socialnetwork.Service.CommentService;
 import com.levi9.socialnetwork.dto.CommentDTO;
+import com.levi9.socialnetwork.dto.ReplyDTO;
 
 @Service
 public class CommentServiceImpl implements CommentService {
-
+	private static final String RESOURCE_NOT_FOUND_MESSAGE = "Comment not found for this id :: "; 
+	
 	@Autowired
 	private CommentRepository commentRepository;
 	
@@ -36,26 +38,32 @@ public class CommentServiceImpl implements CommentService {
 	
 	
 	public Comment getCommentById(Long id) throws ResourceNotFoundException {
-		return commentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Comment not found for this id :: " + id));
+		return commentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE + id));
 	}
 
 	public Comment createComment(CommentDTO commentDTO) {
+		// TODO: Take userId from LoggedInUser instead of DTO when Log-in feature is done
 		Comment comment = new Comment(commentDTO);
 		return commentRepository.save(comment);
 	}
 	
+	public Comment replyToComment(ReplyDTO replyDTO) {
+		Comment comment = new Comment(replyDTO);
+		return commentRepository.save(comment);
+	}
+	
 	public Comment updateComment(Long commentId, @RequestBody CommentDTO commentDTO) throws ResourceNotFoundException {
-		Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResourceNotFoundException("Comment not found for this id :: " + commentId));
+		Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE + commentId));
 		comment.setText(commentDTO.getText());
 		comment.setDeleted(commentDTO.isDeleted());
-		Comment updatedComment = commentRepository.save(comment);
 		
-		return updatedComment;
+		return commentRepository.save(comment);
 	}
 	
 	public Comment deleteComment(Long commentId) throws ResourceNotFoundException{
-		Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResourceNotFoundException("Comment not found for this id :: " + commentId));
-		commentRepository.delete(comment);
+		Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE + commentId));
+		comment.setDeleted(true);
+		commentRepository.save(comment);
 		
 		return comment;
 	}

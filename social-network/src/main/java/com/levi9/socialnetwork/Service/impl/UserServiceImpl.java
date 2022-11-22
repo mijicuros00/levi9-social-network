@@ -135,9 +135,10 @@ public class UserServiceImpl implements UserService {
 		Group group = groupService.getGroupById(requestDTO.getIdGroup());
 		User user = userRepository.findById(requestDTO.getIdUser()).orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + requestDTO.getIdUser()));
 		
-		if(group.getUserRequests().contains(user)) {
+		if(group.containsUserRequest(user.getId())) {
 			throw new ResourceExistsException("Resource already exists.");
 		}
+		
 		group.getUserRequests().add(user);
 		groupRepository.save(group);
 		

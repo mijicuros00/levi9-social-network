@@ -19,6 +19,7 @@ import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Comment;
 import com.levi9.socialnetwork.Service.CommentService;
 import com.levi9.socialnetwork.dto.CommentDTO;
+import com.levi9.socialnetwork.dto.ReplyDTO;
 
 @RestController
 @RequestMapping("api/comments")
@@ -50,7 +51,7 @@ public class CommentController {
 	@GetMapping("/post")
 	public ResponseEntity<List<Comment>> getCommentsByPost(@RequestParam (value="postId") Long postId){
 		return new ResponseEntity<>(commentService.getCommentsByPost(postId), HttpStatus.OK);
-		}
+	}
 	
 	@GetMapping("/replies")
 	public ResponseEntity<List<Comment>> getRepliesByComment(@RequestParam (value="commentId") Long commentId){
@@ -62,6 +63,12 @@ public class CommentController {
 	@PostMapping
 	public ResponseEntity<Comment> createComment(@RequestBody CommentDTO commentDTO) {
 		commentService.createComment(commentDTO);
+		return ResponseEntity.status(200).build();
+	}
+	
+	@PostMapping("/reply")
+	public ResponseEntity<Comment> replyToComment(@RequestBody ReplyDTO replyDTO) {
+		commentService.replyToComment(replyDTO);
 		return ResponseEntity.status(200).build();
 	}
 	
