@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.levi9.socialnetwork.Exception.ResourceDuplicateException;
 import com.levi9.socialnetwork.Exception.ResourceExistsException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Comment;
@@ -25,6 +26,8 @@ public interface UserService  extends UserDetailsService {
 	public User createUser(User user);
 
 	public int addFriend(Long userId, Long friendId );
+	
+	public boolean removeFriend(Long userId, Long friendId) throws ResourceNotFoundException, ResourceExistsException;
 	
 	public ResponseEntity<User> updateUser(Long userId, @RequestBody User userDetails) throws ResourceNotFoundException;
 	

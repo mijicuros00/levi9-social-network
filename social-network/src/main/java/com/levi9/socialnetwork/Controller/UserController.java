@@ -1,5 +1,6 @@
 package com.levi9.socialnetwork.Controller;
 
+import java.util.List;
 import java.util.Map;
 
 import com.levi9.socialnetwork.Model.MuteDuration;
@@ -32,6 +33,8 @@ import com.levi9.socialnetwork.dto.RequestDTO;
 @RequestMapping("/api/users")
 public class UserController {
 
+
+	
 	@Autowired
 	private UserService userService;
 	
@@ -63,8 +66,18 @@ public class UserController {
 		return userService.addFriend(userId,friendId);
 	}
 	
-
-	
+	@PutMapping("/{userId}/remove-friend/{friendId}")
+	public ResponseEntity<Boolean> removeFriend(@PathVariable Long userId, @PathVariable Long friendId) throws ResourceNotFoundException {
+		//TODO: userId - remove when you complete autentification
+		try{
+			boolean success = userService.removeFriend(userId, friendId);
+			return new ResponseEntity<>(success, HttpStatus.OK);
+		}catch (ResourceNotFoundException e){
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} catch (ResourceExistsException e) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
 
 	@PostMapping()
 	public User createUser(@RequestBody User user) {

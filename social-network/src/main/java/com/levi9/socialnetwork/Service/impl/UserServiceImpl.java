@@ -17,9 +17,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.levi9.socialnetwork.Exception.ResourceDuplicateException;
 
 import com.levi9.socialnetwork.Exception.ResourceExistsException;
 import com.levi9.socialnetwork.Controller.UserController;
+
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Group;
 import com.levi9.socialnetwork.Model.User;
@@ -58,14 +60,29 @@ public class UserServiceImpl implements UserService {
 	 return ResponseEntity.ok().body(user);
 	}
 	
+
+	@Override
+	public boolean removeFriend(Long userId, Long friendId) throws ResourceNotFoundException, ResourceExistsException {
+	
+		User user = userRepository.findById(userId).map(u -> u).orElseThrow();
+		boolean removed = user.getFriends().removeIf(f -> f.getId().equals(friendId));
+		
+		if(!removed){
+			throw new ResourceNotFoundException("Friend with id " + friendId + " does not exist !");
+		}
+		
+		userRepository.save(user);
+		return removed;
+	}
+	
+	
 	public List<User> getNotMutedUsers(Long groupId)
 	{
 		return this.userRepository.getNotMutedUsers(groupId);
 	}
 	
 	
-	
-	
+
 	public int addFriend( Long userId, Long friendId )
 	{
 		Optional<User> user1=  userRepository.findById(userId);
