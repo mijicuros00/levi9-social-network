@@ -2,6 +2,7 @@ package com.levi9.socialnetwork.Service;
 
 import java.util.Map;
 
+import com.levi9.socialnetwork.dto.AddressDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -19,5 +20,4 @@ public interface AddressService {
 	public ResponseEntity<Address> updateAddress(Long addressId,@RequestBody Address addressDetails) throws ResourceNotFoundException;
 	
 	public Map<String, Boolean> deleteAddress(Long addressId) throws ResourceNotFoundException;
-	
 }

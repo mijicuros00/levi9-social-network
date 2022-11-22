@@ -2,7 +2,9 @@ package com.levi9.socialnetwork.Service.impl;
 
 import com.levi9.socialnetwork.Exception.ResourceExistsException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
+import com.levi9.socialnetwork.Model.Address;
 import com.levi9.socialnetwork.Model.Event;
+import com.levi9.socialnetwork.Model.Group;
 import com.levi9.socialnetwork.Repository.EventRepository;
 import com.levi9.socialnetwork.Service.EventService;
 import com.levi9.socialnetwork.Service.UserService;
@@ -51,5 +53,11 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND_MESSAGE + eventId));
 
         eventRepository.delete(event);
+    }
+
+    public Event createEventInGroup(Event event, Address address, Group group) throws ResourceExistsException {
+        event.setGroupId(group.getId());
+        event.setLocationId(address.getId());
+        return createEvent(event);
     }
 }

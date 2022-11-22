@@ -37,7 +37,7 @@ public class Event {
 
     public Event(EventDTO eventDTO) {
         this.id = eventDTO.getId();
-        this.locationId = eventDTO.getLocationId();
+        this.locationId = eventDTO.getLocation().getId();
         this.userId = eventDTO.getUserId();
         this.groupId = eventDTO.getGroupId();
         this.startDate = eventDTO.getStartDate();

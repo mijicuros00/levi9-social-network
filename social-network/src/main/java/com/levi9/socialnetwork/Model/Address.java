@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.levi9.socialnetwork.dto.AddressDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -47,9 +48,11 @@ public class Address {
 	}
 
 
-	
-	
-	
-	
-	
+	public Address(AddressDTO addressDTO) {
+		this.id = addressDTO.getId();
+		this.country = addressDTO.getCountry();
+		this.city = addressDTO.getCity();
+		this.street = addressDTO.getStreet();
+		this.number = addressDTO.getNumber();
+	}
 }

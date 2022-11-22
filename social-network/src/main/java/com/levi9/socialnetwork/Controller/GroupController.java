@@ -3,8 +3,12 @@ package com.levi9.socialnetwork.Controller;
 import java.util.List;
 
 import com.levi9.socialnetwork.Exception.ResourceExistsException;
-import com.levi9.socialnetwork.Service.MuteGroupService;
-import com.levi9.socialnetwork.Service.UserService;
+import com.levi9.socialnetwork.Model.Address;
+import com.levi9.socialnetwork.Model.Event;
+import com.levi9.socialnetwork.Service.*;
+import com.levi9.socialnetwork.dto.AddressDTO;
+import com.levi9.socialnetwork.dto.EventDTO;
+import liquibase.pro.packaged.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Group;
 import com.levi9.socialnetwork.Model.Post;
-import com.levi9.socialnetwork.Service.GroupService;
-import com.levi9.socialnetwork.Service.PostService;
 import com.levi9.socialnetwork.dto.GroupDTO;
 
 @RestController
@@ -39,6 +41,12 @@ public class GroupController {
 	
 	@Autowired
 	private PostService postService;
+
+	@Autowired
+	private EventService eventService;
+
+	@Autowired
+	private AddressService addressService;
 	
 	@GetMapping
 	public ResponseEntity<List<Group>> getAllGroups() {
@@ -119,6 +127,22 @@ public class GroupController {
 		groupService.removeMember(userId, groupId);
 
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+	}
+
+	@PostMapping("/{groupId}/events")
+	public ResponseEntity<EventDTO> createEventInGroup(@PathVariable Long groupId, @RequestBody EventDTO eventDTO)
+			throws ResourceNotFoundException, ResourceExistsException {
+		//TODO: Use logged in user id
+		Long userId = 1L;
+		eventDTO.setUserId(userId);
+
+		AddressDTO addressDTO = eventDTO.getLocation();
+		Address address = addressService.createAddress(new Address(addressDTO));
+
+		Group group = groupService.getGroupById(groupId);
+
+		Event event = eventService.createEventInGroup(new Event(eventDTO), address, group);
+		return new ResponseEntity<>(new EventDTO(event, address), HttpStatus.OK);
 	}
 
 }
