@@ -37,7 +37,7 @@ public class EmailServiceImpl implements EmailService{
 
 		SimpleMailMessage mail = new SimpleMailMessage();
 		mail.setTo(user.getEmail());
-		mail.setFrom(env.getProperty("spring.mail.username"));
+		mail.setFrom(from);
 		mail.setSubject("New post on your group");
 		mail.setText("Hi " + user.getName() + ",\n\nyou have new post on your group.");
 		javaMailSender.send(mail);

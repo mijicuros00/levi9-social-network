@@ -2,7 +2,6 @@ package com.levi9.socialnetwork.Model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
@@ -12,7 +11,6 @@ import javax.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 
 
@@ -48,9 +46,6 @@ public class User implements Serializable, UserDetails {
 
 	@Column(name = "last_password_reset_date")
 	private Timestamp lastPasswordResetDate;
-	
-//	@Column(name = "enabled")
-//	private String enabled;
 
 	@ManyToMany(cascade= CascadeType.ALL, fetch= FetchType.EAGER)
 	@JoinTable(joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
@@ -153,7 +148,6 @@ public class User implements Serializable, UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
 		return roles;
 	}
 
@@ -181,14 +175,5 @@ public class User implements Serializable, UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
-
-//	public Collection<Group> getGroupRequests() {
-//		return groupRequests;
-//	}
-//
-//	public void setGroupRequests(Collection<Group> groupRequests) {
-//		this.groupRequests = groupRequests;
-//	}
-
 
 }

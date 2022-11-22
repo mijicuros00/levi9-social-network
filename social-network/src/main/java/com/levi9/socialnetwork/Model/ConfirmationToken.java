@@ -1,6 +1,5 @@
 package com.levi9.socialnetwork.Model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
