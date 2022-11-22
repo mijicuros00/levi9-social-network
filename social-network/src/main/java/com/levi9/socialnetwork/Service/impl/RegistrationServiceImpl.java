@@ -2,7 +2,7 @@ package com.levi9.socialnetwork.Service.impl;
 
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.ConfirmationToken;
-import com.levi9.socialnetwork.Model.EStatus;
+import com.levi9.socialnetwork.Model.EUserVerifiedRegistration;
 import com.levi9.socialnetwork.Model.User;
 import com.levi9.socialnetwork.Security.authority.JWToken;
 import com.levi9.socialnetwork.Service.ConfirmationTokenService;
@@ -82,7 +82,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
         String encodedPassword = passwordEncoder.encode(registrationRequestDTO.getPassword());
 
-        User registeredUser = new User(registrationRequestDTO.getName(), registrationRequestDTO.getSurname(), registrationRequestDTO.getEmail(), registrationRequestDTO.getUsername(), encodedPassword, EStatus.NOT_VERIFIED);
+        User registeredUser = new User(registrationRequestDTO.getName(), registrationRequestDTO.getSurname(), registrationRequestDTO.getEmail(), registrationRequestDTO.getUsername(), encodedPassword, EUserVerifiedRegistration.NOT_VERIFIED);
 
         registeredUser = userService.save(registeredUser);
 
@@ -113,7 +113,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
         confirmationTokenService.save(confirmationToken);
 
-        user.setStatus(EStatus.VERIFIED);
+        user.setStatus(EUserVerifiedRegistration.VERIFIED);
         userService.save(user);
 
         return "Email " + user.getEmail() + " successfully confirmed!";

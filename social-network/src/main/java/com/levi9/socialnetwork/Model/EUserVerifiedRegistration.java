@@ -1,6 +1,6 @@
 package com.levi9.socialnetwork.Model;
 
-public enum EStatus {
+public enum EUserVerifiedRegistration {
     NOT_VERIFIED,
     VERIFIED
 }
