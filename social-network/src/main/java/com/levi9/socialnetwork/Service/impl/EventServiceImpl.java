@@ -1,10 +1,5 @@
 package com.levi9.socialnetwork.Service.impl;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.levi9.socialnetwork.Exception.ResourceExistsException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Address;
@@ -12,8 +7,11 @@ import com.levi9.socialnetwork.Model.Event;
 import com.levi9.socialnetwork.Model.Group;
 import com.levi9.socialnetwork.Repository.EventRepository;
 import com.levi9.socialnetwork.Service.EventService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -74,5 +72,9 @@ public class EventServiceImpl implements EventService {
         event.setGroupId(group.getId());
         event.setLocationId(address.getId());
         return createEvent(event);
+    }
+
+    public List<Event> getAllEventsInGroup(Long groupId) {
+        return eventRepository.findAllInGroup(groupId);
     }
 }

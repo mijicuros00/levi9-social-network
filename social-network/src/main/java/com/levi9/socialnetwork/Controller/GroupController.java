@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -118,16 +119,35 @@ public class GroupController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/{groupId}/events")
-    public ResponseEntity<EventDTO> createEventInGroup(@PathVariable Long groupId, @RequestBody EventDTO eventDTO)
-            throws ResourceNotFoundException, ResourceExistsException {
+    @GetMapping("/{groupId}/events")
+    public ResponseEntity<List<EventDTO>> getEventsInGroup(@PathVariable Long groupId) throws ResourceNotFoundException {
+        List<Event> groupEvents = eventService.getAllEventsInGroup(groupId);
+        List<EventDTO> groupEventDTOs = new ArrayList<>();
+        for (Event event : groupEvents) {
+            Address address = addressService.getAddressById(event.getLocationId());
+            EventDTO eventDTO = new EventDTO(event, address);
+            groupEventDTOs.add(eventDTO);
+        }
+        return new ResponseEntity<>(groupEventDTOs, HttpStatus.OK);
+    }
 
-        // TODO: Use logged in user id
-        Long userId = 1L;
+    @PostMapping("/{groupId}/events")
+    public ResponseEntity<EventDTO> createEventInGroup(@PathVariable Long groupId, @RequestBody EventDTO eventDTO, Principal principal)
+            throws ResourceNotFoundException, ResourceExistsException {
+        User user = userService.findUserByUsername(principal.getName());
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        Long userId = user.getId();
+
+        Group group = groupService.getGroupById(groupId);
+        if (!group.containsUser(userId)) {
+            throw new ResourceNotFoundException("User with id " + userId + " is not a member of group with id " + groupId);
+        }
+
         eventDTO.setUserId(userId);
         AddressDTO addressDTO = eventDTO.getLocation();
         Address address = addressService.createAddress(new Address(addressDTO));
-        Group group = groupService.getGroupById(groupId);
         Event event = eventService.createEventInGroup(new Event(eventDTO), address, group);
 
         return new ResponseEntity<>(new EventDTO(event, address), HttpStatus.OK);
