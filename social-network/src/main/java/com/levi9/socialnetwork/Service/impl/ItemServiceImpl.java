@@ -18,19 +18,17 @@ public class ItemServiceImpl implements ItemService {
     private ItemRepository itemRepository;
 
     public ItemDTO getItemById(Long id) throws ResourceNotFoundException {
-        return itemRepository.findItemById(id)
-                .map(ItemMapper::mapEntityToDTO)
+        return itemRepository.findItemById(id).map(ItemMapper::mapEntityToDTO)
                 .orElseThrow(() -> new ResourceNotFoundException("Item with id " + id + "was not found"));
     }
 
-    public Long createItem(ItemDTO itemDTO){
+    public Long createItem(ItemDTO itemDTO) {
         return itemRepository.save(ItemMapper.mapDTOToEntity(itemDTO)).getId();
     }
 
     @Transactional
     public ItemDTO updateItem(Long id, ItemDTO itemDTO) throws ResourceNotFoundException {
-        Item item = itemRepository.findItemById(id)
-                .map(searchedItem -> searchedItem)
+        Item item = itemRepository.findItemById(id).map(searchedItem -> searchedItem)
                 .orElseThrow(() -> new ResourceNotFoundException("Item with id " + id + "was not found"));
 
         item.setLink(itemDTO.getLink());

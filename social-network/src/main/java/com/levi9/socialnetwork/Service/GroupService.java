@@ -14,19 +14,19 @@ import com.levi9.socialnetwork.dto.RequestDTO;
 
 public interface GroupService {
 
-	public List<Group> getAllGroups();
-	
-	public Group getGroupById(Long id) throws ResourceNotFoundException;
+    public List<Group> getAllGroups() throws ResourceNotFoundException;
 
-	public Group createGroup(GroupDTO groupDTO);
-	
-	public Group updateGroup(Long groupId, @RequestBody GroupDTO groupDTO) throws ResourceNotFoundException;
-	
-	public Group deleteGroup(Long groupId) throws ResourceNotFoundException;
+    public Group getGroupById(Long id) throws ResourceNotFoundException;
 
-	public boolean acceptMember(Long userId, Long groupId) throws ResourceNotFoundException, ResourceExistsException;
+    public Group createGroup(GroupDTO groupDTO);
 
-	public boolean removeMember(Long userId, Long groupId) throws ResourceNotFoundException;
-	
-	public User addUserToGroup(RequestDTO requestDTO) throws ResourceNotFoundException, ResourceExistsException;
+    public Group updateGroup(Long groupId, @RequestBody GroupDTO groupDTO) throws ResourceNotFoundException;
+
+    public Group deleteGroup(Long groupId) throws ResourceNotFoundException;
+
+    public boolean acceptMember(Long userId, Long groupId) throws ResourceNotFoundException, ResourceExistsException;
+
+    public boolean removeMember(Long userId, Long groupId) throws ResourceNotFoundException;
+
+    public User addUserToGroup(RequestDTO requestDTO) throws ResourceNotFoundException, ResourceExistsException;
 }

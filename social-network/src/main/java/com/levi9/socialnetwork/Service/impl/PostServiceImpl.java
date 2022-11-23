@@ -6,10 +6,13 @@ import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.levi9.socialnetwork.Controller.UserController;
 import com.levi9.socialnetwork.Exception.BadRequestException;
+import com.levi9.socialnetwork.Exception.ResourceExistsException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Group;
 import com.levi9.socialnetwork.Model.Post;
@@ -50,24 +53,32 @@ public class PostServiceImpl implements PostService {
                     .orElseThrow(() -> new ResourceNotFoundException("Post with id " + id + "was not found"));
     }
 
-    public Long createPost(CreatePostDTO postDTO, Long userId){
-
-        Long id = postRepository.save(PostMapper.mapCreateDTOToEntity(postDTO, userId)).getId();
-
-        if(postDTO.getGroupId() != null){
-            List<User> notMutedUsers = userRepository.getNotMutedUsers(postDTO.getGroupId());
-            for (User user : notMutedUsers)
-            {
-                try {
-                    emailService.sendNotificaitionAsync(user);
-                    return id;
-                } catch( Exception e ){
-                    logger.info("Error sending email: " + e.getMessage());
-                }
+    public Long createPost(CreatePostDTO postDTO) throws ResourceNotFoundException, ResourceExistsException{
+    	
+        if (postDTO.getGroupId() != null) {
+            Group group = groupRepository.getById(postDTO.getGroupId());
+            if (!group.containsUser(postDTO.getUserId())) {
+                throw new ResourceExistsException("That post already axists.");
             }
         }
-
-    	return id;
+        
+        List<User> notMutedUsers = userRepository.getNotMutedUsers(postDTO.getGroupId());
+        
+        Long id;
+		
+    		for (User user : notMutedUsers) 
+    		{ 
+    			try {
+    				id = postRepository.save(PostMapper.mapCreateDTOToEntity(postDTO)).getId();
+    				System.out.println("Thread id: " + Thread.currentThread().getId());
+    				emailService.sendNotificaitionAsync(user);
+    				return id;
+    			} catch( Exception e ){
+    				logger.info("Error sending email: " + e.getMessage());
+    			} 
+    		}
+			
+    	return 0L;
         
     }
     

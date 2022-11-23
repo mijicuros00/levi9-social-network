@@ -44,21 +44,16 @@ public class AuthController {
     private JWToken jwToken;
 
     @PostMapping(value = "/registration")
-    public ResponseEntity<Void> registration(@RequestBody RegistrationRequestDTO registrationRequestDTO) {
+    public ResponseEntity<Void> registration(@RequestBody RegistrationRequestDTO registrationRequestDTO)
+            throws IOException {
 
-        try {
-            registrationService.register(registrationRequestDTO);
-        } catch(IllegalStateException illegalStateException){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (IOException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
+        registrationService.register(registrationRequestDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/confirm")
     public String confirmToken(@RequestParam String token) throws ResourceNotFoundException {
+
         return registrationService.confirmToken(token);
     }
 

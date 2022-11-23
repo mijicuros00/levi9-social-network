@@ -18,69 +18,57 @@ import com.levi9.socialnetwork.dto.ReplyDTO;
 
 @Service
 public class CommentServiceImpl implements CommentService {
-	private static final String RESOURCE_NOT_FOUND_MESSAGE = "Comment not found for this id :: "; 
-	private static final String DELETED_POST_MESSAGE = "Post is deleted.";
-	
-	@Autowired
-	private CommentRepository commentRepository;
-	
-	@Autowired
-	private PostRepository postRepository;
-	
-	public List<Comment> getAllComments() {
-		return commentRepository.findAll();
-	}
-	
-	public List<Comment> getCommentsByPost(Long postId) {
-			
-		return commentRepository.getCommentsByPost(postId);
-	}
-	
-	
-	public List<Comment> getRepliesByComment(Long commentId) {
-		return commentRepository.getRepliesByComment(commentId);
-	}
-	
-	
-	
-	public Comment getCommentById(Long id) throws ResourceNotFoundException {
-		return commentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE + id));
-	}
 
-	public Comment createComment(CommentDTO commentDTO) throws ResourceNotFoundException, BadRequestException {
-		// TODO: Take userId from LoggedInUser instead of DTO when Log-in feature is done
-		Post post = postRepository.findById(commentDTO.getIdPost()).orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE + commentDTO.getIdPost()));
-		if(post.isDeleted()) {
-			throw new BadRequestException(DELETED_POST_MESSAGE);
-		}
-		
-		Comment comment = new Comment(commentDTO);
-		return commentRepository.save(comment);
-	}
-	
-	public Comment replyToComment(ReplyDTO replyDTO) throws ResourceNotFoundException, BadRequestException {
-		Post post = postRepository.findById(replyDTO.getIdPost()).orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE + replyDTO.getIdPost()));
-		if(post.isDeleted()) {
-			throw new BadRequestException(DELETED_POST_MESSAGE);
-		}
-		
-		Comment comment = new Comment(replyDTO);
-		return commentRepository.save(comment);
-	}
-	
-	public Comment updateComment(Long commentId, @RequestBody CommentDTO commentDTO) throws ResourceNotFoundException {
-		Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE + commentId));
-		comment.setText(commentDTO.getText());
-		
-		return commentRepository.save(comment);
-	}
-	
-	public Comment deleteComment(Long commentId) throws ResourceNotFoundException{
-		Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE + commentId));
-		comment.setDeleted(true);
-		commentRepository.save(comment);
-		
-		return comment;
-	}
-	
+    @Autowired
+    private CommentRepository commentRepository;
+
+    public List<Comment> getAllComments() throws ResourceNotFoundException {
+        List<Comment> allComments = commentRepository.findAll();
+
+        if (allComments == null) {
+            throw new ResourceNotFoundException("There is not any comment");
+
+        }
+
+        return allComments;
+
+    }
+
+    public List<Comment> getCommentsByPost(Long postId) {
+
+        return commentRepository.getCommentsByPost(postId);
+    }
+
+    public List<Comment> getRepliesByComment(Long commentId) {
+        return commentRepository.getRepliesByComment(commentId);
+    }
+
+    public Comment getCommentById(Long id) throws ResourceNotFoundException {
+        return commentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Comment not found for this id :: " + id));
+    }
+
+    public Comment createComment(CommentDTO commentDTO) {
+        Comment comment = new Comment(commentDTO);
+        return commentRepository.save(comment);
+    }
+
+    public Comment updateComment(Long commentId, @RequestBody CommentDTO commentDTO) throws ResourceNotFoundException {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Comment not found for this id :: " + commentId));
+        comment.setText(commentDTO.getText());
+        comment.setDeleted(commentDTO.isDeleted());
+        Comment updatedComment = commentRepository.save(comment);
+
+        return updatedComment;
+    }
+
+    public Comment deleteComment(Long commentId) throws ResourceNotFoundException {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Comment not found for this id :: " + commentId));
+        commentRepository.delete(comment);
+
+        return comment;
+    }
+
 }

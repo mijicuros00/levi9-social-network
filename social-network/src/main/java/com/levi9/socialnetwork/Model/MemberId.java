@@ -3,6 +3,7 @@ package com.levi9.socialnetwork.Model;
 import java.io.Serializable;
 
 import lombok.NoArgsConstructor;
+
 @NoArgsConstructor
 public class MemberId implements Serializable {
     private Long idUser;
@@ -15,7 +16,6 @@ public class MemberId implements Serializable {
 
     @Override
     public String toString() {
-        return "idUser=" + idUser +
-                ", idGroup=" + idGroup;
+        return "idUser=" + idUser + ", idGroup=" + idGroup;
     }
 }

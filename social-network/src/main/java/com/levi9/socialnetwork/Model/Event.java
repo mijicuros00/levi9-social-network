@@ -47,16 +47,12 @@ public class Event {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE,targetEntity = Member.class)
-    @JoinTable(name = "member_event",
-    joinColumns = 
-    @JoinColumn(name = "id_event", referencedColumnName = "id",nullable = false, updatable = false),
-    inverseJoinColumns ={
-    	    @JoinColumn(name="id_user", referencedColumnName="id_user"),
-    	    @JoinColumn(name="id_group", referencedColumnName="id_group")
-    	  })
-	private Set<Member> memberUsers;
-    
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE, targetEntity = Member.class)
+    @JoinTable(name = "member_event", joinColumns = @JoinColumn(name = "id_event", referencedColumnName = "id", nullable = false, updatable = false), inverseJoinColumns = {
+            @JoinColumn(name = "id_user", referencedColumnName = "id_user"),
+            @JoinColumn(name = "id_group", referencedColumnName = "id_group") })
+    private Set<Member> memberUsers;
+
     public Event(EventDTO eventDTO) {
         this.id = eventDTO.getId();
         this.locationId = eventDTO.getLocation().getId();
@@ -67,16 +63,9 @@ public class Event {
         this.memberUsers = eventDTO.getMemberUsers();
     }
 
-
     @Override
     public String toString() {
-        return "Event{" +
-                "id=" + id +
-                ", locationId=" + locationId +
-                ", userId=" + userId +
-                ", groupId=" + groupId +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                '}';
+        return "Event{" + "id=" + id + ", locationId=" + locationId + ", userId=" + userId + ", groupId=" + groupId
+                + ", startDate=" + startDate + ", endDate=" + endDate + '}';
     }
 }

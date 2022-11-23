@@ -15,11 +15,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Member {
-	@Id
-	@Column(name="id_user")
-	Long idUser;
-	@Id
-	@Column(name="id_group")
-	Long idGroup;
-	
+    @Id
+    @Column(name = "id_user")
+    Long idUser;
+    @Id
+    @Column(name = "id_group")
+    Long idGroup;
+
 }
