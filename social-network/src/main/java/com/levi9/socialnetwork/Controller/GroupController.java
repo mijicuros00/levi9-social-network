@@ -106,6 +106,18 @@ public class GroupController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @DeleteMapping("/{groupId}/leave")
+    public ResponseEntity<Void> leaveGroup(@PathVariable Long groupId, Principal principal) throws ResourceNotFoundException {
+        User user = userService.findUserByUsername(principal.getName());
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        Long userId = user.getId();
+        muteGroupService.deleteMuteGroup(userId, groupId);
+        groupService.removeMember(userId, groupId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PostMapping("/{groupId}/events")
     public ResponseEntity<EventDTO> createEventInGroup(@PathVariable Long groupId, @RequestBody EventDTO eventDTO)
             throws ResourceNotFoundException, ResourceExistsException {

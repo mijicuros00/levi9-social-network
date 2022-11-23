@@ -1,12 +1,5 @@
 package com.levi9.socialnetwork.Service.impl;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-
 import com.levi9.socialnetwork.Exception.ResourceExistsException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Group;
@@ -18,6 +11,12 @@ import com.levi9.socialnetwork.Service.GroupService;
 import com.levi9.socialnetwork.Service.MuteGroupService;
 import com.levi9.socialnetwork.dto.GroupDTO;
 import com.levi9.socialnetwork.dto.RequestDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class GroupServiceImpl implements GroupService {
@@ -105,10 +104,11 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public boolean removeMember(Long userId, Long groupId) throws ResourceNotFoundException {
+        groupRepository.removeMembersFromEvents(groupId, userId);
         Group group = getGroupById(groupId);
         boolean removed = group.getMembers().removeIf(user -> user.getId().equals(userId));
         if (!removed) {
-            throw new ResourceNotFoundException("User with id " + userId + " did not request joining this group!");
+            throw new ResourceNotFoundException("User with id " + userId + " is not a member of group with id " + groupId);
         }
         groupRepository.save(group);
         return true;
