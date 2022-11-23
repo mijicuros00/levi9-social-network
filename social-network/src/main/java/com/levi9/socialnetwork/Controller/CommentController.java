@@ -55,9 +55,9 @@ public class CommentController {
 
         return new ResponseEntity<>(commentService.getRepliesByComment(commentId), HttpStatus.OK);
     }
-    
+
     @PostMapping("/reply")
-    public ResponseEntity<Comment> replyToComment(@RequestBody ReplyDTO replyDTO) throws ResourceNotFoundException{
+    public ResponseEntity<Comment> replyToComment(@RequestBody ReplyDTO replyDTO) throws ResourceNotFoundException {
         commentService.replyToComment(replyDTO);
         return ResponseEntity.status(200).build();
     }

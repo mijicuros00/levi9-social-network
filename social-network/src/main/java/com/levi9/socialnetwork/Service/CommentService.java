@@ -16,7 +16,7 @@ public interface CommentService {
     public List<Comment> getAllComments() throws ResourceNotFoundException;
 
     public List<Comment> getCommentsByPost(Long postId);
-    
+
     public Comment replyToComment(ReplyDTO replyDTO) throws ResourceNotFoundException;
 
     public List<Comment> getRepliesByComment(Long commentId);
