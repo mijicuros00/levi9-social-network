@@ -86,6 +86,13 @@ public class WebSecurityConfig {
 		
 		return http.build();
 	}
+	
+	private static final String[] AUTH_WHITELIST = {
+	        "/swagger-resources/**",
+	        "/swagger-ui.html",
+	        "/v2/api-docs",
+	        "/webjars/**"
+	};
 
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
@@ -93,6 +100,7 @@ public class WebSecurityConfig {
 			web.ignoring().antMatchers(HttpMethod.POST, "/auth/login");
 			web.ignoring().antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "favicon.ico", "/**/*.html",
 					"/**/*.css", "/**/*.js");
+			 web.ignoring().antMatchers(AUTH_WHITELIST);
 		};
 	}
 
