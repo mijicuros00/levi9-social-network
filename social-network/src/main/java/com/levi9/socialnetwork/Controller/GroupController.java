@@ -8,7 +8,6 @@ import com.levi9.socialnetwork.Model.Event;
 import com.levi9.socialnetwork.Service.*;
 import com.levi9.socialnetwork.dto.AddressDTO;
 import com.levi9.socialnetwork.dto.EventDTO;
-import liquibase.pro.packaged.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

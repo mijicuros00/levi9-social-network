@@ -35,6 +35,9 @@ public class PostController {
     @Autowired
     private GroupService groupService;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping(value = "/{id}")
 
     public ResponseEntity<PostDTO> getPost(@PathVariable Long id) throws ResourceNotFoundException {

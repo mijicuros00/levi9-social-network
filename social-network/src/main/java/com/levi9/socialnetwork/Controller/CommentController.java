@@ -19,6 +19,7 @@ import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Comment;
 import com.levi9.socialnetwork.Service.CommentService;
 import com.levi9.socialnetwork.dto.CommentDTO;
+import com.levi9.socialnetwork.dto.ReplyDTO;
 
 @RestController
 @RequestMapping("api/comment")

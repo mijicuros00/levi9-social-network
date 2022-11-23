@@ -106,7 +106,6 @@ public class PostServiceImpl implements PostService {
         post.setPrivate(postDTO.isPrivate());
         post.setCreatedDate(postDTO.getCreatedDate());
         post.setDeleted(postDTO.isDeleted());
-        post.setUserId(postDTO.getUserId());
         post.setGroupId(postDTO.getGroupId());
 
         postRepository.save(post);

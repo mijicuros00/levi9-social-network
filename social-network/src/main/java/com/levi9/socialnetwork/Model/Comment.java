@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.levi9.socialnetwork.dto.CommentDTO;
+import com.levi9.socialnetwork.dto.ReplyDTO;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

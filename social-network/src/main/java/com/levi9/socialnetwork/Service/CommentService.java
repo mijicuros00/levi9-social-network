@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.levi9.socialnetwork.Exception.BadRequestException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Comment;
 import com.levi9.socialnetwork.dto.CommentDTO;
+import com.levi9.socialnetwork.dto.ReplyDTO;
 
 public interface CommentService {
 
