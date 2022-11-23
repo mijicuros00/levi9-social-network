@@ -6,11 +6,11 @@ import com.levi9.socialnetwork.Model.Post;
 import com.levi9.socialnetwork.Model.User;
 import com.levi9.socialnetwork.Service.GroupService;
 import com.levi9.socialnetwork.Service.PostService;
-import com.levi9.socialnetwork.Service.impl.PostServiceImpl;
+import com.levi9.socialnetwork.Service.UserService;
 import com.levi9.socialnetwork.dto.CreatePostDTO;
-import com.levi9.socialnetwork.dto.MuteGroupDTO;
 import com.levi9.socialnetwork.dto.PostDTO;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +29,9 @@ public class PostController {
 
     @Autowired
     private GroupService groupService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<PostDTO> getOne(@PathVariable Long id){
@@ -64,20 +67,26 @@ public class PostController {
 		return new ResponseEntity<>(postService.getAllPostsOfMyFriendsFromPrivateGroups(userId), HttpStatus.OK);
     }
     
-    
+
     @PostMapping
-    public ResponseEntity<Long> createPost(@RequestBody CreatePostDTO postDTO) throws ResourceNotFoundException {
-        // Logged user will be used to set which user created post
+    public ResponseEntity<Long> createPost(@RequestBody CreatePostDTO postDTO, Principal principal) throws ResourceNotFoundException {
+
+        User user = userService.findUserByUsername(principal.getName());
+
+        if(user == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         if(postDTO.getGroupId() != null){
             Group group = groupService.getGroupById(postDTO.getGroupId());
-            if(!group.containsUser(postDTO.getUserId())){
+            if(!group.containsUser(user.getId())){
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         }
 
         Long id;
         try{
-            id = postService.createPost(postDTO);
+            id = postService.createPost(postDTO, user.getId());
                        
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -93,7 +102,14 @@ public class PostController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<PostDTO> updatePost(@PathVariable Long id, @RequestBody PostDTO postDTO){
+    public ResponseEntity<PostDTO> updatePost(@PathVariable Long id, @RequestBody PostDTO postDTO, Principal principal) throws ResourceNotFoundException {
+
+        User user = userService.findUserByUsername(principal.getName());
+        PostDTO post = postService.getPostById(id);
+
+        if(!user.getId().equals(post.getUserId())){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
 
         PostDTO updatedPost;
 
@@ -107,13 +123,21 @@ public class PostController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity deletePost(@PathVariable Long id){
-        try{
-            postService.deletePost(id);
-        }catch (ResourceNotFoundException e){
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Void> deletePost(@PathVariable Long id, Principal principal) throws ResourceNotFoundException {
+
+        PostDTO postDTO = postService.getPostById(id);
+        User user = userService.findUserByUsername(principal.getName());
+
+        if(!user.getId().equals(postDTO.getUserId())){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        try {
+            postService.deletePost(id);
+        } catch (ResourceNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

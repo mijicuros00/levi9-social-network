@@ -50,25 +50,24 @@ public class PostServiceImpl implements PostService {
                     .orElseThrow(() -> new ResourceNotFoundException("Post with id " + id + "was not found"));
     }
 
-    public Long createPost(CreatePostDTO postDTO){
-    	
-        List<User> notMutedUsers = userRepository.getNotMutedUsers(postDTO.getGroupId());
-        
-        Long id;
-		
-    		for (User user : notMutedUsers) 
-    		{ 
-    			try {
-    				id = postRepository.save(PostMapper.mapCreateDTOToEntity(postDTO)).getId();
-    				System.out.println("Thread id: " + Thread.currentThread().getId());
-    				emailService.sendNotificaitionAsync(user);
-    				return id;
-    			} catch( Exception e ){
-    				logger.info("Error sending email: " + e.getMessage());
-    			} 
-    		}
-			
-    	return 0L;
+    public Long createPost(CreatePostDTO postDTO, Long userId){
+
+        Long id = postRepository.save(PostMapper.mapCreateDTOToEntity(postDTO, userId)).getId();
+
+        if(postDTO.getGroupId() != null){
+            List<User> notMutedUsers = userRepository.getNotMutedUsers(postDTO.getGroupId());
+            for (User user : notMutedUsers)
+            {
+                try {
+                    emailService.sendNotificaitionAsync(user);
+                    return id;
+                } catch( Exception e ){
+                    logger.info("Error sending email: " + e.getMessage());
+                }
+            }
+        }
+
+    	return id;
         
     }
     
@@ -96,7 +95,6 @@ public class PostServiceImpl implements PostService {
         post.setPrivate(postDTO.isPrivate());
         post.setCreatedDate(postDTO.getCreatedDate());
         post.setDeleted(postDTO.isDeleted());
-        post.setUserId(postDTO.getUserId());
         post.setGroupId(postDTO.getGroupId());
 
         postRepository.save(post);

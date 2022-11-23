@@ -1,5 +1,5 @@
 CREATE TABLE "post_item" (
-    "id_user" bigint,
+    "id_item" bigint,
     "id_post" bigint,
-    PRIMARY KEY ("id_user", "id_post")
+    PRIMARY KEY ("id_item", "id_post")
 );
