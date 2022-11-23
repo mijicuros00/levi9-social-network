@@ -1,29 +1,20 @@
 package com.levi9.socialnetwork.Controller;
 
-import java.util.List;
-
 import com.levi9.socialnetwork.Exception.ResourceExistsException;
-import com.levi9.socialnetwork.Model.Address;
-import com.levi9.socialnetwork.Model.Event;
+import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
+import com.levi9.socialnetwork.Model.*;
 import com.levi9.socialnetwork.Service.*;
 import com.levi9.socialnetwork.dto.AddressDTO;
 import com.levi9.socialnetwork.dto.EventDTO;
+import com.levi9.socialnetwork.dto.GroupDTO;
+import com.levi9.socialnetwork.dto.MuteGroupDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
-import com.levi9.socialnetwork.Model.Group;
-import com.levi9.socialnetwork.Model.Post;
-import com.levi9.socialnetwork.dto.GroupDTO;
+import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/group")
@@ -128,6 +119,30 @@ public class GroupController {
         Event event = eventService.createEventInGroup(new Event(eventDTO), address, group);
 
         return new ResponseEntity<>(new EventDTO(event, address), HttpStatus.OK);
+    }
+
+    @PutMapping("/{groupId}/mute")
+    public ResponseEntity<MuteGroupDTO> muteGroupForDuration(@PathVariable(value = "groupId") Long groupId, @RequestBody String muteDurationName, Principal principal)
+            throws ResourceNotFoundException, ResourceExistsException {
+        User user = userService.findUserByUsername(principal.getName());
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        MuteDuration muteDuration = muteGroupService.getMuteDurationFromString(muteDurationName);
+        MuteGroup muteGroup = muteGroupService.muteGroup(user.getId(), groupId, muteDuration);
+        return new ResponseEntity<>(new MuteGroupDTO(muteGroup), HttpStatus.OK);
+    }
+
+    @PutMapping("/{groupId}/unmute")
+    public ResponseEntity<MuteGroupDTO> unmuteGroup(@PathVariable(value = "groupId") Long groupId, Principal principal) throws ResourceNotFoundException {
+        User user = userService.findUserByUsername(principal.getName());
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        MuteGroup muteGroup = muteGroupService.unmuteGroup(user.getId(), groupId);
+        return new ResponseEntity<>(new MuteGroupDTO(muteGroup), HttpStatus.OK);
     }
 
 }

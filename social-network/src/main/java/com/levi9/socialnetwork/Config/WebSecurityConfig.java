@@ -61,7 +61,7 @@ public class WebSecurityConfig {
                 .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and().authorizeRequests()
                 .antMatchers("/api/auth/**").permitAll().antMatchers("/api/users/**").permitAll()
                 .antMatchers("/api/auth/**").permitAll().antMatchers("/api/events/**").permitAll()
-                .antMatchers("/api/mute_groups/**").permitAll().antMatchers("/api/groups/**").permitAll()
+                .antMatchers("/api/mute_groups/**").permitAll().antMatchers("/api/group/**").permitAll()
                 .antMatchers("/api/comments/**").permitAll().antMatchers("/api/posts/**").permitAll()
 
                 .antMatchers("/api/events/**").permitAll()

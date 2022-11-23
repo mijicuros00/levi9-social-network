@@ -1,4 +1,4 @@
-insert into "user" (id, name, surname, email, password, status) values (default, 'Tadeo', 'Cawthery', 'tcawthery0@behance.net', '$2a$10$.r4El/SxWktyti7tzqKnDuv.nAZGW2XK6mD5lZZYxMSQsdF.uMWRq', 'VERIFIED');
+insert into "user" (id, name, surname, email, username, password, status) values (default, 'Tadeo', 'Cawthery', 'tcawthery0@behance.net', 'tcaw', '$2a$10$.r4El/SxWktyti7tzqKnDuv.nAZGW2XK6mD5lZZYxMSQsdF.uMWRq', 'VERIFIED');
 insert into "user" (id, name, surname, email, password, status) values (default, 'Cara', 'Sabin', 'csabin1@amazon.de', '$2a$10$.r4El/SxWktyti7tzqKnDuv.nAZGW2XK6mD5lZZYxMSQsdF.uMWRq', 'VERIFIED');
 insert into "user" (id, name, surname, email, password, status) values (default, 'Maisie', 'Peepall', 'nikolaakv@gmail.com', '$2a$10$.r4El/SxWktyti7tzqKnDuv.nAZGW2XK6mD5lZZYxMSQsdF.uMWRq', 'VERIFIED');
 insert into "user" (id, name, surname, email, password, status) values (default, 'Ruggiero', 'Boij', 'rboij3@imgur.com', '$2a$10$.r4El/SxWktyti7tzqKnDuv.nAZGW2XK6mD5lZZYxMSQsdF.uMWRq', 'VERIFIED');
