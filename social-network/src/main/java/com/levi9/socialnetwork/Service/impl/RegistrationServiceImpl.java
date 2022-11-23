@@ -2,7 +2,6 @@ package com.levi9.socialnetwork.Service.impl;
 
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.ConfirmationToken;
-import com.levi9.socialnetwork.Model.Role;
 import com.levi9.socialnetwork.Model.UserVerificationStatus;
 import com.levi9.socialnetwork.Model.User;
 import com.levi9.socialnetwork.Security.authority.JWToken;
