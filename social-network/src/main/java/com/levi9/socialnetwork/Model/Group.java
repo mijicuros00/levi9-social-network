@@ -34,6 +34,9 @@ public class Group {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
+
+	@Column(name = "name")
+	private String name;
 	
 	@Column(name = "private")
 	private boolean isPrivate; 
@@ -56,7 +59,7 @@ public class Group {
 	)
 	private Set<User> members = new HashSet<>();
 
-	public Group(boolean isPrivate, Long idAdmin) {
+	public Group(String name, boolean isPrivate, Long idAdmin) {
 		super();
 		this.isPrivate = isPrivate;
 		this.idAdmin = idAdmin;

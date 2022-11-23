@@ -41,7 +41,7 @@ public class GroupServiceImpl implements GroupService {
 	}
 
 	public Group createGroup(GroupDTO groupDTO) {
-		Group group = new Group(groupDTO.isPrivate(), groupDTO.getIdAdmin());
+		Group group = new Group(groupDTO.getName(), groupDTO.isPrivate(), groupDTO.getIdAdmin());
 		return groupRepository.save(group);
 	}
 	
