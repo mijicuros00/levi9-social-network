@@ -23,4 +23,8 @@ public interface UserRepository extends JpaRepository<User, Long>  {
 
 	@Query(value = "Select * from user WHERE user.id = :userId", nativeQuery = true)
 	User findUsersInGroup(Long userId);
+	
+    @Query(value = "SELECT * FROM public.user INNER JOIN member_event ON public.user.id = member_event.id_user "
+            + "WHERE member_event.id_event = :idEvent", nativeQuery = true)
+    List<User> getUsersOnEvent(Long idEvent);
 }

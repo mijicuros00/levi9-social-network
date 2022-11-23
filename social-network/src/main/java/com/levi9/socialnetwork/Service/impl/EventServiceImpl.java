@@ -3,19 +3,23 @@ package com.levi9.socialnetwork.Service.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
 import com.levi9.socialnetwork.Exception.ResourceExistsException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Address;
 import com.levi9.socialnetwork.Model.Event;
 import com.levi9.socialnetwork.Model.Group;
+import com.levi9.socialnetwork.Model.User;
 import com.levi9.socialnetwork.Repository.EventRepository;
+import com.levi9.socialnetwork.Repository.UserRepository;
+import com.levi9.socialnetwork.Service.EmailService;
 import com.levi9.socialnetwork.Service.EventService;
-
-import javax.transaction.Transactional;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -26,6 +30,12 @@ public class EventServiceImpl implements EventService {
 
 	@Autowired
 	private EventRepository eventRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired 
+	private EmailService emailService;
 
 
     public List<Event> getAllEvents() {
@@ -81,5 +91,16 @@ public class EventServiceImpl implements EventService {
         event.setGroupId(group.getId());
         event.setLocationId(address.getId());
         return createEvent(event);
+    }
+    
+    @Scheduled(cron = "0 */1 * * * *")
+    public void notifyAllUsersAboutEvent() throws MailException, InterruptedException {
+        List<Event> events = eventRepository.getEventsForNotify();
+        for (Event event : events) {
+            List<User> users = userRepository.getUsersOnEvent(event.getId()); 
+            for (User user : users) {
+               emailService.sendNotificationAboutEventAsync(event, user);
+            }
+        }
     }
 }

@@ -1,18 +1,13 @@
 package com.levi9.socialnetwork.Service;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-
-
-import com.levi9.socialnetwork.Model.User;
-import org.springframework.core.env.Environment;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-
 import java.io.IOException;
+
+import org.springframework.mail.MailException;
+import org.springframework.scheduling.annotation.Async;
+
+import com.levi9.socialnetwork.Model.Event;
+import com.levi9.socialnetwork.Model.User;
 
 
 public interface EmailService  {
@@ -25,5 +20,6 @@ public interface EmailService  {
 
 	String registerEmail(String name, String link) throws IOException;
 	
-	
+	@Async
+	public void sendNotificationAboutEventAsync(Event event, User user) throws MailException, InterruptedException;
 }
