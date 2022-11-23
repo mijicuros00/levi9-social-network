@@ -22,13 +22,9 @@ public interface UserService  extends UserDetailsService {
 
 	public User findUserById(Long userId) throws ResourceNotFoundException;
 
-	User findUserByUsername(String username) throws ResourceNotFoundException;
+	public User findUserByUsername(String username) throws ResourceNotFoundException;
 	
-	public User findUserByUsername(String username);
-	
-	public User findUserByUsername(String username);
-	
-	User save(User user);
+	public User save(User user);
 	
 	public User createUser(User user);
 

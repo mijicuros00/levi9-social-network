@@ -123,7 +123,7 @@ public class PostServiceImpl implements PostService {
         postRepository.save(post);
     }
     
-    public List<Post> getAllPostsFromGroup(Long groupId) throws ResourceNotFoundException, BadRequestException {
+    public List<Post> getAllPostsFromGroup(Long groupId,Long userId) throws ResourceNotFoundException, BadRequestException {
     	
     	// Hard-coded until log-in is not implemented, when it's done add id of logged in user
     	Long idLoggedUser = 5L;
@@ -133,7 +133,7 @@ public class PostServiceImpl implements PostService {
     		throw new BadRequestException("User is not member of group.");
     	}
     	
-    	return postRepository.getAllPostsFromGroup(groupId);
+    	return postRepository.getAllPostsFromGroup(groupId,userId);
     	
     }
 }
