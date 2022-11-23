@@ -11,9 +11,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long> {
-	
-	@Query(value = "SELECT * FROM event\r\n"
-			+ "WHERE event.end_date < CURRENT_TIMESTAMP ", nativeQuery = true)
-	List<Event> getAllExpiredEvents();
-	
+
+    @Query(value = "SELECT * FROM event\r\n" + "WHERE event.end_date < CURRENT_TIMESTAMP ", nativeQuery = true)
+    List<Event> getAllExpiredEvents();
+
 }

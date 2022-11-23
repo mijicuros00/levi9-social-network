@@ -16,7 +16,6 @@ public class MuteGroupId implements Serializable {
 
     @Override
     public String toString() {
-        return "userId=" + userId +
-                ", groupId=" + groupId;
+        return "userId=" + userId + ", groupId=" + groupId;
     }
 }
