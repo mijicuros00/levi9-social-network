@@ -68,7 +68,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Transactional
     @Override
-    public String register(RegistrationRequestDTO registrationRequestDTO) {
+    public String register(RegistrationRequestDTO registrationRequestDTO) throws IOException, ResourceNotFoundException {
         boolean isRequestValid = validateRegistrationRequest(registrationRequestDTO);
         if (!isRequestValid) {
             throw new IllegalStateException("Registration request is not valid!");

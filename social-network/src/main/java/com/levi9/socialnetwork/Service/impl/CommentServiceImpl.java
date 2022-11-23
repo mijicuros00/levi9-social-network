@@ -18,22 +18,36 @@ import com.levi9.socialnetwork.dto.ReplyDTO;
 
 @Service
 public class CommentServiceImpl implements CommentService {
+    
+    private static final String RESOURCE_NOT_FOUND_MESSAGE = "Comment not found for this id :: "; 
+    private static final String DELETED_POST_MESSAGE = "Post is deleted.";
 
     @Autowired
     private CommentRepository commentRepository;
+    
+    @Autowired
+    private PostRepository postRepository;
 
     public List<Comment> getAllComments() throws ResourceNotFoundException {
         List<Comment> allComments = commentRepository.findAll();
 
         if (allComments == null) {
             throw new ResourceNotFoundException("There is not any comment");
-
         }
 
         return allComments;
-
     }
 
+    public Comment replyToComment(ReplyDTO replyDTO) throws ResourceNotFoundException, BadRequestException {
+        Post post = postRepository.findById(replyDTO.getIdPost()).orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE + replyDTO.getIdPost()));
+        if(post.isDeleted()) {
+            throw new BadRequestException(DELETED_POST_MESSAGE);
+        }
+
+        Comment comment = new Comment(replyDTO);
+        return commentRepository.save(comment);
+    }
+    
     public List<Comment> getCommentsByPost(Long postId) {
 
         return commentRepository.getCommentsByPost(postId);
