@@ -57,15 +57,24 @@ public class Comment {
         this.idRepliedTo = idRepliedTo;
         this.idPost = idPost;
     }
-
+    
     public Comment(CommentDTO commentDTO) {
         super();
         this.text = commentDTO.getText();
         this.createdDate = commentDTO.getCreatedDate();
-        this.deleted = commentDTO.isDeleted();
+        this.deleted = false;
         this.idUser = commentDTO.getIdUser();
-        this.idRepliedTo = commentDTO.getIdRepliedTo();
         this.idPost = commentDTO.getIdPost();
+    }
+
+    public Comment(ReplyDTO replyDTO) {
+        super();
+        this.text = replyDTO.getText();
+        this.createdDate = replyDTO.getCreatedDate();
+        this.deleted = false;
+        this.idUser = replyDTO.getIdUser();
+        this.idRepliedTo = replyDTO.getIdRepliedTo();
+        this.idPost = replyDTO.getIdPost();
     }
 
 }

@@ -1,5 +1,6 @@
 package com.levi9.socialnetwork.Controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,10 @@ import com.levi9.socialnetwork.Exception.ResourceExistsException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Group;
 import com.levi9.socialnetwork.Model.Post;
+import com.levi9.socialnetwork.Model.User;
 import com.levi9.socialnetwork.Service.GroupService;
 import com.levi9.socialnetwork.Service.PostService;
+import com.levi9.socialnetwork.Service.UserService;
 import com.levi9.socialnetwork.dto.CreatePostDTO;
 import com.levi9.socialnetwork.dto.PostDTO;
 
@@ -69,12 +72,29 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity<Long> createPost(@RequestBody CreatePostDTO postDTO)
+    public ResponseEntity<Long> createPost(@RequestBody CreatePostDTO postDTO, Principal principal)
             throws ResourceNotFoundException, ResourceExistsException {
-        // Logged user will be used to set which user created post
+
+        User user = userService.findUserByUsername(principal.getName());
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        if (postDTO.getGroupId() != null) {
+            Group group = groupService.getGroupById(postDTO.getGroupId());
+            if (!group.containsUser(user.getId())) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        }
 
         Long id;
-        id = postService.createPost(postDTO);
+        try {
+            id = postService.createPost(postDTO, user.getId());
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
         String location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id)
                 .toUriString();

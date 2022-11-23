@@ -45,7 +45,7 @@ public class AuthController {
 
     @PostMapping(value = "/registration")
     public ResponseEntity<Void> registration(@RequestBody RegistrationRequestDTO registrationRequestDTO)
-            throws IOException {
+            throws IOException, ResourceNotFoundException {
 
         registrationService.register(registrationRequestDTO);
         return new ResponseEntity<>(HttpStatus.OK);
