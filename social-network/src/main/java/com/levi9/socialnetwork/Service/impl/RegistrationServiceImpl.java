@@ -44,7 +44,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Autowired
     private UserService userService;
 
-    public static int PASSWORD_MIN_LENGTH = 6;
+    public static final int PASSWORD_MIN_LENGTH = 6;
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 

@@ -19,10 +19,10 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Component
 public class JWToken {
 
-	@Value("social-network")
+	@Value("${app.name}")
 	private String APP_NAME;
 
-	@Value("TTnkjgbhfduigrdhnblfvkghmngkdsknj")
+	@Value("${token.secret}")
 	public String SECRET;
 
 	@Value("1800000")
@@ -40,19 +40,9 @@ public class JWToken {
 				.setIssuedAt(new Date()).setExpiration(generateExpirationDate()).signWith(SIGNATURE_ALGORITHM, SECRET)
 				.compact();
 
-		// .claim("key", value), .claim("role", user.getRole())
 	}
 
 	private String generateAudience() {
-
-		// String audience = AUDIENCE_UNKNOWN;
-		// if (device.isNormal()) {
-		// audience = AUDIENCE_WEB;
-		// } else if (device.isTablet()) {
-		// audience = AUDIENCE_TABLET;
-		// } else if (device.isMobile()) {
-		// audience = AUDIENCE_MOBILE;
-		// }
 
 		return AUDIENCE_WEB;
 	}
