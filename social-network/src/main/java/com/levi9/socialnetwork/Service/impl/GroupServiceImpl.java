@@ -64,11 +64,15 @@ public class GroupServiceImpl implements GroupService {
 		Group group = groupRepository.findById(requestDTO.getIdGroup()).orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE + requestDTO.getIdGroup()));
 		User user = userRepository.findById(requestDTO.getIdUser()).orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE + requestDTO.getIdGroup()));
 	
-		if(group.getUserRequests().contains(user)) {
-			throw new ResourceExistsException("Request for group already exists.");
+		if (group.containsUser(user.getId())) {
+			throw new ResourceExistsException("User is already member of group.");
 		}
+
 		group.getMembers().add(user);
 		groupRepository.save(group);
+		
+		MuteGroup muteGroup = new MuteGroup(user.getId(), group.getId(), false, LocalDateTime.now());
+		muteGroupService.createMuteGroup(muteGroup);
 		
 		return user;
 		
