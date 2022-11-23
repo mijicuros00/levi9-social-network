@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
 	private Logger logger = org.slf4j.LoggerFactory.getLogger(UserController.class);
 
 	public static final String USER_NOT_FOUND_EXCEPTION_MESSAGE = "User not found for this id : ";
+	public static final String USER_NOT_FOUND_USERNAME_EXCEPTION_MESSAGE = "User not found with this username : ";
 
 	@Autowired
 	private EmailService emailService;
@@ -63,6 +64,15 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User findUserById(Long userId) throws ResourceNotFoundException {
 		return userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_EXCEPTION_MESSAGE + userId));
+	}
+
+	@Override
+	public User findUserByUsername(String username) throws ResourceNotFoundException {
+		User user = userRepository.findByUsername(username);
+		if(user == null){
+			throw new ResourceNotFoundException(USER_NOT_FOUND_USERNAME_EXCEPTION_MESSAGE + username);
+		}
+		return user;
 	}
 
 	@Override

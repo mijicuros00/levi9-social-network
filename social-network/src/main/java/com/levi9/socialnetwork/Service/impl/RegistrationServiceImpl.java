@@ -2,6 +2,7 @@ package com.levi9.socialnetwork.Service.impl;
 
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.ConfirmationToken;
+import com.levi9.socialnetwork.Model.Role;
 import com.levi9.socialnetwork.Model.UserVerificationStatus;
 import com.levi9.socialnetwork.Model.User;
 import com.levi9.socialnetwork.Security.authority.JWToken;
@@ -44,7 +45,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Autowired
     private UserService userService;
 
-    public static int PASSWORD_MIN_LENGTH = 6;
+    public static final int PASSWORD_MIN_LENGTH = 6;
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 

@@ -19,10 +19,10 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Component
 public class JWToken {
 
-	@Value("social-network")
+	@Value("${app.name}")
 	private String APP_NAME;
 
-	@Value("TTnkjgbhfduigrdhnblfvkghmngkdsknj")
+	@Value("${token.secret}")
 	public String SECRET;
 
 	@Value("1800000")
