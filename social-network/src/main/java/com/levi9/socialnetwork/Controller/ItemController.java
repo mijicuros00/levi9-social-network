@@ -9,34 +9,25 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "api/items")
+@RequestMapping(value = "api/item")
 public class ItemController {
 
     @Autowired
     private ItemService itemService;
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<ItemDTO> updateItem(@PathVariable Long id, @RequestBody ItemDTO itemDTO){
+    public ResponseEntity<ItemDTO> updateItem(@PathVariable Long id, @RequestBody ItemDTO itemDTO)
+            throws ResourceNotFoundException {
 
         ItemDTO updatedItem;
-
-        try{
-            updatedItem = itemService.updateItem(id, itemDTO);
-        } catch (ResourceNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
+        updatedItem = itemService.updateItem(id, itemDTO);
         return new ResponseEntity<>(updatedItem, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> deleteItem(@PathVariable Long id){
-        try{
-            itemService.deleteItem(id);
-        } catch (ResourceNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<Void> deleteItem(@PathVariable Long id) throws ResourceNotFoundException {
 
+        itemService.deleteItem(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

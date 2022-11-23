@@ -8,5 +8,6 @@ import java.io.IOException;
 public interface RegistrationService {
 
     String register(RegistrationRequestDTO registrationRequestDTO) throws IOException;
+
     String confirmToken(String token) throws ResourceNotFoundException;
 }

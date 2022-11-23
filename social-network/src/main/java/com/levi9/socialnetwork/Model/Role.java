@@ -19,21 +19,20 @@ import lombok.Setter;
 @Setter
 public class Role implements Serializable, GrantedAuthority {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public Role() {
-	}
+    public Role() {
+    }
 
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	private String name;
-	
-	
-	@Override
-	public String getAuthority() {
-		return name;
-	}
+    private Long id;
+
+    private String name;
+
+    @Override
+    public String getAuthority() {
+        return name;
+    }
 
 }

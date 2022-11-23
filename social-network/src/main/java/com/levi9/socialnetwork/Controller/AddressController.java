@@ -19,42 +19,44 @@ import com.levi9.socialnetwork.Service.AddressService;
 import com.levi9.socialnetwork.Service.UserService;
 import com.levi9.socialnetwork.Service.impl.AddressServiceImpl;
 
-
 @RestController
-@RequestMapping("/api/addresses")
+@RequestMapping("/api/address")
 public class AddressController {
-	
 
-	@Autowired
-	private AddressService addressService;
+    @Autowired
+    private AddressService addressService;
 
-	@GetMapping
-	public java.util.List<Address> getAllAddresses() {
-		return this.addressService.getAllAddresses();
-	}
+    @GetMapping
+    public java.util.List<Address> getAllAddresses() {
+        
+        return this.addressService.getAllAddresses();
+    }
 
-	@GetMapping("/{id}")
-	public ResponseEntity<Address> getAddressById(@PathVariable(value = "id") Long addressId)
-			throws ResourceNotFoundException {
-		return addressService.getAddressById(addressId);
-	}
+    @GetMapping("/{id}")
+    public ResponseEntity<Address> getAddress(@PathVariable(value = "id") Long addressId)
+            throws ResourceNotFoundException {
+        
+        return addressService.getAddressById(addressId);
+    }
 
-	@PostMapping
-	public Address createAddress(@RequestBody Address address) {
-		return addressService.createAddress(address);
-	}
+    @PostMapping
+    public Address createAddress(@RequestBody Address address) {
+        
+        return addressService.createAddress(address);
+    }
 
-	@PutMapping("/{id}")
-	public ResponseEntity<Address> updateAddress(@PathVariable(value = "id") Long addressId,
-			@RequestBody Address addressDetails) throws ResourceNotFoundException {
-		return addressService.updateAddress(addressId, addressDetails);
-	}
+    @PutMapping("/{id}")
+    public ResponseEntity<Address> updateAddress(@PathVariable(value = "id") Long addressId,
+            @RequestBody Address addressDetails) throws ResourceNotFoundException {
+        
+        return addressService.updateAddress(addressId, addressDetails);
+    }
 
-	@DeleteMapping("/{id}")
-	public Map<String, Boolean> deleteAddress(@PathVariable(value = "id") Long addressId)
-			throws ResourceNotFoundException {
-		return addressService.deleteAddress(addressId);
-	}
-	
-	
+    @DeleteMapping("/{id}")
+    public Map<String, Boolean> deleteAddress(@PathVariable(value = "id") Long addressId)
+            throws ResourceNotFoundException {
+        
+        return addressService.deleteAddress(addressId);
+    }
+
 }

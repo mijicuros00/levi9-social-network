@@ -13,46 +13,43 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="address", schema="public")
+@Table(name = "address", schema = "public")
 @NoArgsConstructor
 @Getter
 @Setter
 public class Address {
 
-	
-	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Long id;
-	
-	@Column(name = "country")
-	private String country;
-	
-	@Column(name = "city")
-	private String city;
-	
-	@Column(name = "street")
-	private String street;
-	
-	@Column(name = "number")
-	private int number;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-	
-	public Address(Long id, String country, String city, String street, int number) {
-		super();
-		this.id = id;
-		this.country = country;
-		this.city = city;
-		this.street = street;
-		this.number = number;
-	}
+    @Column(name = "country")
+    private String country;
 
+    @Column(name = "city")
+    private String city;
 
-	public Address(AddressDTO addressDTO) {
-		this.id = addressDTO.getId();
-		this.country = addressDTO.getCountry();
-		this.city = addressDTO.getCity();
-		this.street = addressDTO.getStreet();
-		this.number = addressDTO.getNumber();
-	}
+    @Column(name = "street")
+    private String street;
+
+    @Column(name = "number")
+    private int number;
+
+    public Address(Long id, String country, String city, String street, int number) {
+        super();
+        this.id = id;
+        this.country = country;
+        this.city = city;
+        this.street = street;
+        this.number = number;
+    }
+
+    public Address(AddressDTO addressDTO) {
+        this.id = addressDTO.getId();
+        this.country = addressDTO.getCountry();
+        this.city = addressDTO.getCity();
+        this.street = addressDTO.getStreet();
+        this.number = addressDTO.getNumber();
+    }
 }

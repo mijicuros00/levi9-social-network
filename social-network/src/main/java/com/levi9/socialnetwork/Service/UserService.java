@@ -24,13 +24,15 @@ public interface UserService  extends UserDetailsService {
 
 	User findUserByUsername(String username) throws ResourceNotFoundException;
 	
+	public User findUserByUsername(String username);
+	
 	User save(User user);
 	
 	public User createUser(User user);
 
 	public int addFriend(Long userId, Long friendId );
 	
-	public boolean removeFriend(Long userId, Long friendId) throws ResourceNotFoundException, ResourceExistsException;
+    public boolean removeFriend(Long userId, Long friendId) throws ResourceNotFoundException, ResourceExistsException;
 	
 	public ResponseEntity<User> updateUser(Long userId, @RequestBody User userDetails) throws ResourceNotFoundException;
 	
