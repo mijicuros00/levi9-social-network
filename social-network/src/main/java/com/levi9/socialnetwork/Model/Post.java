@@ -45,7 +45,7 @@ public class Post {
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "post_item",
             joinColumns = @JoinColumn(name = "id_post"),
-            inverseJoinColumns = @JoinColumn(name = "id_user")
+            inverseJoinColumns = @JoinColumn(name = "id_item")
     )
     private Set<Item> items = new HashSet<>();
 

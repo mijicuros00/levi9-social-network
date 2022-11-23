@@ -14,7 +14,7 @@ public class PostMapper {
         return new Post(post.getId(), post.isPrivate(), post.getText(), post.getCreatedDate(), post.isDeleted(), post.getUserId(), post.getGroupId(), post.getHiddenFrom(), post.getItems());
     }
 
-    public static Post mapCreateDTOToEntity(CreatePostDTO post){
-        return new Post(post.isPrivate(), post.getText(), post.getCreatedDate(), false, post.getUserId(), post.getGroupId(), post.getHiddenFrom(), post.getItems());
+    public static Post mapCreateDTOToEntity(CreatePostDTO post, Long userId){
+        return new Post(post.isPrivate(), post.getText(), post.getCreatedDate(), false, userId, post.getGroupId(), post.getHiddenFrom(), post.getItems());
     }
 }

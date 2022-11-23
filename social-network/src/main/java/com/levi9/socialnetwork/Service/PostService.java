@@ -14,7 +14,7 @@ import com.levi9.socialnetwork.dto.PostDTO;
 public interface PostService {
 
     public PostDTO getPostById(Long id) throws ResourceNotFoundException;
-    public Long createPost(CreatePostDTO postDTO);
+    public Long createPost(CreatePostDTO postDTO, Long userId);
     public List<Post> getAllPostsFromFriends(Long userId) throws ResourceNotFoundException;
     public List<Post> getAllPostsOfMyFriendsFromPublicGroups(Long userId) throws ResourceNotFoundException;
     public List<Post> getAllPostsOfMyFriendsFromPrivateGroups(Long userId) throws ResourceNotFoundException;
