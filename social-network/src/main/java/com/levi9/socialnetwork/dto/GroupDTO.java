@@ -5,6 +5,8 @@ public class GroupDTO {
 	private boolean isPrivate;
 
 	private Long idAdmin;
+
+	private String name;
 	
 	public GroupDTO() {}
 	
@@ -29,7 +31,12 @@ public class GroupDTO {
 	public void setIdAdmin(Long idAdmin) {
 		this.idAdmin = idAdmin;
 	}
-	
-	
-	
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }

@@ -8,7 +8,6 @@ import com.levi9.socialnetwork.Model.Event;
 import com.levi9.socialnetwork.Service.*;
 import com.levi9.socialnetwork.dto.AddressDTO;
 import com.levi9.socialnetwork.dto.EventDTO;
-import liquibase.pro.packaged.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -122,7 +121,7 @@ public class GroupController {
 	public ResponseEntity<Void> removeMember(@PathVariable Long groupId, @PathVariable Long userId) throws ResourceNotFoundException {
 		//TODO: Check if user that sent request is really group admin
 		//TODO: Remove data from member_event table when implemented
-		Group group = groupService.getGroupById(groupId);
+		
 		muteGroupService.deleteMuteGroup(userId, groupId);
 		groupService.removeMember(userId, groupId);
 
