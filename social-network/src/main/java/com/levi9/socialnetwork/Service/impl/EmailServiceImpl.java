@@ -78,7 +78,6 @@ public class EmailServiceImpl implements EmailService{
 
     @Async
     public void sendNotificationAboutEventAsync(Event event, User user) throws MailException, InterruptedException {
-        Thread.sleep(1000);
         System.out.println("Sending mail...");
 
         SimpleMailMessage mail = new SimpleMailMessage();
