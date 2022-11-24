@@ -1,6 +1,6 @@
 
 insert into "event" (id, id_location, "start_date", "end_date", id_user, id_group) values (default, 3, '2022-07-03', '2022-05-17', 3, 2);
-insert into "event" (id, id_location, "start_date", "end_date", id_user, id_group) values (default, 7, '2021-12-18', '2022-09-09', 9, 5);
+insert into "event" (id, id_location, "start_date", "end_date", id_user, id_group) values (default, 7, '2021-12-18', '2022-09-09', 9, 3);
 insert into "event" (id, id_location, "start_date", "end_date", id_user, id_group) values (default, 10, '2022-07-28', '2022-06-12', 9, 5);
 insert into "event" (id, id_location, "start_date", "end_date", id_user, id_group) values (default, 8, '2022-10-04', '2022-08-14', 9, 5);
 insert into "event" (id, id_location, "start_date", "end_date", id_user, id_group) values (default, 9, '2022-08-27', '2022-08-04', 9, 9);

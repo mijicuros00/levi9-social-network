@@ -19,6 +19,8 @@ import com.levi9.socialnetwork.Service.MuteGroupService;
 import com.levi9.socialnetwork.dto.GroupDTO;
 import com.levi9.socialnetwork.dto.RequestDTO;
 
+import javax.transaction.Transactional;
+
 @Service
 public class GroupServiceImpl implements GroupService {
 	private static final String RESOURCE_NOT_FOUND_MESSAGE = "Group is not found for this id ::";
@@ -72,6 +74,12 @@ public class GroupServiceImpl implements GroupService {
 		
 		return user;
 		
+	}
+
+	@Override
+	@Transactional
+	public void deleteMemberEvents(Long userId, Long groupId) {
+		groupRepository.deleteMemberEvents(userId, groupId);
 	}
 
 

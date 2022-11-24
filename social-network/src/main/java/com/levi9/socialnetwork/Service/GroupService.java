@@ -29,4 +29,6 @@ public interface GroupService {
 	public boolean removeMember(Long userId, Long groupId) throws ResourceNotFoundException;
 	
 	public User addUserToGroup(RequestDTO requestDTO) throws ResourceNotFoundException, ResourceExistsException;
+
+	void deleteMemberEvents(Long userId, Long groupId);
 }
