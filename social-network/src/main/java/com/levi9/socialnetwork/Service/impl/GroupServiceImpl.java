@@ -1,6 +1,8 @@
 package com.levi9.socialnetwork.Service.impl;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import com.levi9.socialnetwork.Repository.UserRepository;
 import com.levi9.socialnetwork.Service.GroupService;
 import com.levi9.socialnetwork.Service.MuteGroupService;
 import com.levi9.socialnetwork.dto.GroupDTO;
+import com.levi9.socialnetwork.dto.GroupResponseDTO;
 import com.levi9.socialnetwork.dto.RequestDTO;
 
 @Service
@@ -32,16 +35,26 @@ public class GroupServiceImpl implements GroupService {
 	@Autowired
 	private MuteGroupService muteGroupService;
 
-	public List<Group> getAllGroups() {
-		return groupRepository.findAll();
+	public List<GroupResponseDTO> getAllGroups() {
+	    List<Group> groups = groupRepository.findAll();
+	    List<GroupResponseDTO> groupResponseDTOs = new ArrayList<>();
+	    for (Group group : groups) {
+            GroupResponseDTO groupDTO = new GroupResponseDTO(group);
+            groupResponseDTOs.add(groupDTO);
+        }
+	    return groupResponseDTOs;
 	}
 	
 	public Group getGroupById(Long id) throws ResourceNotFoundException {
 		return groupRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE + id));
 	}
 
-	public Group createGroup(GroupDTO groupDTO) {
-		Group group = new Group(groupDTO.isPrivate(), groupDTO.getIdAdmin());
+	public Group createGroup(GroupDTO groupDTO, Principal principal) {
+	    String adminUsername = principal.getName();
+	    User loggedUser = userRepository.findByUsername(adminUsername);
+	    Long adminId = loggedUser.getId();
+	    
+		Group group = new Group(groupDTO.isPrivate(), adminId);
 		return groupRepository.save(group);
 	}
 	
@@ -105,7 +118,7 @@ public class GroupServiceImpl implements GroupService {
 			throw new ResourceNotFoundException("User with id " + userId + " did not request joining this group!");
 		}
 		groupRepository.save(group);
-		return true;
-	}
+        return true;
+    }
 
 }
