@@ -8,6 +8,8 @@ import com.levi9.socialnetwork.Model.User;
 import com.levi9.socialnetwork.Model.Event;
 import com.levi9.socialnetwork.Model.Post;
 import com.levi9.socialnetwork.Model.Address;
+import com.levi9.socialnetwork.Model.MuteGroup;
+import com.levi9.socialnetwork.Model.MuteDuration;
 import com.levi9.socialnetwork.Service.EventService;
 import com.levi9.socialnetwork.Service.GroupService;
 import com.levi9.socialnetwork.Service.UserService;
@@ -27,6 +29,14 @@ import com.levi9.socialnetwork.dto.EventDTO;
 import com.levi9.socialnetwork.dto.GroupDTO;
 import com.levi9.socialnetwork.dto.MuteGroupDTO;
 import com.levi9.socialnetwork.dto.GroupResponseDTO;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.transaction.Transactional;
 
@@ -152,7 +162,7 @@ public class GroupController {
     
 
 	@PostMapping("/{groupId}/accept-member/{userId}")
-	public ResponseEntity<Boolean> acceptMember(@PathVariable Long groupId, @PathVariable Long userId, Principal principal) throws ResourceNotFoundException {
+	public ResponseEntity<Boolean> acceptMember(@PathVariable Long groupId, @PathVariable Long userId, Principal principal) throws ResourceNotFoundException, ResourceExistsException {
 
 		User user = userService.findUserByUsername(principal.getName());
 		Group group = groupService.getGroupById(user.getId());
@@ -161,14 +171,8 @@ public class GroupController {
 			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
 
-		try{
 			boolean success = groupService.acceptMember(userId, groupId);
 			return new ResponseEntity<>(success, HttpStatus.OK);
-		}catch (ResourceNotFoundException e){
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		} catch (ResourceExistsException e) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
 	}
 
 	@DeleteMapping("/{groupId}/remove-member/{userId}")

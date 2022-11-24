@@ -124,7 +124,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public boolean removeMember(Long userId, Long groupId) throws ResourceNotFoundException {
+    public void removeMember(Long userId, Long groupId) throws ResourceNotFoundException {
         groupRepository.removeMembersFromEvents(groupId, userId);
         Group group = getGroupById(groupId);
         boolean removed = group.getMembers().removeIf(user -> user.getId().equals(userId));
@@ -133,7 +133,6 @@ public class GroupServiceImpl implements GroupService {
         }
         groupRepository.save(group);
 
-        return true;
     }
 
 }
