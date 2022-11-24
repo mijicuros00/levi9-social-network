@@ -6,13 +6,24 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.levi9.socialnetwork.Exception.ResourceExistsException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Address;
 import com.levi9.socialnetwork.Model.Event;
 import com.levi9.socialnetwork.Model.Group;
+import com.levi9.socialnetwork.Model.MuteDuration;
+import com.levi9.socialnetwork.Model.MuteGroup;
 import com.levi9.socialnetwork.Model.Post;
+import com.levi9.socialnetwork.Model.User;
 import com.levi9.socialnetwork.Service.AddressService;
 import com.levi9.socialnetwork.Service.EventService;
 import com.levi9.socialnetwork.Service.GroupService;
@@ -22,8 +33,8 @@ import com.levi9.socialnetwork.Service.UserService;
 import com.levi9.socialnetwork.dto.AddressDTO;
 import com.levi9.socialnetwork.dto.EventDTO;
 import com.levi9.socialnetwork.dto.GroupDTO;
-import com.levi9.socialnetwork.dto.MuteGroupDTO;
 import com.levi9.socialnetwork.dto.GroupResponseDTO;
+import com.levi9.socialnetwork.dto.MuteGroupDTO;
 
 @RestController
 @RequestMapping("/api/group")

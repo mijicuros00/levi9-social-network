@@ -60,28 +60,28 @@ public class CommentServiceImpl implements CommentService {
 
     public Comment getCommentById(Long id) throws ResourceNotFoundException {
         return commentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Comment not found for this id :: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE + id));
     }
 
     public Comment createComment(CommentDTO commentDTO) {
         Comment comment = new Comment(commentDTO);
         return commentRepository.save(comment);
     }
-
+ 
     public Comment updateComment(Long commentId, @RequestBody CommentDTO commentDTO) throws ResourceNotFoundException {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new ResourceNotFoundException("Comment not found for this id :: " + commentId));
+                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE + commentId));
         comment.setText(commentDTO.getText());
-        comment.setDeleted(commentDTO.isDeleted());
-        Comment updatedComment = commentRepository.save(comment);
+        comment.setDeleted(commentDTO.isDeleted()); 
 
-        return updatedComment;
+        return commentRepository.save(comment);
     }
 
     public Comment deleteComment(Long commentId) throws ResourceNotFoundException {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new ResourceNotFoundException("Comment not found for this id :: " + commentId));
-        commentRepository.delete(comment);
+                .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE + commentId));
+        comment.setDeleted(true);
+        commentRepository.save(comment);
 
         return comment;
     }
