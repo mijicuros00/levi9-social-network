@@ -2,9 +2,6 @@ package com.levi9.socialnetwork.Service;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-
 import com.levi9.socialnetwork.Exception.BadRequestException;
 import com.levi9.socialnetwork.Exception.ResourceExistsException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
@@ -28,5 +25,5 @@ public interface PostService {
 
     public void deletePost(Long id) throws ResourceNotFoundException;
 
-    public List<Post> getAllPostsFromGroup(Long groupId,Long userId) throws ResourceNotFoundException, BadRequestException;
+    public List<Post> getAllPostsFromGroup(Long groupId,String username) throws ResourceNotFoundException, BadRequestException;
 }

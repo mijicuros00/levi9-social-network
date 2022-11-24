@@ -78,10 +78,10 @@ public class GroupController {
     }
 
     @GetMapping(value = "/{groupId}/posts")
-    public ResponseEntity<List<Post>> getAllPosts(@PathVariable(value = "groupId") Long groupId)
+    public ResponseEntity<List<Post>> getAllPosts(@PathVariable(value = "groupId") Long groupId,Principal user)
             throws ResourceNotFoundException {
 
-        List<Post> visiblePosts = postService.getAllPostsFromGroup(groupId);
+        List<Post> visiblePosts = postService.getAllPostsFromGroup(groupId,user.getName());
         return ResponseEntity.ok().body(visiblePosts);
     }
 
