@@ -1,5 +1,6 @@
 package com.levi9.socialnetwork.Exception;
 
+import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.security.InvalidParameterException;
 import java.util.NoSuchElementException;
@@ -22,5 +23,9 @@ class CustomExceptionHandler extends BaseExceptionHandler {
 		registerMapping(ResourceNotFoundException.class, HttpStatus.NOT_FOUND);
 		registerMapping(MethodPathParamterNotValidException.class, HttpStatus.BAD_REQUEST);
 		registerMapping(ResourceExistsException.class, HttpStatus.BAD_REQUEST);
+		registerMapping(IllegalStateException.class, HttpStatus.BAD_REQUEST);
+		registerMapping(IOException.class, HttpStatus.BAD_REQUEST);
+
+		
 	}
 }
