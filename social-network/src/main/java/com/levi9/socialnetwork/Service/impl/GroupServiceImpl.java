@@ -72,7 +72,6 @@ public class GroupServiceImpl implements GroupService {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE + groupId));
         groupRepository.delete(group);
-
         return group;
     }
 	

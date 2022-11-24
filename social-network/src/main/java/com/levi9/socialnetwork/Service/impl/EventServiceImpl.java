@@ -1,7 +1,6 @@
 package com.levi9.socialnetwork.Service.impl;
 
 import java.util.List;
-
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +18,8 @@ import com.levi9.socialnetwork.Repository.EventRepository;
 import com.levi9.socialnetwork.Repository.UserRepository;
 import com.levi9.socialnetwork.Service.EmailService;
 import com.levi9.socialnetwork.Service.EventService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -85,6 +86,10 @@ public class EventServiceImpl implements EventService {
         event.setGroupId(group.getId());
         event.setLocationId(address.getId());
         return createEvent(event);
+    }
+
+    public List<Event> getAllEventsInGroup(Long groupId) {
+        return eventRepository.findAllInGroup(groupId);
     }
     
     @Scheduled(cron = "0 */1 * * * *")
