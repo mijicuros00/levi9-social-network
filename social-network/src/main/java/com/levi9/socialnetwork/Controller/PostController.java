@@ -128,16 +128,15 @@ public class PostController {
         PostDTO postDTO = postService.getPostById(id);
         User user = userService.findUserByUsername(principal.getName());
 
-        if(!user.getId().equals(postDTO.getUserId())){
+        if (!user.getId().equals(postDTO.getUserId())) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         try {
             postService.deletePost(id);
-        } catch (ResourceNotFoundException e){
+        } catch (ResourceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
