@@ -20,7 +20,6 @@ public class ReplyDTO {
 
 	public ReplyDTO(String text, LocalDateTime createdDate, boolean deleted, Long idUser, Long idRepliedTo,
 			Long idPost) {
-		super();
 		this.text = text;
 		this.createdDate = createdDate;
 		this.deleted = deleted;

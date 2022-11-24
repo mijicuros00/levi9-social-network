@@ -1,25 +1,34 @@
 package com.levi9.socialnetwork.Controller;
 
+import java.security.Principal;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import com.levi9.socialnetwork.Exception.ResourceExistsException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
-import com.levi9.socialnetwork.Model.*;
-import com.levi9.socialnetwork.Service.*;
+import com.levi9.socialnetwork.Model.Address;
+import com.levi9.socialnetwork.Model.Event;
+import com.levi9.socialnetwork.Model.Group;
+import com.levi9.socialnetwork.Model.Post;
+import com.levi9.socialnetwork.Service.AddressService;
+import com.levi9.socialnetwork.Service.EventService;
+import com.levi9.socialnetwork.Service.GroupService;
+import com.levi9.socialnetwork.Service.MuteGroupService;
+import com.levi9.socialnetwork.Service.PostService;
+import com.levi9.socialnetwork.Service.UserService;
 import com.levi9.socialnetwork.dto.AddressDTO;
 import com.levi9.socialnetwork.dto.EventDTO;
 import com.levi9.socialnetwork.dto.GroupDTO;
 import com.levi9.socialnetwork.dto.MuteGroupDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
-import java.util.List;
+import com.levi9.socialnetwork.dto.GroupResponseDTO;
 
 @RestController
 @RequestMapping("/api/group")
 public class GroupController {
-
+	
     @Autowired
     private GroupService groupService;
 
@@ -28,7 +37,7 @@ public class GroupController {
 
     @Autowired
     private MuteGroupService muteGroupService;
-
+	
     @Autowired
     private PostService postService;
 
@@ -37,28 +46,30 @@ public class GroupController {
 
     @Autowired
     private AddressService addressService;
-
+	
     @GetMapping
-    public ResponseEntity<List<Group>> getAllGroups() throws ResourceNotFoundException {
+    public ResponseEntity<List<GroupResponseDTO>> getAllGroups() {
 
-        List<Group> groups = groupService.getAllGroups();
+        List<GroupResponseDTO> groups = groupService.getAllGroups();
         return ResponseEntity.ok().body(groups);
     }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Group> getGroup(@PathVariable(value = "id") Long groupId) throws ResourceNotFoundException {
-
-        Group group = groupService.getGroupById(groupId);
-        return ResponseEntity.ok().body(group);
-    }
-
-    @PostMapping
-    public ResponseEntity<Group> createGroup(@RequestBody GroupDTO groupDTO) {
-
-        groupService.createGroup(groupDTO);
-        return ResponseEntity.status(200).build();
-    }
-
+  
+	  @GetMapping("/{id}")
+	  public ResponseEntity<GroupResponseDTO> getGroup(@PathVariable(value = "id") Long groupId) throws ResourceNotFoundException {
+		    Group group = groupService.getGroupById(groupId);
+		    GroupResponseDTO groupResponseDTO = new GroupResponseDTO(group);
+		    return ResponseEntity.ok().body(groupResponseDTO);
+	  }
+	
+	  @PostMapping
+	  public ResponseEntity<Group> createGroup(@RequestBody GroupDTO groupDTO, Principal principal) {
+	      if(principal == null) {
+	          return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+	      }
+		    groupService.createGroup(groupDTO, principal);
+		    return ResponseEntity.status(200).build();
+	  }
+	
     @PutMapping("/{id}")
     public ResponseEntity<Group> updateGroup(@PathVariable(value = "id") Long groupId, @RequestBody GroupDTO groupDTO)
             throws ResourceNotFoundException {
