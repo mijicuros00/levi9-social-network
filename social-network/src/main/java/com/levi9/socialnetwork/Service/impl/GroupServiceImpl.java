@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
+import javax.transaction.Transactional;
+
 @Service
 public class GroupServiceImpl implements GroupService {
     private static final String RESOURCE_NOT_FOUND_MESSAGE = "Group is not found for this id ::";
@@ -95,6 +97,12 @@ public class GroupServiceImpl implements GroupService {
 
 	  }
 
+	@Override
+	@Transactional
+	public void deleteMemberEvents(Long userId, Long groupId) {
+		groupRepository.deleteMemberEvents(userId, groupId);
+	}
+
 
     @Override
     public boolean acceptMember(Long userId, Long groupId) throws ResourceNotFoundException, ResourceExistsException {
@@ -115,7 +123,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public boolean removeMember(Long userId, Long groupId) throws ResourceNotFoundException {
+    public void removeMember(Long userId, Long groupId) throws ResourceNotFoundException {
         groupRepository.removeMembersFromEvents(groupId, userId);
         Group group = getGroupById(groupId);
         boolean removed = group.getMembers().removeIf(user -> user.getId().equals(userId));
@@ -124,7 +132,6 @@ public class GroupServiceImpl implements GroupService {
         }
         groupRepository.save(group);
 
-        return true;
     }
 
 }

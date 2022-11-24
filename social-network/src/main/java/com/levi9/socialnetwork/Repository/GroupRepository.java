@@ -9,6 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface GroupRepository extends JpaRepository<Group, Long> {
+
+    @Modifying
+    @Query(value = "delete from member_event where id_user = :userId and id_group = :groupId", nativeQuery = true)
+    void deleteMemberEvents(Long userId, Long groupId);
+
     @Modifying
     @Transactional
     @Query(value = "delete from member_event where member_event.id_user = :userId and member_event.id_group = :groupId", nativeQuery = true)
