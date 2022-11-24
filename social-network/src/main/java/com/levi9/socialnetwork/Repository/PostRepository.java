@@ -37,5 +37,4 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query(value = "SELECT * FROM post\r\n"
             + "WHERE (post.created_date  + interval '24 hour') < CURRENT_TIMESTAMP and post.deleted != true ", nativeQuery = true)
     List<Post> getAllExpiredPosts();
-
 }

@@ -44,5 +44,4 @@ public class MuteGroup {
         this.endOfMute = muteGroupDTO.getEndOfMute();
     }
 
-   
 }

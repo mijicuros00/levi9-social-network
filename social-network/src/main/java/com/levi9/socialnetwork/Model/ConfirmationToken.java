@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="confirmation_token", schema="public")
+@Table(name = "confirmation_token", schema = "public")
 @Getter
 @Setter
 @NoArgsConstructor

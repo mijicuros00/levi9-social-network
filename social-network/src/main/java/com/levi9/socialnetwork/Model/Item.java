@@ -5,13 +5,13 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name="item", schema="public")
+@Table(name = "item", schema = "public")
 @Getter
 @Setter
 public class Item {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -23,12 +23,11 @@ public class Item {
         this.link = link;
     }
 
-    public Item( String link) {
+    public Item(String link) {
         this.link = link;
     }
 
     public Item() {
     }
 
-   
 }

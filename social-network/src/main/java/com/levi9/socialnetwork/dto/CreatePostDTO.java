@@ -15,7 +15,6 @@ public class CreatePostDTO {
     private boolean isPrivate;
     private String text;
     private LocalDateTime createdDate;
-    private Long userId;
     private Long groupId;
     private Set<User> hiddenFrom = new HashSet<>();
     private Set<Item> items = new HashSet<>();
