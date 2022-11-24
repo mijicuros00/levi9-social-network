@@ -1,15 +1,11 @@
 package com.levi9.socialnetwork.dto;
 
 import com.levi9.socialnetwork.Model.Address;
-
-import java.time.LocalDateTime;
-import java.util.Set;
-
 import com.levi9.socialnetwork.Model.Event;
-import com.levi9.socialnetwork.Model.Member;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -20,7 +16,7 @@ public class EventDTO {
     private Long groupId;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private Set<Member> memberUsers;
+//    private Set<Member> memberUsers;
     
     public EventDTO() {
     }

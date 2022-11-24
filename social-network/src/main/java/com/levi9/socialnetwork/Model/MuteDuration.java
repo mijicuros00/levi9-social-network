@@ -13,12 +13,12 @@ public enum MuteDuration {
     public Duration getDuration() {
         Duration duration;
         switch (this) {
-            case HOURS_1 -> duration = Duration.ofHours(1);
-            case HOURS_8 -> duration = Duration.ofHours(8);
-            case HOURS_24 -> duration = Duration.ofHours(24);
-            case DAYS_7 -> duration = Duration.ofDays(7);
-            case DAYS_30 -> duration = Duration.ofDays(30);
-            default -> duration = Duration.ZERO;
+        case HOURS_1 -> duration = Duration.ofHours(1);
+        case HOURS_8 -> duration = Duration.ofHours(8);
+        case HOURS_24 -> duration = Duration.ofHours(24);
+        case DAYS_7 -> duration = Duration.ofDays(7);
+        case DAYS_30 -> duration = Duration.ofDays(30);
+        default -> duration = Duration.ZERO;
         }
         return duration;
     }

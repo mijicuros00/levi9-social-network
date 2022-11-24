@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.Getter;
 
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,140 +24,142 @@ import lombok.Setter;
 @Setter
 public class User implements Serializable, UserDetails {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-	@Column(name = "name")
-	private String name;
+    @Column(name = "name")
+    private String name;
 
-	@Column(name = "surname")
-	private String surname;
+    @Column(name = "surname")
+    private String surname;
 
-	@Column(name = "email")
-	private String email;
+    @Column(name = "email")
+    private String email;
 
-	@Column(name = "username")
-	private String username;
+    @Column(name = "username")
+    private String username;
 
-	@Column(name = "password")
-	private String password;
+    @Column(name = "password")
+    private String password;
 
-	@Column(name = "last_password_reset_date")
-	private Timestamp lastPasswordResetDate;
+    @Column(name = "last_password_reset_date")
+    private Timestamp lastPasswordResetDate;
 
-	@ManyToMany(cascade= CascadeType.ALL, fetch= FetchType.EAGER)
-	@JoinTable(joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-	private Set<Role> roles;
-	
-	@ManyToMany(cascade= CascadeType.PERSIST, fetch= FetchType.EAGER)
-	@JoinTable(joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "id_friend", referencedColumnName = "id"))
-	private Set<User> friends;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private Set<Role> roles;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "status", nullable = false)
-	private UserVerificationStatus status;
-    
-	public User(Long id, String name, String surname, String email, String password) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.surname = surname;
-		this.email = email;
-		this.password = password;
-	}
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinTable(joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "id_friend", referencedColumnName = "id"))
+    private Set<User> friends;
 
-	public User(String name, String surname, String email, String username, String password) {
-		this.name = name;
-		this.surname = surname;
-		this.email = email;
-		this.username = username;
-		this.password = password;
-	}
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private UserVerificationStatus status;
 
-	public User(String name, String surname, String email, String username, String password, UserVerificationStatus status) {
-		this.name = name;
-		this.surname = surname;
-		this.email = email;
-		this.username = username;
-		this.password = password;
-		this.status = status;
-	}
+    public User(Long id, String name, String surname, String email, String password) {
+        super();
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.password = password;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public User(String name, String surname, String email, String username, String password) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public User(String name, String surname, String email, String username, String password,
+            UserVerificationStatus status) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.status = status;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getSurname() {
-		return surname;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setSurname(String surname) {
-		this.surname = surname;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getSurname() {
+        return surname;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
 
-	public void setUserame(String username) {
-		this.username = username;
-	}
-	public String getPassword() {
-		return password;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setPassword(String password) {
-		Timestamp now = new Timestamp(new Date().getTime());
-		this.setLastPasswordResetDate(now);
-		this.password = password;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return roles;
-	}
+    public void setUserame(String username) {
+        this.username = username;
+    }
 
-	@Override
-	public String getUsername() {
-		return this.username;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
-	}
+    public void setPassword(String password) {
+        Timestamp now = new Timestamp(new Date().getTime());
+        this.setLastPasswordResetDate(now);
+        this.password = password;
+    }
 
-	@Override
-	public boolean isAccountNonLocked() {
-		return true;
-	}
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
 
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
+    @Override
+    public String getUsername() {
+        return this.username;
+    }
 
-	@Override
-	public boolean isEnabled() {
-		return true;
-	}
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
 }

@@ -1,32 +1,40 @@
 package com.levi9.socialnetwork.Service.impl;
 
-
 import java.util.List;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
 
 import com.levi9.socialnetwork.Exception.ResourceExistsException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Address;
 import com.levi9.socialnetwork.Model.Event;
 import com.levi9.socialnetwork.Model.Group;
+import com.levi9.socialnetwork.Model.User;
 import com.levi9.socialnetwork.Repository.EventRepository;
+import com.levi9.socialnetwork.Repository.UserRepository;
+import com.levi9.socialnetwork.Service.EmailService;
 import com.levi9.socialnetwork.Service.EventService;
-
-import javax.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class EventServiceImpl implements EventService {
-
 	
-	private static final String NOT_FOUND_MESSAGE = "Event not found for this id :: ";
-	private static final String ALREADY_EXISTS_MESSAGE = "Event already exists with this id :: ";
+	  private static final String NOT_FOUND_MESSAGE = "Event not found for this id :: ";
+	  private static final String ALREADY_EXISTS_MESSAGE = "Event already exists with this id :: ";
 
-	@Autowired
-	private EventRepository eventRepository;
-
+	  @Autowired
+	  private EventRepository eventRepository;
+	
+	  @Autowired
+	  private UserRepository userRepository;
+	
+	  @Autowired 
+	  private EmailService emailService;
 
     public List<Event> getAllEvents() {
         return eventRepository.findAll();
@@ -57,22 +65,19 @@ public class EventServiceImpl implements EventService {
 
     @Transactional
     public List<Event> deleteAllExpiredEvents() {
-        
-    	List<Event> expiredEvents = eventRepository.getAllExpiredEvents();
-    	
-    	for (Event e : expiredEvents) 
-    	{ 
-    		 eventRepository.delete(e);
-    	}
 
-    	return expiredEvents;
+        List<Event> expiredEvents = eventRepository.getAllExpiredEvents();
+
+        for (Event e : expiredEvents) {
+            eventRepository.delete(e);
+        }
+
+        return expiredEvents;
     }
 
-    
     public void deleteEvent(Long eventId) throws ResourceNotFoundException {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND_MESSAGE + eventId));
-
 
         eventRepository.delete(event);
     }
@@ -81,5 +86,20 @@ public class EventServiceImpl implements EventService {
         event.setGroupId(group.getId());
         event.setLocationId(address.getId());
         return createEvent(event);
+    }
+
+    public List<Event> getAllEventsInGroup(Long groupId) {
+        return eventRepository.findAllInGroup(groupId);
+    }
+    
+    @Scheduled(cron = "0 */1 * * * *")
+    public void notifyAllUsersAboutEvent() throws MailException, InterruptedException {
+        List<Event> events = eventRepository.getEventsForNotify();
+        for (Event event : events) {
+            List<User> users = userRepository.getUsersOnEvent(event.getId()); 
+            for (User user : users) {
+               emailService.sendNotificationAboutEventAsync(event, user);
+            }
+        }
     }
 }

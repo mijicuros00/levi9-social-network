@@ -22,40 +22,41 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 public abstract class BaseExceptionHandler {
-	private static final ExceptionMapping DEFAULT_ERROR = new ExceptionMapping(INTERNAL_SERVER_ERROR);
+    private static final ExceptionMapping DEFAULT_ERROR = new ExceptionMapping(INTERNAL_SERVER_ERROR);
 
-	private final Map<Class<?>, ExceptionMapping> exceptionMappings = new HashMap<>();
+    private final Map<Class<?>, ExceptionMapping> exceptionMappings = new HashMap<>();
 
-	public BaseExceptionHandler() {
-		registerMapping(MissingServletRequestParameterException.class, BAD_REQUEST);
-		registerMapping(MethodArgumentTypeMismatchException.class, BAD_REQUEST);
-		registerMapping(HttpRequestMethodNotSupportedException.class, METHOD_NOT_ALLOWED);
-		registerMapping(ServletRequestBindingException.class, BAD_REQUEST);
-		registerMapping(BadRequestException.class, BAD_REQUEST);}
+    public BaseExceptionHandler() {
+        registerMapping(MissingServletRequestParameterException.class, BAD_REQUEST);
+        registerMapping(MethodArgumentTypeMismatchException.class, BAD_REQUEST);
+        registerMapping(HttpRequestMethodNotSupportedException.class, METHOD_NOT_ALLOWED);
+        registerMapping(ServletRequestBindingException.class, BAD_REQUEST);
+        registerMapping(BadRequestException.class, BAD_REQUEST);
+    }
 
-	@ExceptionHandler(Throwable.class)
-	@ResponseBody
-	public ResponseEntity<ErrorResponse> handleThrowable(final Throwable ex, final HttpServletResponse response) {
-		ExceptionMapping mapping = exceptionMappings.getOrDefault(ex.getClass(), DEFAULT_ERROR);
-		StringWriter stringWriter = new StringWriter();
-		PrintWriter printWriter = new PrintWriter(stringWriter);
-		ex.printStackTrace(printWriter);
-		String stackTrace = stringWriter.toString();
+    @ExceptionHandler(Throwable.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleThrowable(final Throwable ex, final HttpServletResponse response) {
+        ExceptionMapping mapping = exceptionMappings.getOrDefault(ex.getClass(), DEFAULT_ERROR);
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(stringWriter);
+        ex.printStackTrace(printWriter);
+        String stackTrace = stringWriter.toString();
 
-		return new ResponseEntity<>(new ErrorResponse(mapping.status, ex.getMessage(), stackTrace), mapping.status);
-	}
+        return new ResponseEntity<>(new ErrorResponse(mapping.status, ex.getMessage(), stackTrace), mapping.status);
+    }
 
-	protected void registerMapping(final Class<?> clazz, final HttpStatus status) {
-		exceptionMappings.put(clazz, new ExceptionMapping(status));
-	}
+    protected void registerMapping(final Class<?> clazz, final HttpStatus status) {
+        exceptionMappings.put(clazz, new ExceptionMapping(status));
+    }
 
-	private static class ExceptionMapping {
-		private final HttpStatus status;
+    private static class ExceptionMapping {
+        private final HttpStatus status;
 
-		public ExceptionMapping(HttpStatus status) {
-			super();
-			this.status = status;
-		}
-	}
+        public ExceptionMapping(HttpStatus status) {
+            super();
+            this.status = status;
+        }
+    }
 
 }
