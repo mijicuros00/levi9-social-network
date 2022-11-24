@@ -218,24 +218,4 @@ public class GroupController {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
-	@PostMapping("/{groupId}/events")
-	public ResponseEntity<EventDTO> createEventInGroup(@PathVariable Long groupId, @RequestBody EventDTO eventDTO, Principal principal)
-			throws ResourceNotFoundException, ResourceExistsException {
-		User user = userService.findUserByUsername(principal.getName());
-		Group group = groupService.getGroupById(user.getId());
-
-		if(!group.getIdAdmin().equals(user.getId())){
-			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-		}
-
-		eventDTO.setUserId(user.getId());
-
-		AddressDTO addressDTO = eventDTO.getLocation();
-		Address address = addressService.createAddress(new Address(addressDTO));
-
-
-		Event event = eventService.createEventInGroup(new Event(eventDTO), address, group);
-		return new ResponseEntity<>(new EventDTO(event, address), HttpStatus.OK);
-	}
-
 }
