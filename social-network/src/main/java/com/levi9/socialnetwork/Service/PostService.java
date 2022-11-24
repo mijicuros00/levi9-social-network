@@ -28,5 +28,5 @@ public interface PostService {
 
     public void deletePost(Long id) throws ResourceNotFoundException;
 
-    public List<Post> getAllPostsFromGroup(Long groupId) throws ResourceNotFoundException, BadRequestException;
+    public List<Post> getAllPostsFromGroup(Long groupId,Long userId) throws ResourceNotFoundException, BadRequestException;
 }

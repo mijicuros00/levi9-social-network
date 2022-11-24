@@ -104,20 +104,18 @@ public class PostServiceImpl implements PostService {
         post.setDeleted(true);
         postRepository.save(post);
     }
-
-    public List<Post> getAllPostsFromGroup(Long groupId) throws ResourceNotFoundException, BadRequestException {
-
-        // Hard-coded until log-in is not implemented, when it's done add id of logged
-        // in user
-        Long idLoggedUser = 5L;
-        Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new ResourceNotFoundException("group with id " + groupId + " does not exists"));
-
-        if (!group.containsUser(idLoggedUser)) {
-            throw new BadRequestException("User is not member of group.");
-        }
-
-        return postRepository.getAllPostsFromGroup(groupId);
-
+    
+    public List<Post> getAllPostsFromGroup(Long groupId,Long userId) throws ResourceNotFoundException, BadRequestException {
+    	
+    	// Hard-coded until log-in is not implemented, when it's done add id of logged in user
+    	Long idLoggedUser = 5L;
+    	Group group = groupRepository.findById(groupId).orElseThrow(() -> new ResourceNotFoundException("group with id " + groupId + " does not exists"));
+    	
+    	if(!group.containsUser(idLoggedUser)) {
+    		throw new BadRequestException("User is not member of group.");
+    	}
+    	
+    	return postRepository.getAllPostsFromGroup(groupId,userId);
+    
     }
 }
