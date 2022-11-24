@@ -17,11 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.levi9.socialnetwork.Exception.ResourceExistsException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Event;
-import com.levi9.socialnetwork.Service.EventService;
-import com.levi9.socialnetwork.Service.EventService;
-
 import com.levi9.socialnetwork.Service.impl.EventServiceImpl;
-
 import com.levi9.socialnetwork.dto.EventDTO;
 
 @RestController

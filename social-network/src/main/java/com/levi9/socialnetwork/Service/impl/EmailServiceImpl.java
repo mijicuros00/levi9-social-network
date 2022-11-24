@@ -1,5 +1,11 @@
 package com.levi9.socialnetwork.Service.impl;
 
+import java.io.File;
+import java.io.IOException;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,13 +17,9 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import com.levi9.socialnetwork.Model.Event;
 import com.levi9.socialnetwork.Model.User;
 import com.levi9.socialnetwork.Service.EmailService;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import java.io.File;
-import java.io.IOException;
 
 @Service
 public class EmailServiceImpl implements EmailService {
@@ -72,4 +74,20 @@ public class EmailServiceImpl implements EmailService {
         return htmlString;
     }
 
+    @Async
+    public void sendNotificationAboutEventAsync(Event event, User user) throws MailException, InterruptedException {
+        System.out.println("Sending mail...");
+
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(user.getEmail());
+        mail.setFrom(from);
+        mail.setSubject("Your event start for less than one hour");
+        mail.setText("Hi " + user.getName() + ",\n\n");
+        mail.setText("Event in which you confirmed presence starts in less than one hour");
+        javaMailSender.send(mail);
+
+        System.out.println("Email sended!");
+        
+    }
+	
 }
