@@ -1,21 +1,20 @@
 package com.levi9.socialnetwork.Service.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.levi9.socialnetwork.dto.AddressDTO;
+import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
+import com.levi9.socialnetwork.Model.Address;
+import com.levi9.socialnetwork.Repository.AddressRepository;
+import com.levi9.socialnetwork.Service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
-import com.levi9.socialnetwork.Model.Address;
-import com.levi9.socialnetwork.Repository.AddressRepository;
-import com.levi9.socialnetwork.Repository.UserRepository;
-import com.levi9.socialnetwork.Service.AddressService;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class AddressServiceImpl implements AddressService {
+    private static final String NOT_FOUND_MESSAGE = "Address not found for this id :: ";
 
     @Autowired
     private AddressRepository addressRepository;
@@ -24,10 +23,9 @@ public class AddressServiceImpl implements AddressService {
         return this.addressRepository.findAll();
     }
 
-    public ResponseEntity<Address> getAddressById(Long addressId) throws ResourceNotFoundException {
-        Address address = addressRepository.findById(addressId)
-                .orElseThrow(() -> new ResourceNotFoundException("Address not found for this id :: " + addressId));
-        return ResponseEntity.ok().body(address);
+    public Address getAddressById(Long addressId) throws ResourceNotFoundException {
+        return addressRepository.findById(addressId)
+                .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND_MESSAGE + addressId));
     }
 
     public Address createAddress(Address address) {
@@ -37,7 +35,7 @@ public class AddressServiceImpl implements AddressService {
     public ResponseEntity<Address> updateAddress(Long addressId, @RequestBody Address addressDetails)
             throws ResourceNotFoundException {
         Address address = addressRepository.findById(addressId)
-                .orElseThrow(() -> new ResourceNotFoundException("Address not found for this id :: " + addressId));
+                .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND_MESSAGE + addressId));
 
         address.setCountry(addressDetails.getCountry());
         address.setCity(addressDetails.getCity());
@@ -50,7 +48,7 @@ public class AddressServiceImpl implements AddressService {
 
     public Map<String, Boolean> deleteAddress(Long addressId) throws ResourceNotFoundException {
         Address address = addressRepository.findById(addressId)
-                .orElseThrow(() -> new ResourceNotFoundException("Address not found for this id :: " + addressId));
+                .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND_MESSAGE + addressId));
 
         addressRepository.delete(address);
         Map<String, Boolean> response = new HashMap<>();
