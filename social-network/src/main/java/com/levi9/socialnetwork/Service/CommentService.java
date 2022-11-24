@@ -2,6 +2,7 @@ package com.levi9.socialnetwork.Service;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.levi9.socialnetwork.Exception.BadRequestException;
@@ -15,6 +16,8 @@ public interface CommentService {
     public List<Comment> getAllComments() throws ResourceNotFoundException;
 
     public List<Comment> getCommentsByPost(Long postId);
+
+    public Comment replyToComment(ReplyDTO replyDTO) throws ResourceNotFoundException;
 
     public List<Comment> getRepliesByComment(Long commentId);
 

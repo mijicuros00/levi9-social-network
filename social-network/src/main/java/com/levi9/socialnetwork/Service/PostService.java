@@ -16,7 +16,7 @@ public interface PostService {
 
     public PostDTO getPostById(Long id) throws ResourceNotFoundException;
 
-    public Long createPost(CreatePostDTO postDTO) throws ResourceNotFoundException, ResourceExistsException;
+    public Long createPost(CreatePostDTO postDTO, Long userId) throws ResourceNotFoundException, ResourceExistsException;
 
     public List<Post> getAllPostsFromFriends(Long userId) throws ResourceNotFoundException;
 

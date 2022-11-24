@@ -39,4 +39,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             + "WHERE public.user.id = :userId and public.member.id_user = :userId and public.group.private = true and hf.id_user != :userId", nativeQuery = true)
     List<Post> getAllPostsOfMyFriendsFromPrivateGroups(Long userId);
 
+    @Query(value = "SELECT * FROM post\r\n"
+            + "WHERE (post.created_date  + interval '24 hour') < CURRENT_TIMESTAMP and post.deleted != true ", nativeQuery = true)
+    List<Post> getAllExpiredPosts();
 }

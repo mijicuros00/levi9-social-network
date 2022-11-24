@@ -45,7 +45,7 @@ public class AuthController {
 
     @PostMapping(value = "/registration")
     public ResponseEntity<Void> registration(@RequestBody RegistrationRequestDTO registrationRequestDTO)
-            throws IOException {
+            throws IOException, ResourceNotFoundException {
 
         registrationService.register(registrationRequestDTO);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -58,7 +58,7 @@ public class AuthController {
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequestDTO loginRequest){
+    public ResponseEntity<String> login(@RequestBody LoginRequestDTO loginRequest) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 loginRequest.getUsername(), loginRequest.getPassword());
 

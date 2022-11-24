@@ -64,4 +64,12 @@ public class Group {
         return false;
     }
 
+    public boolean containsUserRequest(Long userId) {
+        for (User user : getUserRequests()) {
+            if(user.getId().equals(userId))
+                return true;
+        }
+        return false;
+    }
+
 }

@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public interface RegistrationService {
 
-    String register(RegistrationRequestDTO registrationRequestDTO) throws IOException;
+    String register(RegistrationRequestDTO registrationRequestDTO) throws IOException, ResourceNotFoundException;
 
     String confirmToken(String token) throws ResourceNotFoundException;
 }

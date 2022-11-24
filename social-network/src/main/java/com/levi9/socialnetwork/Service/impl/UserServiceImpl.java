@@ -142,7 +142,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(requestDTO.getIdUser()).orElseThrow(
                 () -> new ResourceNotFoundException(USER_NOT_FOUND_EXCEPTION_MESSAGE + requestDTO.getIdUser()));
 
-        if (group.getUserRequests().contains(user)) {
+        if (group.containsUserRequest(user.getId())) {
             throw new ResourceExistsException("Resource already exists.");
         }
         group.getUserRequests().add(user);
