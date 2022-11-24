@@ -21,7 +21,7 @@ import com.levi9.socialnetwork.Service.impl.EventServiceImpl;
 import com.levi9.socialnetwork.dto.EventDTO;
 
 @RestController
-@RequestMapping("/api/events")
+@RequestMapping("/api/event")
 public class EventController {
 
     @Autowired
@@ -29,35 +29,43 @@ public class EventController {
 
     @GetMapping
     public ResponseEntity<List<Event>> getAllEvents() {
+
         List<Event> allEvents = eventService.getAllEvents();
         return new ResponseEntity<>(allEvents, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Event> getEventById(@PathVariable(value = "id") Long eventId) throws ResourceNotFoundException {
+    public ResponseEntity<Event> getEvent(@PathVariable(value = "id") Long eventId) throws ResourceNotFoundException {
+
         Event event = eventService.getEventById(eventId);
         return new ResponseEntity<>(event, HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<Event> createEvent(@RequestBody EventDTO eventDTO) throws ResourceExistsException {
+
         Event event = eventService.createEvent(new Event(eventDTO));
         return new ResponseEntity<>(event, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Event> updateEvent(@PathVariable(value = "id") Long eventId, @RequestBody EventDTO eventDTO) throws ResourceNotFoundException {
+    public ResponseEntity<Event> updateEvent(@PathVariable(value = "id") Long eventId, @RequestBody EventDTO eventDTO)
+            throws ResourceNotFoundException {
+
         Event event = eventService.updateEvent(eventId, new Event(eventDTO));
         return new ResponseEntity<>(event, HttpStatus.OK);
     }
 
     @DeleteMapping("/expired")
     public ResponseEntity<List<Event>> deleteAllExpiredEvents() throws ResourceNotFoundException {
+
         return new ResponseEntity<>(eventService.deleteAllExpiredEvents(), HttpStatus.OK);
     }
-    
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> deleteEvent(@PathVariable(value = "id") Long eventId) throws ResourceNotFoundException {
+    public ResponseEntity<Boolean> deleteEvent(@PathVariable(value = "id") Long eventId)
+            throws ResourceNotFoundException {
+
         eventService.deleteEvent(eventId);
         return new ResponseEntity<>(true, HttpStatus.OK);
     }

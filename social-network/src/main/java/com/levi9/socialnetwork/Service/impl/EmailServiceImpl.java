@@ -1,6 +1,5 @@
 package com.levi9.socialnetwork.Service.impl;
 
-
 import java.io.File;
 import java.io.IOException;
 
@@ -23,58 +22,57 @@ import com.levi9.socialnetwork.Model.User;
 import com.levi9.socialnetwork.Service.EmailService;
 
 @Service
-public class EmailServiceImpl implements EmailService{
-	
-	@Autowired
-	private JavaMailSender javaMailSender;
+public class EmailServiceImpl implements EmailService {
 
-	@Value("${spring.mail.username}")
-	private String from;
+    @Autowired
+    private JavaMailSender javaMailSender;
 
-	@Autowired
-	private Environment env;
-	
-	@Async
-	public void sendNotificaitionAsync(User user) throws MailException, InterruptedException {
-		
-		Thread.sleep(1000);
-		System.out.println("Sending mail...");
+    @Value("${spring.mail.username}")
+    private String from;
 
-		SimpleMailMessage mail = new SimpleMailMessage();
-		mail.setTo(user.getEmail());
-		mail.setFrom(from);
-		mail.setSubject("New post on your group");
-		mail.setText("Hi " + user.getName() + ",\n\nyou have new post on your group.");
-		javaMailSender.send(mail);
+    @Autowired
+    private Environment env;
 
-		System.out.println("Email sended!");
-	}
+    @Async
+    public void sendNotificaitionAsync(User user) throws MailException, InterruptedException {
 
-	@Override
-	public void sendEmail(String to, String email, String subject) {
-		try {
-			MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-			MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
-			helper.setSubject(subject);
-			helper.setTo(to);
-			helper.setText(email, true);
-			helper.setFrom(from);
-			javaMailSender.send(mimeMessage);
-		} catch (MessagingException e) {
-			e.printStackTrace();
-			throw new IllegalStateException("Failed to send email");
-		}
-	}
+        Thread.sleep(1000);
+        System.out.println("Sending mail...");
 
-	@Override
-	public String registerEmail(String name, String link) throws IOException {
-		File htmlTemplateFile = new File("src/main/resources/static/EmailTemplate.html");
-		String htmlString = FileUtils.readFileToString(htmlTemplateFile);
-		htmlString = htmlString.replace("$name", name);
-		htmlString = htmlString.replace("$link", link);
-		return htmlString;
-	}
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(user.getEmail());
+        mail.setFrom(from);
+        mail.setSubject("New post on your group");
+        mail.setText("Hi " + user.getName() + ",\n\nyou have new post on your group.");
+        javaMailSender.send(mail);
 
+        System.out.println("Email sended!");
+    }
+
+    @Override
+    public void sendEmail(String to, String email, String subject) {
+        try {
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+            helper.setSubject(subject);
+            helper.setTo(to);
+            helper.setText(email, true);
+            helper.setFrom(from);
+            javaMailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            throw new IllegalStateException("Failed to send email");
+        }
+    }
+
+    @Override
+    public String registerEmail(String name, String link) throws IOException {
+        File htmlTemplateFile = new File("src/main/resources/static/EmailTemplate.html");
+        String htmlString = FileUtils.readFileToString(htmlTemplateFile);
+        htmlString = htmlString.replace("$name", name);
+        htmlString = htmlString.replace("$link", link);
+        return htmlString;
+    }
 
     @Async
     public void sendNotificationAboutEventAsync(Event event, User user) throws MailException, InterruptedException {

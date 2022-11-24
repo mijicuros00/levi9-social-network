@@ -22,78 +22,68 @@ import com.levi9.socialnetwork.Security.authority.RestAuthenticationEntryPoint;
 import com.levi9.socialnetwork.Security.authority.TokenAuthenticationFilter;
 import com.levi9.socialnetwork.Service.UserService;
 
-
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private UserService userService;
 
-	@Autowired
-	private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-	
+    @Autowired
+    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
-	@Autowired
-	private JWToken jWToken;
+    @Autowired
+    private JWToken jWToken;
 
-	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
-			throws Exception {
-		return authenticationConfiguration.getAuthenticationManager();
-	}
-	
-	@Bean
-	public AuthenticationManager authManager(HttpSecurity http, PasswordEncoder passwordEncoder, UserService userService)
-	        throws Exception {
-	    return http.getSharedObject(AuthenticationManagerBuilder.class)
-	    		.userDetailsService(userService)
-				.passwordEncoder(passwordEncoder)
-	            .and()
-	            .build();
-	}
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    public AuthenticationManager authManager(HttpSecurity http, PasswordEncoder passwordEncoder,
+            UserService userService) throws Exception {
+        return http.getSharedObject(AuthenticationManagerBuilder.class).userDetailsService(userService)
+                .passwordEncoder(passwordEncoder).and().build();
+    }
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 
-				.exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
-				.authorizeRequests().antMatchers("/api/auth/**").permitAll()
-				.antMatchers("/api/users/**").permitAll()
-				.antMatchers("/api/auth/**").permitAll()
-				.antMatchers("/api/events/**").permitAll()
-				.antMatchers("/api/mute_groups/**").permitAll()
-				.antMatchers("/api/groups/**").permitAll()
-				.antMatchers("/api/comments/**").permitAll()
-				.antMatchers("/api/posts/**").permitAll()
+                .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and().authorizeRequests()
+                .antMatchers("/api/auth/**").permitAll().antMatchers("/api/users/**").permitAll()
+                .antMatchers("/api/auth/**").permitAll().antMatchers("/api/events/**").permitAll()
+                .antMatchers("/api/mute_groups/**").permitAll().antMatchers("/api/group/**").permitAll()
+                .antMatchers("/api/comments/**").permitAll().antMatchers("/api/posts/**").permitAll()
 
-				.antMatchers("/api/events/**").permitAll()
-				
-				.anyRequest().authenticated().and()
+                .antMatchers("/api/events/**").permitAll()
 
-				.cors().and()
+                .anyRequest().authenticated().and()
 
-				.addFilterBefore(new TokenAuthenticationFilter(jWToken, userService), BasicAuthenticationFilter.class);
+                .cors().and()
 
-		http.csrf().disable();
-		
-		return http.build();
-	}
+                .addFilterBefore(new TokenAuthenticationFilter(jWToken, userService), BasicAuthenticationFilter.class);
 
-	@Bean
-	public WebSecurityCustomizer webSecurityCustomizer() {
-		return (web) -> {
-			web.ignoring().antMatchers(HttpMethod.POST, "/auth/login");
-			web.ignoring().antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "favicon.ico", "/**/*.html",
-					"/**/*.css", "/**/*.js");
-		};
-	}
+        http.csrf().disable();
+
+        return http.build();
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> {
+            web.ignoring().antMatchers(HttpMethod.POST, "/auth/login");
+            web.ignoring().antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "favicon.ico", "/**/*.html",
+                    "/**/*.css", "/**/*.js");
+        };
+    }
 
 }
