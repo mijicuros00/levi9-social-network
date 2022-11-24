@@ -1,53 +1,23 @@
 package com.levi9.socialnetwork.Controller;
 
+import com.levi9.socialnetwork.Exception.ResourceExistsException;
+import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
+import com.levi9.socialnetwork.Model.*;
+import com.levi9.socialnetwork.Service.*;
+import com.levi9.socialnetwork.dto.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.levi9.socialnetwork.Exception.ResourceExistsException;
-import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
-import com.levi9.socialnetwork.Model.Address;
-import com.levi9.socialnetwork.Model.Event;
-import com.levi9.socialnetwork.Model.Group;
-import com.levi9.socialnetwork.Model.MuteDuration;
-import com.levi9.socialnetwork.Model.MuteGroup;
-import com.levi9.socialnetwork.Model.Post;
-import com.levi9.socialnetwork.Model.User;
-
-import com.levi9.socialnetwork.Service.EventService;
-import com.levi9.socialnetwork.Service.GroupService;
-import com.levi9.socialnetwork.Service.UserService;
-import com.levi9.socialnetwork.Service.MuteGroupService;
-import com.levi9.socialnetwork.Service.PostService;
-import com.levi9.socialnetwork.Service.AddressService;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
-import com.levi9.socialnetwork.Exception.ResourceExistsException;
-import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
-
-import com.levi9.socialnetwork.dto.AddressDTO;
-import com.levi9.socialnetwork.dto.EventDTO;
-import com.levi9.socialnetwork.dto.GroupDTO;
-import com.levi9.socialnetwork.dto.GroupResponseDTO;
-import com.levi9.socialnetwork.dto.MuteGroupDTO;
-
-import javax.transaction.Transactional;
-
 
 @RestController
-@RequestMapping("/api/group")
+@RequestMapping("/api/groups")
 public class GroupController {
 	
     @Autowired
@@ -107,8 +77,8 @@ public class GroupController {
         return ResponseEntity.ok().body(group);
     }
 
-    @GetMapping(value = "/{id-group}/posts")
-    public ResponseEntity<List<Post>> getAllPosts(@PathVariable(value = "id-group") Long groupId)
+    @GetMapping(value = "/{groupId}/posts")
+    public ResponseEntity<List<Post>> getAllPosts(@PathVariable(value = "groupId") Long groupId)
             throws ResourceNotFoundException {
 
         List<Post> visiblePosts = postService.getAllPostsFromGroup(groupId);
@@ -200,7 +170,7 @@ public class GroupController {
 			return new ResponseEntity<>(success, HttpStatus.OK);
 	}
 
-	@DeleteMapping("/{groupId}/remove-member/{userId}")
+	@DeleteMapping("/{groupId}/remove-member")
 	@Transactional
 	public ResponseEntity<Void> removeMember(@PathVariable Long groupId, Principal principal) throws ResourceNotFoundException {
 
