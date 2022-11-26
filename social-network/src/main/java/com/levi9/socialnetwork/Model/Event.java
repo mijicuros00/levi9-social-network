@@ -21,6 +21,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "event", schema = "public")
@@ -28,6 +29,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
+@ToString
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,12 +65,6 @@ public class Event {
         this.startDate = eventDTO.getStartDate();
         this.endDate = eventDTO.getEndDate();
 //        this.memberUsers = eventDTO.getMemberUsers();
-    }
-
-    @Override
-    public String toString() {
-        return "Event{" + "id=" + id + ", locationId=" + locationId + ", userId=" + userId + ", groupId=" + groupId
-                + ", startDate=" + startDate + ", endDate=" + endDate + '}';
     }
 
     public Event(Long id, Long locationId, Long userId, Long groupId, LocalDateTime startDate, LocalDateTime endDate,

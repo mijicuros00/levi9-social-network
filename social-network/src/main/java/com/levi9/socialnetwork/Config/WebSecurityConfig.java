@@ -3,6 +3,7 @@ package com.levi9.socialnetwork.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -83,6 +84,15 @@ public class WebSecurityConfig {
 	        "/v2/api-docs",
 	        "/webjars/**"
 	};
+    	
+    	@Bean
+    	@Profile("test")
+    	public WebSecurityCustomizer webSecurityCustomizerTest() {
+    	 //Since we added the Spring Security to pom.xml and the spring security default
+    	 //Behavior is ... well to secure and block all traffic
+    	 //This will disable the behavior when testing none secured related tests
+    	 return web -> web.ignoring().anyRequest();
+    	}
 
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
