@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,7 @@ import lombok.Setter;
 @IdClass(MemberId.class)
 @Getter
 @Setter
+@Builder
 public class Member {
     @Id
     @Column(name = "id_user")

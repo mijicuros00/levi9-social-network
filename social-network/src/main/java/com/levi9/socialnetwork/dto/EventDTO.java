@@ -1,14 +1,17 @@
 package com.levi9.socialnetwork.dto;
 
+import java.time.LocalDateTime;
+
 import com.levi9.socialnetwork.Model.Address;
 import com.levi9.socialnetwork.Model.Event;
+
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
+@Builder
 public class EventDTO {
     private Long id;
     private AddressDTO location;

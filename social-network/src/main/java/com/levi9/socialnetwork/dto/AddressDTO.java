@@ -1,11 +1,14 @@
 package com.levi9.socialnetwork.dto;
 
 import com.levi9.socialnetwork.Model.Address;
+
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 public class AddressDTO {
 	private Long id;
 	private String country;
