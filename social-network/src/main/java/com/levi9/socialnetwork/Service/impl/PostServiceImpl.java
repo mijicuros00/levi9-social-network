@@ -27,7 +27,7 @@ import com.levi9.socialnetwork.mapper.PostMapper;
 import org.slf4j.Logger;
 
 @Service
-public class PostServiceImpl implements PostService {
+public class  PostServiceImpl implements PostService {
 
     @Autowired
     private PostRepository postRepository;
@@ -45,7 +45,7 @@ public class PostServiceImpl implements PostService {
 
     public PostDTO getPostById(Long id) throws ResourceNotFoundException {
         return postRepository.findPostById(id).map(PostMapper::MapEntityToDTO)
-                .orElseThrow(() -> new ResourceNotFoundException("Post with id " + id + "was not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Post with id " + id + " was not found"));
     }
 
     public Long createPost(CreatePostDTO postDTO, Long userId) throws ResourceNotFoundException, ResourceExistsException{
@@ -83,7 +83,7 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public PostDTO updatePost(Long id, PostDTO postDTO) throws ResourceNotFoundException {
         Post post = postRepository.findPostById(id).map(searchedPost -> searchedPost)
-                .orElseThrow(() -> new ResourceNotFoundException("post with id " + " does not exists"));
+                .orElseThrow(() -> new ResourceNotFoundException("post with id " + id + " does not exists"));
 
         post.setText(postDTO.getText());
         post.setPrivate(postDTO.isPrivate());
@@ -98,8 +98,8 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     public void deletePost(Long id) throws ResourceNotFoundException {
-        Post post = postRepository.findPostById(id).map(deletedPost -> deletedPost)
-                .orElseThrow(() -> new ResourceNotFoundException("post with id " + " does not exists"));
+        Post post = postRepository.findPostById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("post with id " + id + " does not exists"));
 
         post.setDeleted(true);
         postRepository.save(post);
@@ -110,7 +110,7 @@ public class PostServiceImpl implements PostService {
         
         User user = userRepository.findByUsername(username);
     	// Hard-coded until log-in is not implemented, when it's done add id of logged in user
-    	Long idLoggedUser = 5L;
+    	Long idLoggedUser = user.getId();
     	Group group = groupRepository.findById(groupId).orElseThrow(() -> new ResourceNotFoundException("group with id " + groupId + " does not exists"));
     	
     	if(!group.containsUser(idLoggedUser)) {
