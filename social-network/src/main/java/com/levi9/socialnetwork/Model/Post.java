@@ -42,7 +42,7 @@ public class Post {
     private Set<User> hiddenFrom = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "post_item", joinColumns = @JoinColumn(name = "id_post"), inverseJoinColumns = @JoinColumn(name = "id_user"))
+    @JoinTable(name = "post_item", joinColumns = @JoinColumn(name = "id_post"), inverseJoinColumns = @JoinColumn(name = "id_item"))
     private Set<Item> items = new HashSet<>();
 
     public Post(Long id, boolean isPrivate, String text, LocalDateTime createdDate, boolean deleted, Long userId,
