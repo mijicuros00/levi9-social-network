@@ -17,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,6 +30,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -208,31 +210,36 @@ class CommentControllerTests {
 				.andDo(print());
 	}
 
-//	@Test
-//	void replyToComment() throws Exception {
-//		ReplyDTO replyDTO = ReplyDTO.builder()
-//				.idUser(1L)
-//				.idPost(1L)
-//				.idRepliedTo(1L)
-//				.text("Lorem")
-//				.createdDate(LocalDateTime.now())
-//				.deleted(false)
-//				.build();
-//		Comment reply = Comment.builder()
-//				.id(2L)
-//				.idUser(1L)
-//				.idPost(1L)
-//				.idRepliedTo(1L)
-//				.text("Lorem")
-//				.createdDate(replyDTO.getCreatedDate())
-//				.deleted(false)
-//				.build();
-//
-//		given(commentService.replyToComment(replyDTO))
-//				.willReturn(reply);
-//		mockMvc.perform(post("/api/comments/reply", reply))
-//				.andExpectAll(
-//						status().isOk())
-//				.andDo(print());
-//	}
+	@Test
+	void replyToComment() throws Exception {
+		ReplyDTO replyDTO = ReplyDTO.builder()
+				.idUser(2L)
+				.idPost(1L)
+				.idRepliedTo(1L)
+				.text("Lorem")
+				.createdDate(LocalDateTime.now())
+				.deleted(false)
+				.build();
+		Comment reply = Comment.builder()
+				.id(1L)
+				.idUser(2L)
+				.idPost(1L)
+				.idRepliedTo(1L)
+				.text("Lorem")
+				.createdDate(replyDTO.getCreatedDate())
+				.deleted(false)
+				.build();
+
+		given(commentService.replyToComment(replyDTO))
+				.willReturn(reply);
+		mockMvc.perform(post("/api/comments/reply")
+						.accept(MediaType.APPLICATION_JSON_VALUE)
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(objectMapper.writeValueAsString(replyDTO))
+						.characterEncoding("utf-8"))
+				.andExpectAll(
+						status().isOk(),
+						jsonPath("$.id").value(1L))
+				.andDo(print());
+	}
 }
