@@ -49,12 +49,17 @@ public class CommentServiceImpl implements CommentService {
         return commentRepository.save(comment);
     }
 
-    public List<Comment> getCommentsByPost(Long postId) {
-
+    public List<Comment> getCommentsByPost(Long postId) throws ResourceNotFoundException {
+        if (!postRepository.existsById(postId)) {
+            throw new ResourceNotFoundException("Post not found for this id :: " + postId);
+        }
         return commentRepository.getCommentsByPost(postId);
     }
 
-    public List<Comment> getRepliesByComment(Long commentId) {
+    public List<Comment> getRepliesByComment(Long commentId) throws ResourceNotFoundException {
+        if (!postRepository.existsById(commentId)) {
+            throw new ResourceNotFoundException(RESOURCE_NOT_FOUND_MESSAGE + commentId);
+        }
         return commentRepository.getRepliesByComment(commentId);
     }
 

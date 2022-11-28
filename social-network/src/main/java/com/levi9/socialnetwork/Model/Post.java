@@ -11,6 +11,7 @@ import java.util.Set;
 @Table(name = "post", schema = "public")
 @Getter
 @Setter
+@Builder
 public class Post {
 
     @Id

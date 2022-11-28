@@ -15,11 +15,11 @@ public interface CommentService {
 
     public List<Comment> getAllComments() throws ResourceNotFoundException;
 
-    public List<Comment> getCommentsByPost(Long postId);
+    public List<Comment> getCommentsByPost(Long postId) throws ResourceNotFoundException;
 
     public Comment replyToComment(ReplyDTO replyDTO) throws ResourceNotFoundException;
 
-    public List<Comment> getRepliesByComment(Long commentId);
+    public List<Comment> getRepliesByComment(Long commentId) throws ResourceNotFoundException;
 
     public Comment getCommentById(Long id) throws ResourceNotFoundException;
 

@@ -6,6 +6,7 @@ import com.levi9.socialnetwork.Exception.CustomExceptionHandler;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Comment;
 import com.levi9.socialnetwork.Service.impl.CommentServiceImpl;
+import com.levi9.socialnetwork.dto.ReplyDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -19,8 +20,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.Duration;
@@ -29,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -56,13 +54,13 @@ class CommentControllerTests {
 
 	@BeforeEach
 	public void setup() throws Exception {
-		try(var v = MockitoAnnotations.openMocks(this)) {
+		try(var ignored = MockitoAnnotations.openMocks(this)) {
 			this.mockMvc = MockMvcBuilders.standaloneSetup(commentController).build();
 		}
 	}
 
 	@Test
-	void testGetAllComments() throws Exception {
+	void getAllComments() throws Exception {
 		List<Comment> commentList = new ArrayList<>();
 		commentList.add(Comment.builder()
 				.id(1L)
@@ -82,27 +80,20 @@ class CommentControllerTests {
 				.createdDate(LocalDateTime.now())
 				.deleted(false)
 				.build());
+
 		given(commentService.getAllComments())
 				.willReturn(commentList);
-
-		ResultActions response = mockMvc.perform(get("/api/comments"));
-
-		response.andExpectAll(
+		mockMvc.perform(get("/api/comments"))
+				.andExpectAll(
 						status().isOk(),
-						jsonPath("$.size()", is(commentList.size())),
+						jsonPath("$.size()", is(2)),
 						jsonPath("$[0].id").value(1L),
-						jsonPath("$[0].idUser").value(1L),
-						jsonPath("$[0].idPost").value(1L),
-						jsonPath("$[0].idRepliedTo", nullValue()),
-						jsonPath("$[1].id").value(2L),
-						jsonPath("$[1].idUser").value(2L),
-						jsonPath("$[1].idPost").value(1L),
-						jsonPath("$[1].idRepliedTo").value(1L))
+						jsonPath("$[1].id").value(2L))
 				.andDo(print());
 	}
 
 	@Test
-	void testGetCommentSuccessful() throws Exception {
+	void getComment() throws Exception {
 		Comment comment = Comment.builder()
 				.id(1L)
 				.text("Lorem ipsum")
@@ -112,25 +103,136 @@ class CommentControllerTests {
 				.idRepliedTo(null)
 				.idPost(1L)
 				.build();
+
 		given(commentService.getCommentById(1L))
 				.willReturn(comment);
-
-		ResultActions response = mockMvc.perform(get("/api/comments/{id}", 1L));
-		response.andExpectAll(
+		mockMvc.perform(get("/api/comments/{id}", 1L))
+				.andExpectAll(
 						status().isOk(),
 						jsonPath("$.id").value(1L))
+				.andDo(print());
+
+		given(commentService.getCommentById(2L))
+				.willThrow(ResourceNotFoundException.class);
+		mockMvc.perform(get("/api/comments/{id}", 2L))
+				.andExpect(status().isNotFound())
 				.andDo(print());
 	}
 
 	@Test
-	void testGetCommentUnsuccessful() throws Exception {
-		given(commentService.getCommentById(1L))
+	void getCommentsByPost() throws Exception {
+		List<Comment> commentList = new ArrayList<>();
+		commentList.add(Comment.builder()
+				.id(2L)
+				.idUser(1L)
+				.idPost(1L)
+				.idRepliedTo(null)
+				.text("Lorem")
+				.createdDate(LocalDateTime.now())
+				.deleted(false)
+				.build());
+		commentList.add(Comment.builder()
+				.id(3L)
+				.idUser(2L)
+				.idPost(2L)
+				.idRepliedTo(null)
+				.text("ipsum")
+				.createdDate(LocalDateTime.now())
+				.deleted(false)
+				.build());
+
+		given(commentService.getCommentsByPost(1L))
+				.willReturn(commentList.stream()
+						.filter(c -> c.getIdPost() == 1L).toList());
+		mockMvc.perform(get("/api/comments/post/{postId}", 1L))
+				.andExpectAll(
+						status().isOk(),
+						jsonPath("$.size()", is(1)),
+						jsonPath("$[0].id").value(2L),
+						jsonPath("$[0].idPost").value(1L))
+				.andDo(print());
+
+		given(commentService.getCommentsByPost(3L))
 				.willThrow(ResourceNotFoundException.class);
-
-		ResultActions response = mockMvc.perform(get("/api/comments/{id}", 1L));
-
-		response.andExpect(status().isNotFound())
+		mockMvc.perform(get("/api/comments/post/{postId}", 3L))
+				.andExpect(status().isNotFound())
 				.andDo(print());
 	}
 
+	@Test
+	void getRepliesByComment() throws Exception {
+		List<Comment> commentList = new ArrayList<>();
+		commentList.add(Comment.builder()
+				.id(1L)
+				.idUser(1L)
+				.idPost(1L)
+				.idRepliedTo(null)
+				.text("Lorem")
+				.createdDate(LocalDateTime.now())
+				.deleted(false)
+				.build());
+		commentList.add(Comment.builder()
+				.id(2L)
+				.idUser(2L)
+				.idPost(1L)
+				.idRepliedTo(1L)
+				.text("ipsum")
+				.createdDate(LocalDateTime.now())
+				.deleted(false)
+				.build());
+
+		given(commentService.getRepliesByComment(1L))
+				.willReturn(commentList.stream()
+						.filter(c -> c.getIdRepliedTo() != null && c.getIdRepliedTo() == 1L).toList());
+		mockMvc.perform(get("/api/comments/{commentId}/reply", 1L))
+				.andExpectAll(
+						status().isOk(),
+						jsonPath("$.size()", is(1)),
+						jsonPath("$[0].id").value(2L),
+						jsonPath("$[0].idRepliedTo").value(1L))
+				.andDo(print());
+
+		given(commentService.getRepliesByComment(2L))
+				.willReturn(commentList.stream()
+						.filter(c -> c.getIdRepliedTo() != null && c.getIdRepliedTo() == 2L).toList());
+		mockMvc.perform(get("/api/comments/{commentId}/reply", 2L))
+				.andExpectAll(
+						status().isOk(),
+						jsonPath("$.size()", is(0)))
+				.andDo(print());
+
+		given(commentService.getRepliesByComment(3L))
+				.willThrow(ResourceNotFoundException.class);
+		mockMvc.perform(get("/api/comments/{commentId}/reply", 3L))
+				.andExpect(status().isNotFound())
+				.andDo(print());
+	}
+
+//	@Test
+//	void replyToComment() throws Exception {
+//		ReplyDTO replyDTO = ReplyDTO.builder()
+//				.idUser(1L)
+//				.idPost(1L)
+//				.idRepliedTo(1L)
+//				.text("Lorem")
+//				.createdDate(LocalDateTime.now())
+//				.deleted(false)
+//				.build();
+//		Comment reply = Comment.builder()
+//				.id(2L)
+//				.idUser(1L)
+//				.idPost(1L)
+//				.idRepliedTo(1L)
+//				.text("Lorem")
+//				.createdDate(replyDTO.getCreatedDate())
+//				.deleted(false)
+//				.build();
+//
+//		given(commentService.replyToComment(replyDTO))
+//				.willReturn(reply);
+//		mockMvc.perform(post("/api/comments/reply", reply))
+//				.andExpectAll(
+//						status().isOk())
+//				.andDo(print());
+//	}
 }

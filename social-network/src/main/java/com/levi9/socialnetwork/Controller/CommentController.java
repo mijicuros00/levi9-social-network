@@ -36,13 +36,15 @@ public class CommentController {
     }
 
     @GetMapping("/post/{postId}")
-    public ResponseEntity<List<Comment>> getCommentsByPost(@PathVariable(value = "postId") Long postId) {
+    public ResponseEntity<List<Comment>> getCommentsByPost(@PathVariable(value = "postId") Long postId)
+            throws ResourceNotFoundException {
 
         return new ResponseEntity<>(commentService.getCommentsByPost(postId), HttpStatus.OK);
     }
 
     @GetMapping("{commentId}/reply")
-    public ResponseEntity<List<Comment>> getRepliesByComment(@PathVariable(value = "commentId") Long commentId) {
+    public ResponseEntity<List<Comment>> getRepliesByComment(@PathVariable(value = "commentId") Long commentId)
+            throws ResourceNotFoundException {
 
         return new ResponseEntity<>(commentService.getRepliesByComment(commentId), HttpStatus.OK);
     }

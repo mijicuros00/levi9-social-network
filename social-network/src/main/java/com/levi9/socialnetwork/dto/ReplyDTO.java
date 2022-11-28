@@ -1,7 +1,10 @@
 package com.levi9.socialnetwork.dto;
 
+import lombok.Builder;
+
 import java.time.LocalDateTime;
 
+@Builder
 public class ReplyDTO {
 	
 	private String text;
