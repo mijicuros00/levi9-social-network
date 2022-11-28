@@ -37,7 +37,7 @@ public class AddressController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Address> updateAddress(@PathVariable(value = "id") Long addressId,
+    public Address updateAddress(@PathVariable(value = "id") Long addressId,
             @RequestBody Address addressDetails) throws ResourceNotFoundException {
 
         return addressService.updateAddress(addressId, addressDetails);
