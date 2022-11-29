@@ -15,6 +15,6 @@ public class PostMapper {
     }
 
     public static Post mapCreateDTOToEntity(CreatePostDTO post, Long userId){
-        return new Post(post.isPrivate(), post.getText(), post.getCreatedDate(), false, userId, post.getGroupId(), post.getHiddenFrom(), post.getItems());
+        return Post.builder().userId(userId).hiddenFrom(post.getHiddenFrom()).items(post.getItems()).createdDate(post.getCreatedDate()).isPrivate(post.isPrivate()).deleted(false).text(post.getText()).build();
     }
 }

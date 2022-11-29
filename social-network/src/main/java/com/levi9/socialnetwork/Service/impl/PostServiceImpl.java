@@ -50,21 +50,21 @@ public class  PostServiceImpl implements PostService {
 
     public Long createPost(CreatePostDTO postDTO, Long userId) throws ResourceNotFoundException, ResourceExistsException{
 
-        Long id = postRepository.save(PostMapper.mapCreateDTOToEntity(postDTO, userId)).getId();
+        Post post = postRepository.save(PostMapper.mapCreateDTOToEntity(postDTO, userId));
 
         if (postDTO.getGroupId() != null) {
             List<User> notMutedUsers = userRepository.getNotMutedUsers(postDTO.getGroupId());
             for (User user : notMutedUsers) {
                 try {
                     emailService.sendNotificaitionAsync(user);
-                    return id;
+                    return post.getId();
                 } catch (Exception e) {
                     logger.info("Error sending email: " + e.getMessage());
                 }
             }
         }
 
-        return id;
+        return post.getId();
 
     }
 

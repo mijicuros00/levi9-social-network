@@ -94,32 +94,32 @@ class PostServiceTest {
 
     }
 
-//    @Test
-//    void testCreatePost() throws ResourceExistsException, ResourceNotFoundException {
-//
-//        Post post = Post.builder()
-//                .id(postId)
-//                .groupId(groupId)
-//                .userId(userId)
-//                .hiddenFrom(new HashSet<>())
-//                .items(new HashSet<>()).
-//                build();
-//
-//
-//        CreatePostDTO createPostDTO = CreatePostDTO.builder()
-//                .groupId(groupId)
-//                .hiddenFrom(new HashSet<>())
-//                .items(new HashSet<>())
-//                .build();
-//
-//        when(postRepository.save(post)).thenReturn(post);
-//
-//        Long actualId = postService.createPost(createPostDTO, userId);
-//
-//        assertThat(actualId).usingRecursiveComparison().isEqualTo(postId);
-//        verify(postRepository, Mockito.times(1)).save(post);
-//        verifyNoMoreInteractions(postRepository);
-//    }
+    @Test
+    void testCreatePost() throws ResourceExistsException, ResourceNotFoundException {
+
+        Post post = Post.builder()
+                .id(postId)
+                .groupId(groupId)
+                .userId(userId)
+                .hiddenFrom(new HashSet<>())
+                .items(new HashSet<>()).
+                build();
+
+
+        CreatePostDTO createPostDTO = CreatePostDTO.builder()
+                .groupId(groupId)
+                .hiddenFrom(new HashSet<>())
+                .items(new HashSet<>())
+                .build();
+
+        when(postRepository.save(any(Post.class))).thenReturn(post);
+
+        Long actualId = postService.createPost(createPostDTO, userId);
+
+        assertEquals(postId, actualId);
+        verify(postRepository, Mockito.times(1)).save(any(Post.class));
+        verifyNoMoreInteractions(postRepository);
+    }
 
     @Test
     void testGetAllPostsFromFriendsShouldReturnListOfPosts() throws ResourceNotFoundException {
