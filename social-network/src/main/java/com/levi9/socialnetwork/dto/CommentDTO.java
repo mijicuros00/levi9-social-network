@@ -3,7 +3,11 @@ package com.levi9.socialnetwork.dto;
 import java.time.LocalDateTime;
 
 import com.levi9.socialnetwork.Model.Comment;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
 
+@Builder
+@EqualsAndHashCode
 public class CommentDTO {
 
 	private String text;
