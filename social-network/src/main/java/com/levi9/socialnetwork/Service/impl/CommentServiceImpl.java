@@ -31,7 +31,7 @@ public class CommentServiceImpl implements CommentService {
     public List<Comment> getAllComments() throws ResourceNotFoundException {
         List<Comment> allComments = commentRepository.findAll();
 
-        if (allComments == null) {
+        if (allComments.isEmpty()) {
             throw new ResourceNotFoundException("There is not any comment");
         }
 
