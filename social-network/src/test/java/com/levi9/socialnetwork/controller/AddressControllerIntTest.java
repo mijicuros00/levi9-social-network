@@ -11,7 +11,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -141,7 +143,11 @@ class AddressControllerIntTest {
 	@Test
 	public void givenAddressIdWhenDeleteAddressThenReturn200() throws Exception {
 
-		willDoNothing().given(addressService).deleteAddress(addressId);
+		Map<String, Boolean> result = new HashMap<>();
+		result.put("deleted", Boolean.TRUE);
+		
+		given(addressService.deleteAddress(addressId))
+				.willReturn(result);
 
 		ResultActions response = mockMvc.perform(delete("/api/addresses/{id}", addressId));
 		response.andExpect(status().isOk()).andDo(print());
