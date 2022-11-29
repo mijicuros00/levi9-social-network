@@ -35,6 +35,15 @@ public class ReplyDTO {
 		this.idPost = idPost;
 	}
 
+	public ReplyDTO(Comment reply) {
+		this.text = reply.getText();
+		this.createdDate = reply.getCreatedDate();
+		this.deleted = reply.isDeleted();
+		this.idUser = reply.getIdUser();
+		this.idRepliedTo = reply.getIdRepliedTo();
+		this.idPost = reply.getIdPost();
+	}
+
 	public String getText() {
 		return text;
 	}

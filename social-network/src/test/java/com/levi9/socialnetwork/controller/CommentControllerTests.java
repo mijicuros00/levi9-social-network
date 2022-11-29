@@ -6,6 +6,7 @@ import com.levi9.socialnetwork.Exception.CustomExceptionHandler;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Comment;
 import com.levi9.socialnetwork.Service.impl.CommentServiceImpl;
+import com.levi9.socialnetwork.dto.CommentDTO;
 import com.levi9.socialnetwork.dto.ReplyDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -89,8 +90,10 @@ class CommentControllerTests {
 				.andExpectAll(
 						status().isOk(),
 						jsonPath("$.size()", is(2)),
-						jsonPath("$[0].id").value(1L),
-						jsonPath("$[1].id").value(2L))
+						jsonPath("$[0].idUser").value(1L),
+						jsonPath("$[0].idPost").value(1L),
+						jsonPath("$[1].idUser").value(2L),
+						jsonPath("$[1].idPost").value(1L))
 				.andDo(print());
 	}
 
@@ -111,7 +114,8 @@ class CommentControllerTests {
 		mockMvc.perform(get("/api/comments/{id}", 1L))
 				.andExpectAll(
 						status().isOk(),
-						jsonPath("$.id").value(1L))
+						jsonPath("$.idUser").value(1L),
+						jsonPath("$.idPost").value(1L))
 				.andDo(print());
 
 		given(commentService.getCommentById(2L))
@@ -150,7 +154,7 @@ class CommentControllerTests {
 				.andExpectAll(
 						status().isOk(),
 						jsonPath("$.size()", is(1)),
-						jsonPath("$[0].id").value(2L),
+						jsonPath("$[0].idUser").value(1L),
 						jsonPath("$[0].idPost").value(1L))
 				.andDo(print());
 
@@ -190,7 +194,8 @@ class CommentControllerTests {
 				.andExpectAll(
 						status().isOk(),
 						jsonPath("$.size()", is(1)),
-						jsonPath("$[0].id").value(2L),
+						jsonPath("$[0].idUser").value(2L),
+						jsonPath("$[0].idPost").value(1L),
 						jsonPath("$[0].idRepliedTo").value(1L))
 				.andDo(print());
 
@@ -239,7 +244,114 @@ class CommentControllerTests {
 						.characterEncoding("utf-8"))
 				.andExpectAll(
 						status().isOk(),
-						jsonPath("$.id").value(1L))
+						jsonPath("$.idUser").value(2L),
+						jsonPath("$.idPost").value(1L),
+						jsonPath("$.idRepliedTo").value(1L))
+				.andDo(print());
+	}
+
+	@Test
+	void createComment() throws Exception {
+		CommentDTO commentDTO = CommentDTO.builder()
+				.idUser(2L)
+				.idPost(1L)
+				.text("Lorem")
+				.createdDate(LocalDateTime.now())
+				.deleted(false)
+				.build();
+		Comment comment = Comment.builder()
+				.id(1L)
+				.idUser(2L)
+				.idPost(1L)
+				.idRepliedTo(1L)
+				.text("Lorem")
+				.createdDate(commentDTO.getCreatedDate())
+				.deleted(false)
+				.build();
+
+		given(commentService.createComment(commentDTO))
+				.willReturn(comment);
+		mockMvc.perform(post("/api/comments")
+						.accept(MediaType.APPLICATION_JSON_VALUE)
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(objectMapper.writeValueAsString(commentDTO))
+						.characterEncoding("utf-8"))
+				.andExpectAll(
+						status().isOk(),
+						jsonPath("$.idUser").value(2L),
+						jsonPath("$.idPost").value(1L))
+				.andDo(print());
+	}
+
+	@Test
+	void updateComment() throws Exception {
+		CommentDTO commentDTO = CommentDTO.builder()
+				.idUser(2L)
+				.idPost(1L)
+				.text("Lorem")
+				.createdDate(LocalDateTime.now())
+				.deleted(false)
+				.build();
+		Comment comment = Comment.builder()
+				.id(1L)
+				.idUser(2L)
+				.idPost(1L)
+				.idRepliedTo(1L)
+				.text("Lorem")
+				.createdDate(commentDTO.getCreatedDate())
+				.deleted(false)
+				.build();
+
+		given(commentService.updateComment(1L, commentDTO))
+				.willReturn(comment);
+		mockMvc.perform(put("/api/comments/{id}", 1L)
+						.accept(MediaType.APPLICATION_JSON_VALUE)
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(objectMapper.writeValueAsString(commentDTO))
+						.characterEncoding("utf-8"))
+				.andExpectAll(
+						status().isOk(),
+						jsonPath("$.idUser").value(2L),
+						jsonPath("$.idPost").value(1L))
+				.andDo(print());
+
+		given(commentService.updateComment(2L, commentDTO))
+				.willThrow(ResourceNotFoundException.class);
+		mockMvc.perform(put("/api/comments/{id}", 2L)
+						.accept(MediaType.APPLICATION_JSON_VALUE)
+						.contentType(MediaType.APPLICATION_JSON_VALUE)
+						.content(objectMapper.writeValueAsString(commentDTO))
+						.characterEncoding("utf-8"))
+				.andExpect(status().isNotFound())
+				.andDo(print());
+	}
+
+	@Test
+	void deleteComment() throws Exception {
+		Comment comment = Comment.builder()
+				.id(1L)
+				.idUser(2L)
+				.idPost(1L)
+				.idRepliedTo(1L)
+				.text("Lorem")
+				.createdDate(LocalDateTime.now())
+				.deleted(true)
+				.build();
+
+		given(commentService.deleteComment(1L))
+				.willReturn(comment);
+		mockMvc.perform(delete("/api/comments/{id}", 1L))
+				.andExpectAll(
+						status().isOk(),
+						jsonPath("$.idUser").value(2L),
+						jsonPath("$.idPost").value(1L),
+						jsonPath("$.deleted").value(true))
+				.andDo(print());
+
+		given(commentService.deleteComment(2L))
+				.willThrow(ResourceNotFoundException.class);
+		mockMvc.perform(delete("/api/comments/{id}", 2L))
+				.andExpect(status().isNotFound())
 				.andDo(print());
 	}
 }
