@@ -17,6 +17,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -28,6 +29,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Group {
 
     @Id
@@ -41,6 +43,9 @@ public class Group {
     @Column(name = "id_admin")
     private Long idAdmin;
 
+    @Column(name = "name")
+    private String name;
+    
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "request", joinColumns = @JoinColumn(name = "id_group"), inverseJoinColumns = @JoinColumn(name = "id_user"))
     @JsonIgnore
@@ -50,10 +55,11 @@ public class Group {
     @JoinTable(name = "member", joinColumns = @JoinColumn(name = "id_group"), inverseJoinColumns = @JoinColumn(name = "id_user"))
     private Set<User> members = new HashSet<>();
 
-    public Group(boolean isPrivate, Long idAdmin) {
+    public Group(boolean isPrivate, Long idAdmin, String name) {
         super();
         this.isPrivate = isPrivate;
         this.idAdmin = idAdmin;
+        this.name = name;
     }
 
     public boolean containsUser(Long userId) {
