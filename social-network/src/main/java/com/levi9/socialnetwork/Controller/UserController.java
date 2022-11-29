@@ -42,13 +42,13 @@ public class UserController {
 //	@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDTO> getUserById(@PathVariable(value = "id") Long userId) throws ResourceNotFoundException {
 
-        return new ResponseEntity<>(UserMapper.mapDTO(userService.findUserById(userId)), HttpStatus.OK);
+        return new ResponseEntity<>(UserMapper.mapDTO(userService.getUserById(userId)), HttpStatus.OK);
     }
 
     @PostMapping("/{userId}/friend/{friendId}")
-    public int addFriend(@PathVariable(value = "userId") Long userId, @PathVariable(value = "friendId") Long friendId) {
+    public ResponseEntity<UserDTO> addFriend(@PathVariable(value = "userId") Long userId, @PathVariable(value = "friendId") Long friendId) throws ResourceNotFoundException {
 
-        return userService.addFriend(userId, friendId);
+        return new ResponseEntity<>(UserMapper.mapDTO(userService.addFriend(userId, friendId)), HttpStatus.OK);
     }
 
     @PutMapping("/{userId}/remove-friend/{friendId}")

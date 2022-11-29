@@ -85,7 +85,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                 registrationRequestDTO.getEmail(), registrationRequestDTO.getUsername(), encodedPassword,
                 UserVerificationStatus.NOT_VERIFIED);
 
-        registeredUser = userService.save(registeredUser);
+        registeredUser = userService.createUser(registeredUser);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(registeredUser.getUsername());
 
@@ -109,7 +109,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     public String confirmToken(String token) throws ResourceNotFoundException {
         ConfirmationToken confirmationToken = confirmationTokenService.findByToken(token);
-        User user = userService.findUserById(confirmationToken.getUserId());
+        User user = userService.getUserById(confirmationToken.getUserId());
 
         if (confirmationToken.getConfirmedAt() != null) {
             throw new IllegalStateException("email already confirmed");
@@ -120,7 +120,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         confirmationTokenService.save(confirmationToken);
 
         user.setStatus(UserVerificationStatus.VERIFIED);
-        userService.save(user);
+        userService.createUser(user);
 
         return "Email " + user.getEmail() + " successfully confirmed!";
     }
