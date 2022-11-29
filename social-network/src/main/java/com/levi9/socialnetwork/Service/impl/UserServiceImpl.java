@@ -53,10 +53,10 @@ public class UserServiceImpl implements UserService {
         return this.userRepository.findAll();
     }
 
-    public ResponseEntity<User> getUserById(Long userId) throws ResourceNotFoundException {
+    public User getUserById(Long userId) throws ResourceNotFoundException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_EXCEPTION_MESSAGE + userId));
-        return ResponseEntity.ok().body(user);
+        return user;
     }
 
     @Override
@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
-    public ResponseEntity<User> updateUser(Long userId, @RequestBody User userDetails)
+    public User updateUser(Long userId, @RequestBody User userDetails)
             throws ResourceNotFoundException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_EXCEPTION_MESSAGE + userId));
@@ -122,7 +122,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(userDetails.getPassword());
 
         final User updatedUser = userRepository.save(user);
-        return ResponseEntity.ok(updatedUser);
+        return updatedUser;
     }
 
     public Map<String, Boolean> deleteUser(Long userId) throws ResourceNotFoundException {
