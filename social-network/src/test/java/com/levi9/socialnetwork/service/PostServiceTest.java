@@ -19,7 +19,10 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -27,11 +30,19 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static org.mockito.BDDMockito.given;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.any;
 
 @RunWith(SpringRunner.class)
 class PostServiceTest {
@@ -44,9 +55,6 @@ class PostServiceTest {
 
     @Mock
     private UserRepository userRepository;
-
-    @InjectMocks
-    private EmailServiceImpl emailService;
 
     @InjectMocks
     private PostServiceImpl postService;
@@ -117,7 +125,7 @@ class PostServiceTest {
         Long actualId = postService.createPost(createPostDTO, userId);
 
         assertEquals(postId, actualId);
-        verify(postRepository, Mockito.times(1)).save(any(Post.class));
+        verify(postRepository, times(1)).save(any(Post.class));
         verifyNoMoreInteractions(postRepository);
     }
 
