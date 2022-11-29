@@ -6,12 +6,10 @@ import com.levi9.socialnetwork.Service.CommentService;
 import com.levi9.socialnetwork.dto.CommentDTO;
 import com.levi9.socialnetwork.dto.ReplyDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/comments")
@@ -21,7 +19,7 @@ public class CommentController {
     private CommentService commentService;
 
     @GetMapping
-    public ResponseEntity<List<CommentDTO>> getAllComments() throws ResourceNotFoundException {
+    public ResponseEntity<List<CommentDTO>> getAllComments() {
 
         List<Comment> comments = commentService.getAllComments();
         List<CommentDTO> commentDTOS = comments.stream().map(CommentDTO::new).toList();
