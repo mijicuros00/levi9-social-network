@@ -220,7 +220,7 @@ class GroupControllerTest {
                 .andExpect(jsonPath("$[0].startDate").value(event.getStartDate().toString()))
                 .andExpect(jsonPath("$[0].endDate").value(event.getEndDate().toString()));
     }
-
+    
     @Test
     void testCreateEventInGroup() throws Exception {
         AddressDTO addressDTO = new AddressDTO(1L, "Serbia", "Novi Sad", "Freedom Square", 1);
@@ -240,5 +240,112 @@ class GroupControllerTest {
         mockMvc.perform(post(URL_PREFIX + "/" + GROUP_ID + "/events").principal(principal)
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8").content(requestBody))
                 .andExpect(status().isOk());
+    }
+    
+    @Test
+    void testCreateEventInGroupShouldReturnUnathorized() throws Exception {
+        AddressDTO addressDTO = new AddressDTO(1L, "Serbia", "Novi Sad", "Freedom Square", 1);
+        Address address = new Address(addressDTO);
+        EventDTO eventDTO = new EventDTO(1L, addressDTO, 1L, 1L, startDate, endDate);
+        Event event = new Event(eventDTO);
+        String requestBody = objectMapper.writeValueAsString(eventDTO);
+        User user = new User(1L, "John", "Smith", "email", "123");
+        Group newGroup = new Group(false, 1L, "New group");
+        newGroup.getMembers().add(user);
+
+        given(userService.findUserByUsername(principal.getName())).willReturn(null);
+        given(groupService.getGroupById(GROUP_ID)).willReturn(newGroup);
+        given(addressService.createAddress(any(Address.class))).willReturn(address);
+        given(eventService.createEventInGroup(event, address, newGroup)).willReturn(event);
+        
+        mockMvc.perform(post(URL_PREFIX + "/" + GROUP_ID + "/events").principal(principal)
+                .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8").content(requestBody))
+                .andExpect(status().isUnauthorized());
+    }
+    
+    @Test
+    void testCreateEventInGroupShouldReturnNonFoundBecauseUserIsNotGroupMember() throws Exception {
+        AddressDTO addressDTO = new AddressDTO(1L, "Serbia", "Novi Sad", "Freedom Square", 1);
+        Address address = new Address(addressDTO);
+        EventDTO eventDTO = new EventDTO(1L, addressDTO, 1L, 1L, startDate, endDate);
+        Event event = new Event(eventDTO);
+        String requestBody = objectMapper.writeValueAsString(eventDTO);
+        User user = new User(1L, "John", "Smith", "email", "123");
+        Group newGroup = new Group(false, 1L, "New group");
+
+        given(userService.findUserByUsername(principal.getName())).willReturn(user);
+        given(groupService.getGroupById(GROUP_ID)).willReturn(newGroup);
+        given(addressService.createAddress(any(Address.class))).willReturn(address);
+        given(eventService.createEventInGroup(event, address, newGroup)).willReturn(event);
+        
+        mockMvc.perform(post(URL_PREFIX + "/" + GROUP_ID + "/events").principal(principal)
+                .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8").content(requestBody))
+                .andExpect(status().isNotFound());
+    }
+    
+    @Test
+    void testAcceptMember() throws Exception {
+        
+        Group group = new Group(false, 1L, "Group 1");
+        group.setId(GROUP_ID);
+        User user = new User(1L, "John", "Smith", "user1", "123");
+        
+        given(groupService.getGroupById(GROUP_ID)).willReturn(group);
+        given(userService.findUserByUsername(principal.getName())).willReturn(user);
+        given(groupService.acceptMember(user.getId(), GROUP_ID)).willReturn(true);
+        
+        mockMvc.perform(post(URL_PREFIX + "/" + GROUP_ID + "/accept-member/" + user.getId())
+                .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8").principal(principal))
+                .andExpect(status().isOk());
+    }
+    
+    @Test
+    void testAcceptMemberNoAuthShouldReturnForbidden() throws Exception {
+        
+        Group group = new Group(false, 2L, "Group 1");
+        group.setId(GROUP_ID);
+        User user = new User(1L, "John", "Smith", "user1", "123");
+        
+        given(groupService.getGroupById(GROUP_ID)).willReturn(group);
+        given(userService.findUserByUsername(principal.getName())).willReturn(user);
+        given(groupService.acceptMember(user.getId(), GROUP_ID)).willReturn(true);
+        
+        mockMvc.perform(post(URL_PREFIX + "/" + GROUP_ID + "/accept-member/" + user.getId())
+                .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8").principal(principal))
+                .andExpect(status().isForbidden());
+    }
+    
+    @Test
+    void testRemoveMember() throws Exception {
+        
+        Group group = new Group(false, 1L, "Group 1");
+        group.setId(GROUP_ID);
+        User user = new User(1L, "John", "Smith", "user1", "123");
+        
+        given(groupService.getGroupById(GROUP_ID)).willReturn(group);
+        given(userService.findUserByUsername(principal.getName())).willReturn(user);
+        groupService.deleteMemberEvents(user.getId(), GROUP_ID);
+        groupService.removeMember(user.getId(), GROUP_ID);
+        
+        mockMvc.perform(delete(URL_PREFIX + "/" + GROUP_ID + "/remove-member/")
+                .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8").principal(principal))
+                .andExpect(status().is2xxSuccessful());
+    }
+    
+    @Test
+    void testRemoveMemberShouldReturnForbidden() throws Exception {
+        
+        Group group = new Group(false, 2L, "Group 1");
+        group.setId(GROUP_ID);
+        User user = new User(1L, "John", "Smith", "user1", "123");
+        
+        given(groupService.getGroupById(GROUP_ID)).willReturn(group);
+        given(userService.findUserByUsername(principal.getName())).willReturn(user);
+        groupService.deleteMemberEvents(user.getId(), GROUP_ID);
+        groupService.removeMember(user.getId(), GROUP_ID);
+        
+        mockMvc.perform(delete(URL_PREFIX + "/" + GROUP_ID + "/remove-member/")
+                .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8").principal(principal))
+                .andExpect(status().isForbidden());
     }
 }
