@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +23,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Address;
 import com.levi9.socialnetwork.Model.Event;
+import com.levi9.socialnetwork.Model.User;
 import com.levi9.socialnetwork.Repository.AddressRepository;
 import com.levi9.socialnetwork.Repository.EventRepository;
 import com.levi9.socialnetwork.Repository.UserRepository;
@@ -91,6 +93,35 @@ public class AddressSeviceTests {
 			addressService.getAddressById(addressId);
 
 		});
+	}
+
+	@Test
+	void testCreateAddress() {
+		Address expectedAddress = Address.builder().id(1L).country("Serbia").city("Kraljevo").street("Zelenjak")
+				.number(1).build();
+		when(addressRepository.save(expectedAddress)).thenReturn(expectedAddress);
+
+		Address actualUser = addressService.createAddress(expectedAddress);
+
+		assertThat(expectedAddress).usingRecursiveComparison().isEqualTo(actualUser);
+		verify(addressRepository, times(1)).save(expectedAddress);
+		verifyNoMoreInteractions(userRepository);
+	}
+
+	@Test
+	void testUpdateAddress() throws ResourceNotFoundException {
+		Address expectedAddress = Address.builder().id(1L).country("Serbia").city("Kraljevo").street("Zelenjak")
+				.number(1).build();
+
+		when(addressRepository.findById(addressId)).thenReturn(Optional.of(expectedAddress));
+		when(addressRepository.save(expectedAddress)).thenReturn(expectedAddress);
+
+		Address actualUser = addressService.updateAddress(addressId, expectedAddress);
+
+		assertThat(actualUser).usingRecursiveComparison().isEqualTo(expectedAddress);
+		verify(addressRepository, times(1)).findById(addressId);
+		verify(addressRepository, times(1)).save(expectedAddress);
+		verifyNoMoreInteractions(userRepository);
 	}
 
 	@Test

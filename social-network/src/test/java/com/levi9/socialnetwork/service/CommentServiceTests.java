@@ -27,21 +27,65 @@ import static org.mockito.BDDMockito.given;
 @RunWith(MockitoJUnitRunner.class)
 class CommentServiceTests {
 
-    private static final String POST_NOT_FOUND_MESSAGE = "Post not found for this id :: ";
-    private static final String COMMENT_NOT_FOUND_MESSAGE = "Post not found for this id :: ";
-
     @Mock
     private CommentRepository commentRepository;
-
-    @InjectMocks
-    private CommentServiceImpl commentService;
 
     @Mock
     private PostRepository postRepository;
 
+    @InjectMocks
+    private CommentServiceImpl commentService;
+
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testGetAllComments() {
+        shouldReturnCommentList();
+    }
+
+    @Test
+    void testReplyToComment() throws ResourceNotFoundException {
+        givenReplyDTOShouldSaveAndReturnComment();
+        givenReplyDTOShouldThrowBadRequestException();
+        givenReplyDTOShouldThrowResourceNotFoundException();
+    }
+
+    @Test
+    void testGetCommentsByPost() throws ResourceNotFoundException {
+        givenPostIdReturnCommentList();
+        givenPostIdThrowResourceNotFoundException();
+    }
+
+    @Test
+    void testGetRepliesByComment() throws ResourceNotFoundException {
+        givenCommentIdReturnReplyList();
+        givenCommentIdThrowResourceNotFoundException();
+    }
+
+    @Test
+    void testGetCommentById() throws ResourceNotFoundException {
+        givenCommentIdShouldReturnComment();
+        givenCommentIdShouldThrowResourceNotFoundGet();
+    }
+
+    @Test
+    void testCreateComment() {
+        givenCommentDTOShouldSaveAndReturnComment();
+    }
+
+    @Test
+    void testUpdateComment() throws ResourceNotFoundException {
+        givenCommentIdAndCommentDTOUpdateComment();
+        givenCommentIdAndCommentDTOShouldThrowResourceNotFound();
+    }
+
+    @Test
+    void testDeleteComment() throws ResourceNotFoundException {
+        givenCommentIdShouldLogicallyDeleteAndReturnComment();
+        givenCommentIdShouldThrowResourceNotFoundDelete();
     }
 
     void shouldReturnCommentList() {
@@ -109,9 +153,7 @@ class CommentServiceTests {
                 .build();
 
         given(postRepository.findById(1L))
-                .willAnswer(invocation -> {
-                    throw new ResourceNotFoundException(POST_NOT_FOUND_MESSAGE + replyDTO.getIdPost());
-                });
+                .willReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
                 () -> commentService.replyToComment(replyDTO));
@@ -183,6 +225,23 @@ class CommentServiceTests {
                 () -> commentService.getRepliesByComment(1L));
     }
 
+    void givenCommentIdShouldReturnComment() throws ResourceNotFoundException {
+        Comment comment = Comment.builder().id(1L).build();
+        given(commentRepository.findById(1L))
+                .willReturn(Optional.ofNullable(comment));
+
+        Comment returnedComment = commentService.getCommentById(1L);
+        assertThat(returnedComment.getId()).isEqualTo(1L);
+    }
+    void givenCommentIdShouldThrowResourceNotFoundGet() {
+        given(commentRepository.findById(1L))
+                .willReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> commentService.getCommentById(1L));
+
+    }
+
     void givenCommentDTOShouldSaveAndReturnComment() {
         CommentDTO commentDTO = CommentDTO.builder()
                 .build();
@@ -226,9 +285,7 @@ class CommentServiceTests {
 
     void givenCommentIdAndCommentDTOShouldThrowResourceNotFound() {
         given(commentRepository.findById(1L))
-                .willAnswer(invocation -> {
-                    throw new ResourceNotFoundException(COMMENT_NOT_FOUND_MESSAGE + 1L);
-                });
+                .willReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
                 () -> commentService.updateComment(1L, new CommentDTO()));
@@ -254,54 +311,11 @@ class CommentServiceTests {
         assertThat(returnedComment.isDeleted()).isTrue();
     }
 
-    void givenCommentIdShouldThrowResourceNotFound() {
+    void givenCommentIdShouldThrowResourceNotFoundDelete() {
         given(commentRepository.findById(1L))
-                .willAnswer(invocation -> {
-                    throw new ResourceNotFoundException(COMMENT_NOT_FOUND_MESSAGE + 1L);
-                });
+                .willReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
                 () -> commentService.deleteComment(1L));
-    }
-
-    @Test
-    void testGetAllComments() {
-        shouldReturnCommentList();
-    }
-
-    @Test
-    void testReplyToComment() throws ResourceNotFoundException {
-        givenReplyDTOShouldSaveAndReturnComment();
-        givenReplyDTOShouldThrowBadRequestException();
-        givenReplyDTOShouldThrowResourceNotFoundException();
-    }
-
-    @Test
-    void testGetCommentsByPost() throws ResourceNotFoundException {
-        givenPostIdReturnCommentList();
-        givenPostIdThrowResourceNotFoundException();
-    }
-
-    @Test
-    void testGetRepliesByComment() throws ResourceNotFoundException {
-        givenCommentIdReturnReplyList();
-        givenCommentIdThrowResourceNotFoundException();
-    }
-
-    @Test
-    void testCreateComment() {
-        givenCommentDTOShouldSaveAndReturnComment();
-    }
-
-    @Test
-    void testUpdateComment() throws ResourceNotFoundException {
-        givenCommentIdAndCommentDTOUpdateComment();
-        givenCommentIdAndCommentDTOShouldThrowResourceNotFound();
-    }
-
-    @Test
-    void testDeleteComment() throws ResourceNotFoundException {
-        givenCommentIdShouldLogicallyDeleteAndReturnComment();
-        givenCommentIdShouldThrowResourceNotFound();
     }
 }

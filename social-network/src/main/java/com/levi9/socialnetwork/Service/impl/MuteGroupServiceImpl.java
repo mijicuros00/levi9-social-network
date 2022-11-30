@@ -1,7 +1,6 @@
 package com.levi9.socialnetwork.Service.impl;
 
 import com.levi9.socialnetwork.Exception.BadRequestException;
-import com.levi9.socialnetwork.Exception.ResourceConflictException;
 import com.levi9.socialnetwork.Exception.ResourceExistsException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.MuteDuration;

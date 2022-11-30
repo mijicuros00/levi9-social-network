@@ -109,15 +109,14 @@ public class  PostServiceImpl implements PostService {
     	
         
         User user = userRepository.findByUsername(username);
-    	// Hard-coded until log-in is not implemented, when it's done add id of logged in user
-    	Long idLoggedUser = user.getId();
-    	Group group = groupRepository.findById(groupId).orElseThrow(() -> new ResourceNotFoundException("group with id " + groupId + " does not exists"));
+    	  Long idLoggedUser = user.getId();
+    	  Group group = groupRepository.findById(groupId).orElseThrow(() -> new ResourceNotFoundException("group with id " + groupId + " does not exists"));
     	
-    	if(!group.containsUser(idLoggedUser)) {
-    		throw new BadRequestException("User is not member of group.");
-    	}
+        if(!group.containsUser(idLoggedUser)) {
+          throw new BadRequestException("User is not member of group.");
+        }
     	
-    	return postRepository.getAllPostsFromGroup(groupId,user.getId());
+    	  return postRepository.getAllPostsFromGroup(groupId,user.getId());
     
     }
 }

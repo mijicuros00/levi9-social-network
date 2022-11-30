@@ -36,6 +36,7 @@ public class CommentServiceImpl implements CommentService {
     public Comment replyToComment(ReplyDTO replyDTO) throws ResourceNotFoundException, BadRequestException {
         Post post = postRepository.findById(replyDTO.getIdPost())
                 .orElseThrow(() -> new ResourceNotFoundException(POST_NOT_FOUND_MESSAGE + replyDTO.getIdPost()));
+
         if (post.isDeleted()) {
             throw new BadRequestException(DELETED_POST_MESSAGE);
         }

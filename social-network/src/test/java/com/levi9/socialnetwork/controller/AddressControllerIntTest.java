@@ -1,18 +1,17 @@
 package com.levi9.socialnetwork.controller;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.levi9.socialnetwork.Controller.AddressController;
+import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
+import com.levi9.socialnetwork.Model.Address;
+import com.levi9.socialnetwork.Service.impl.AddressServiceImpl;
+import com.levi9.socialnetwork.dto.AddressDTO;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,12 +27,15 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.levi9.socialnetwork.Controller.AddressController;
-import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
-import com.levi9.socialnetwork.Model.Address;
-import com.levi9.socialnetwork.Service.impl.AddressServiceImpl;
-import com.levi9.socialnetwork.dto.AddressDTO;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(AddressController.class)
@@ -141,7 +143,11 @@ class AddressControllerIntTest {
 	@Test
 	public void givenAddressIdWhenDeleteAddressThenReturn200() throws Exception {
 
-		willDoNothing().given(addressService).deleteAddress(addressId);
+		Map<String, Boolean> result = new HashMap<>();
+		result.put("deleted", Boolean.TRUE);
+		
+		given(addressService.deleteAddress(addressId))
+				.willReturn(result);
 
 		ResultActions response = mockMvc.perform(delete("/api/addresses/{id}", addressId));
 		response.andExpect(status().isOk()).andDo(print());

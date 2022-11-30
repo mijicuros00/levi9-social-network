@@ -58,7 +58,7 @@ public class GroupController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         groupService.createGroup(groupDTO, principal);
-        return ResponseEntity.status(200).build();
+        return ResponseEntity.status(201).build();
     }
 
     @PutMapping("/{id}")
