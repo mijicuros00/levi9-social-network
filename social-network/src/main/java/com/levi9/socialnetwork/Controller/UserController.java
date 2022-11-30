@@ -8,11 +8,14 @@ import com.levi9.socialnetwork.Service.GroupService;
 import com.levi9.socialnetwork.Service.MuteGroupService;
 import com.levi9.socialnetwork.Service.UserService;
 import com.levi9.socialnetwork.dto.RequestDTO;
+import com.levi9.socialnetwork.dto.UserDTO;
+import com.levi9.socialnetwork.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Map;
 
 @RestController
@@ -37,23 +40,27 @@ public class UserController {
     @GetMapping("/{id}")
 //	@PreAuthorize("hasAnyRole('CUSTOMER','ADMIN'")
 //	@PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<User> getUserById(@PathVariable(value = "id") Long userId) throws ResourceNotFoundException {
+    public ResponseEntity<UserDTO> getUserById(@PathVariable(value = "id") Long userId) throws ResourceNotFoundException {
 
-        return userService.getUserById(userId);
+        return new ResponseEntity<>(UserMapper.mapDTO(userService.getUserById(userId)), HttpStatus.OK);
     }
 
     @PostMapping("/{userId}/friend/{friendId}")
-    public int addFriend(@PathVariable(value = "userId") Long userId, @PathVariable(value = "friendId") Long friendId) {
+    public ResponseEntity<UserDTO> addFriend(@PathVariable(value = "userId") Long userId, @PathVariable(value = "friendId") Long friendId) throws ResourceNotFoundException {
 
-        return userService.addFriend(userId, friendId);
+        return new ResponseEntity<>(UserMapper.mapDTO(userService.addFriend(userId, friendId)), HttpStatus.OK);
     }
 
     @PutMapping("/{userId}/remove-friend/{friendId}")
-    public ResponseEntity<Boolean> removeFriend(@PathVariable Long userId, @PathVariable Long friendId)
+    public ResponseEntity<Boolean> removeFriend(Principal principal, @PathVariable Long friendId)
             throws ResourceNotFoundException, ResourceExistsException {
-        // TODO: userId - remove when you complete autenfication
+        User user = userService.findUserByUsername(principal.getName());
 
-        boolean success = userService.removeFriend(userId, friendId);
+        if(user == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        boolean success = userService.removeFriend(user.getId(), friendId);
         return new ResponseEntity<>(success, HttpStatus.OK);
 
     }
@@ -65,10 +72,10 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable(value = "id") Long userId, @RequestBody User userDetails)
+    public ResponseEntity<UserDTO> updateUser(@PathVariable(value = "id") Long userId, @RequestBody User userDetails)
             throws ResourceNotFoundException {
 
-        return userService.updateUser(userId, userDetails);
+        return new ResponseEntity<>(UserMapper.mapDTO(userService.updateUser(userId, userDetails)), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

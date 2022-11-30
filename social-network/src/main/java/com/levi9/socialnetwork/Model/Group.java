@@ -24,9 +24,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "group", schema = "public")
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Getter
 @Setter
+@Builder
 public class Group {
 
     @Id
