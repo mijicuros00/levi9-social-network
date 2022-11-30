@@ -1,35 +1,19 @@
 package com.levi9.socialnetwork.Model;
 
-import java.time.LocalDateTime;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-
 import com.levi9.socialnetwork.dto.EventDTO;
+import lombok.*;
+import org.hibernate.Hibernate;
 
-import lombok.EqualsAndHashCode;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "event", schema = "public")
 @NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
 @Builder
 @ToString
 public class Event {
@@ -66,7 +50,6 @@ public class Event {
         this.groupId = eventDTO.getGroupId();
         this.startDate = eventDTO.getStartDate();
         this.endDate = eventDTO.getEndDate();
-//        this.memberUsers = eventDTO.getMemberUsers();
     }
 
     public Event(Long id, Long locationId, Long userId, Long groupId, LocalDateTime startDate, LocalDateTime endDate,
@@ -79,5 +62,18 @@ public class Event {
         this.startDate = startDate;
         this.endDate = endDate;
         this.memberUsers = memberUsers;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Event event = (Event) o;
+        return id != null && Objects.equals(id, event.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }
