@@ -8,7 +8,6 @@ import lombok.Setter;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -54,11 +53,7 @@ public class MuteGroup {
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         MuteGroup muteGroup = (MuteGroup) o;
         return userId != null && Objects.equals(userId, muteGroup.userId)
-                && groupId != null && Objects.equals(groupId, muteGroup.groupId)
-                && endOfMute != null
-                && endOfMute.minus(Duration.ofMinutes(1)).isBefore(muteGroup.endOfMute)
-                && endOfMute.plus(Duration.ofMinutes(1)).isAfter(muteGroup.endOfMute)
-                && isPermanent != null && Objects.equals(isPermanent, muteGroup.isPermanent);
+                && groupId != null && Objects.equals(groupId, muteGroup.groupId);
     }
 
     @Override
