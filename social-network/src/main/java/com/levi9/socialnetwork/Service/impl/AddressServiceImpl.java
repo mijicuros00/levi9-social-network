@@ -32,7 +32,7 @@ public class AddressServiceImpl implements AddressService {
         return addressRepository.save(address);
     }
 
-    public ResponseEntity<Address> updateAddress(Long addressId, @RequestBody Address addressDetails)
+    public Address updateAddress(Long addressId, Address addressDetails)
             throws ResourceNotFoundException {
         Address address = addressRepository.findById(addressId)
                 .orElseThrow(() -> new ResourceNotFoundException(NOT_FOUND_MESSAGE + addressId));
@@ -43,7 +43,7 @@ public class AddressServiceImpl implements AddressService {
         address.setNumber(addressDetails.getNumber());
 
         final Address updatedAddress = addressRepository.save(address);
-        return ResponseEntity.ok(updatedAddress);
+        return updatedAddress;
     }
 
     public Map<String, Boolean> deleteAddress(Long addressId) throws ResourceNotFoundException {

@@ -15,7 +15,7 @@ public interface AddressService {
 
     public Address createAddress(Address address);
 
-    public ResponseEntity<Address> updateAddress(Long addressId, @RequestBody Address addressDetails)
+    public Address updateAddress(Long addressId, @RequestBody Address addressDetails)
             throws ResourceNotFoundException;
 
     public Map<String, Boolean> deleteAddress(Long addressId) throws ResourceNotFoundException;

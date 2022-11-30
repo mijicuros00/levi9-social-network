@@ -2,6 +2,7 @@ package com.levi9.socialnetwork.dto;
 
 import com.levi9.socialnetwork.Model.Item;
 import com.levi9.socialnetwork.Model.User;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
+@Builder
 public class CreatePostDTO {
 
     private boolean isPrivate;

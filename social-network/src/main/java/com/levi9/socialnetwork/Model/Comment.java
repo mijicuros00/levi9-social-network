@@ -1,26 +1,19 @@
 package com.levi9.socialnetwork.Model;
 
-import java.time.LocalDateTime;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import com.levi9.socialnetwork.dto.CommentDTO;
 import com.levi9.socialnetwork.dto.ReplyDTO;
+import lombok.*;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "comment", schema = "public")
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
+@EqualsAndHashCode
 public class Comment {
 
     @Id
