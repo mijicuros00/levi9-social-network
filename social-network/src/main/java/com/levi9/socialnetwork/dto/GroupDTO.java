@@ -1,32 +1,23 @@
 package com.levi9.socialnetwork.dto;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode
 public class GroupDTO {
-	
+
     private boolean isPrivate;
 
     private String name;
-	
-    public GroupDTO() {}
-	
+
     public GroupDTO(boolean isPrivate, String name) {
-	    this.isPrivate = isPrivate;
-      this.name = name;
-	   }
-
-	  public boolean isPrivate() {
-		  return isPrivate;
-	  }
-
-	  public void setPrivate(boolean isPrivate) {
-		  this.isPrivate = isPrivate;
-	  }
-
-	  public String getName() {
-		  return name;
-	  }
-
-	  public void setName(String name) {
-		  this.name = name;
-	  }
+        this.isPrivate = isPrivate;
+        this.name = name;
+    }
 
 }

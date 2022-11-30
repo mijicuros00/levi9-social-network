@@ -1,15 +1,17 @@
 package com.levi9.socialnetwork.dto;
 
-import com.levi9.socialnetwork.Model.Item;
-import com.levi9.socialnetwork.Model.User;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.levi9.socialnetwork.Model.Item;
+import com.levi9.socialnetwork.Model.User;
+
+import lombok.Builder;
+import lombok.Data;
+
 @Data
+@Builder
 public class CreatePostDTO {
 
     private boolean isPrivate;

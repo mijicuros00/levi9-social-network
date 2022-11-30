@@ -5,7 +5,10 @@ import lombok.Data;
 
 import javax.persistence.Column;
 
+import com.levi9.socialnetwork.Model.Item;
+
 @Data
+@Builder
 public class ItemDTO {
 
     public ItemDTO(Long id, String link) {

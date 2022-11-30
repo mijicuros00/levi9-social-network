@@ -15,11 +15,10 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/api/groups")
 public class GroupController {
-	
+
     @Autowired
     private GroupService groupService;
 
@@ -28,7 +27,7 @@ public class GroupController {
 
     @Autowired
     private MuteGroupService muteGroupService;
-	
+
     @Autowired
     private PostService postService;
 
@@ -37,30 +36,31 @@ public class GroupController {
 
     @Autowired
     private AddressService addressService;
-	
+
     @GetMapping
     public ResponseEntity<List<GroupResponseDTO>> getAllGroups() {
 
         List<GroupResponseDTO> groups = groupService.getAllGroups();
         return ResponseEntity.ok().body(groups);
     }
-  
-	  @GetMapping("/{id}")
-	  public ResponseEntity<GroupResponseDTO> getGroup(@PathVariable(value = "id") Long groupId) throws ResourceNotFoundException {
-		    Group group = groupService.getGroupById(groupId);
-		    GroupResponseDTO groupResponseDTO = new GroupResponseDTO(group);
-		    return ResponseEntity.ok().body(groupResponseDTO);
-	  }
-	
-	  @PostMapping
-	  public ResponseEntity<Group> createGroup(@RequestBody GroupDTO groupDTO, Principal principal) {
-	      if(principal == null) {
-	          return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-	      }
-		    groupService.createGroup(groupDTO, principal);
-		    return ResponseEntity.status(200).build();
-	  }
-	
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GroupResponseDTO> getGroup(@PathVariable(value = "id") Long groupId)
+            throws ResourceNotFoundException {
+        Group group = groupService.getGroupById(groupId);
+        GroupResponseDTO groupResponseDTO = new GroupResponseDTO(group);
+        return ResponseEntity.ok().body(groupResponseDTO);
+    }
+
+    @PostMapping
+    public ResponseEntity<Group> createGroup(@RequestBody GroupDTO groupDTO, Principal principal) {
+        if (principal == null) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        groupService.createGroup(groupDTO, principal);
+        return ResponseEntity.status(201).build();
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Group> updateGroup(@PathVariable(value = "id") Long groupId, @RequestBody GroupDTO groupDTO)
             throws ResourceNotFoundException {
@@ -78,15 +78,16 @@ public class GroupController {
     }
 
     @GetMapping(value = "/{groupId}/posts")
-    public ResponseEntity<List<Post>> getAllPosts(@PathVariable(value = "groupId") Long groupId,Principal user)
+    public ResponseEntity<List<Post>> getAllPosts(@PathVariable(value = "groupId") Long groupId, Principal user)
             throws ResourceNotFoundException {
 
-        List<Post> visiblePosts = postService.getAllPostsFromGroup(groupId,user.getName());
+        List<Post> visiblePosts = postService.getAllPostsFromGroup(groupId, user.getName());
         return ResponseEntity.ok().body(visiblePosts);
     }
 
     @DeleteMapping("/{groupId}/leave")
-    public ResponseEntity<Void> leaveGroup(@PathVariable Long groupId, Principal principal) throws ResourceNotFoundException {
+    public ResponseEntity<Void> leaveGroup(@PathVariable Long groupId, Principal principal)
+            throws ResourceNotFoundException {
         User user = userService.findUserByUsername(principal.getName());
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -98,7 +99,8 @@ public class GroupController {
     }
 
     @GetMapping("/{groupId}/events")
-    public ResponseEntity<List<EventDTO>> getEventsInGroup(@PathVariable Long groupId) throws ResourceNotFoundException {
+    public ResponseEntity<List<EventDTO>> getEventsInGroup(@PathVariable Long groupId)
+            throws ResourceNotFoundException {
         List<Event> groupEvents = eventService.getAllEventsInGroup(groupId);
         List<EventDTO> groupEventDTOs = new ArrayList<>();
         for (Event event : groupEvents) {
@@ -110,8 +112,8 @@ public class GroupController {
     }
 
     @PostMapping("/{groupId}/events")
-    public ResponseEntity<EventDTO> createEventInGroup(@PathVariable Long groupId, @RequestBody EventDTO eventDTO, Principal principal)
-            throws ResourceNotFoundException, ResourceExistsException {
+    public ResponseEntity<EventDTO> createEventInGroup(@PathVariable Long groupId, @RequestBody EventDTO eventDTO,
+            Principal principal) throws ResourceNotFoundException, ResourceExistsException {
         User user = userService.findUserByUsername(principal.getName());
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -120,7 +122,8 @@ public class GroupController {
 
         Group group = groupService.getGroupById(groupId);
         if (!group.containsUser(userId)) {
-            throw new ResourceNotFoundException("User with id " + userId + " is not a member of group with id " + groupId);
+            throw new ResourceNotFoundException(
+                    "User with id " + userId + " is not a member of group with id " + groupId);
         }
 
         eventDTO.setUserId(userId);
@@ -132,7 +135,8 @@ public class GroupController {
     }
 
     @PutMapping("/{groupId}/mute")
-    public ResponseEntity<MuteGroupDTO> muteGroupForDuration(@PathVariable(value = "groupId") Long groupId, @RequestBody String muteDurationName, Principal principal)
+    public ResponseEntity<MuteGroupDTO> muteGroupForDuration(@PathVariable(value = "groupId") Long groupId,
+            @RequestBody String muteDurationName, Principal principal)
             throws ResourceNotFoundException, ResourceExistsException {
         User user = userService.findUserByUsername(principal.getName());
         if (user == null) {
@@ -145,7 +149,8 @@ public class GroupController {
     }
 
     @PutMapping("/{groupId}/unmute")
-    public ResponseEntity<MuteGroupDTO> unmuteGroup(@PathVariable(value = "groupId") Long groupId, Principal principal) throws ResourceNotFoundException {
+    public ResponseEntity<MuteGroupDTO> unmuteGroup(@PathVariable(value = "groupId") Long groupId, Principal principal)
+            throws ResourceNotFoundException {
         User user = userService.findUserByUsername(principal.getName());
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -154,38 +159,39 @@ public class GroupController {
         MuteGroup muteGroup = muteGroupService.unmuteGroup(user.getId(), groupId);
         return new ResponseEntity<>(new MuteGroupDTO(muteGroup), HttpStatus.OK);
     }
-    
 
-	@PostMapping("/{groupId}/accept-member/{userId}")
-	public ResponseEntity<Boolean> acceptMember(@PathVariable Long groupId, @PathVariable Long userId, Principal principal) throws ResourceNotFoundException, ResourceExistsException {
+    @PostMapping("/{groupId}/accept-member/{userId}")
+    public ResponseEntity<Boolean> acceptMember(@PathVariable Long groupId, @PathVariable Long userId,
+            Principal principal) throws ResourceNotFoundException, ResourceExistsException {
 
-		User user = userService.findUserByUsername(principal.getName());
-		Group group = groupService.getGroupById(user.getId());
+        User user = userService.findUserByUsername(principal.getName());
+        Group group = groupService.getGroupById(user.getId());
 
-		if(!group.getIdAdmin().equals(user.getId())){
-			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-		}
+        if (!group.getIdAdmin().equals(user.getId())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
 
-			boolean success = groupService.acceptMember(userId, groupId);
-			return new ResponseEntity<>(success, HttpStatus.OK);
-	}
+        boolean success = groupService.acceptMember(userId, groupId);
+        return new ResponseEntity<>(success, HttpStatus.OK);
+    }
 
-	@DeleteMapping("/{groupId}/remove-member")
-	@Transactional
-	public ResponseEntity<Void> removeMember(@PathVariable Long groupId, Principal principal) throws ResourceNotFoundException {
+    @DeleteMapping("/{groupId}/remove-member")
+    @Transactional
+    public ResponseEntity<Void> removeMember(@PathVariable Long groupId, Principal principal)
+            throws ResourceNotFoundException {
 
-		User user = userService.findUserByUsername(principal.getName());
-		Group group = groupService.getGroupById(user.getId());
+        User user = userService.findUserByUsername(principal.getName());
+        Group group = groupService.getGroupById(user.getId());
 
-		if(!group.getIdAdmin().equals(user.getId())){
-			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-		}
+        if (!group.getIdAdmin().equals(user.getId())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
 
-		muteGroupService.deleteMuteGroup(user.getId(), groupId);
-		groupService.deleteMemberEvents(user.getId(), groupId);
-		groupService.removeMember(user.getId(), groupId);
+        muteGroupService.deleteMuteGroup(user.getId(), groupId);
+        groupService.deleteMemberEvents(user.getId(), groupId);
+        groupService.removeMember(user.getId(), groupId);
 
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	}
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
 }

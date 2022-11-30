@@ -17,6 +17,7 @@ import javax.persistence.Table;
 
 import com.levi9.socialnetwork.dto.EventDTO;
 
+import lombok.EqualsAndHashCode;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @Setter
+@EqualsAndHashCode
 @Builder
 @ToString
 public class Event {

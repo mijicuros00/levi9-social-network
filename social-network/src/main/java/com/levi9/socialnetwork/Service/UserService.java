@@ -18,21 +18,17 @@ public interface UserService extends UserDetailsService {
 
     public java.util.List<User> getAllUsers();
 
-    public ResponseEntity<User> getUserById(Long userId) throws ResourceNotFoundException;
-
-    public User findUserById(Long userId) throws ResourceNotFoundException;
+    public User getUserById(Long userId) throws ResourceNotFoundException;
     
     public User findUserByUsername(String username) throws ResourceNotFoundException;
 
-    public User save(User user);
-
     public User createUser(User user);
 
-    public int addFriend(Long userId, Long friendId);
+    public User addFriend(Long userId, Long friendId) throws ResourceNotFoundException;
 
     public boolean removeFriend(Long userId, Long friendId) throws ResourceNotFoundException, ResourceExistsException;
 
-    public ResponseEntity<User> updateUser(Long userId, @RequestBody User userDetails) throws ResourceNotFoundException;
+    public User updateUser(Long userId, @RequestBody User userDetails) throws ResourceNotFoundException;
 
     public User createGroupRequest(RequestDTO requestDTO) throws ResourceNotFoundException, ResourceExistsException;
 
