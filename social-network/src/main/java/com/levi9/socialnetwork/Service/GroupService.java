@@ -27,7 +27,7 @@ public interface GroupService {
 
     public boolean acceptMember(Long userId, Long groupId) throws ResourceNotFoundException, ResourceExistsException;
 
-	  void deleteMemberEvents(Long userId, Long groupId);
+	void deleteMemberEvents(Long userId, Long groupId);
 
     public void removeMember(Long userId, Long groupId) throws ResourceNotFoundException;
 

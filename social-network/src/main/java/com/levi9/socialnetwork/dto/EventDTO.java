@@ -5,12 +5,14 @@ import java.time.LocalDateTime;
 import com.levi9.socialnetwork.Model.Address;
 import com.levi9.socialnetwork.Model.Event;
 
+import lombok.EqualsAndHashCode;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 @Builder
 public class EventDTO {
     private Long id;
