@@ -1,7 +1,10 @@
 package com.levi9.socialnetwork.Model;
 
+import lombok.EqualsAndHashCode;
+
 import java.io.Serializable;
 
+@EqualsAndHashCode
 public class MuteGroupId implements Serializable {
     private Long userId;
     private Long groupId;

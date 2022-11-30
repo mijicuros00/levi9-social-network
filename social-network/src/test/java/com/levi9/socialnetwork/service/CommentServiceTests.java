@@ -28,16 +28,16 @@ import static org.mockito.BDDMockito.given;
 class CommentServiceTests {
 
     private static final String POST_NOT_FOUND_MESSAGE = "Post not found for this id :: ";
-    private static final String COMMENT_NOT_FOUND_MESSAGE = "Post not found for this id :: ";
+    private static final String COMMENT_NOT_FOUND_MESSAGE = "Comment not found for this id :: ";
 
     @Mock
     private CommentRepository commentRepository;
 
-    @InjectMocks
-    private CommentServiceImpl commentService;
-
     @Mock
     private PostRepository postRepository;
+
+    @InjectMocks
+    private CommentServiceImpl commentService;
 
     @BeforeEach
     void setup() {

@@ -1,20 +1,17 @@
 package com.levi9.socialnetwork.controller;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.levi9.socialnetwork.Controller.AddressController;
+import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
+import com.levi9.socialnetwork.Model.Address;
+import com.levi9.socialnetwork.Service.impl.AddressServiceImpl;
+import com.levi9.socialnetwork.dto.AddressDTO;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,12 +27,15 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.levi9.socialnetwork.Controller.AddressController;
-import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
-import com.levi9.socialnetwork.Model.Address;
-import com.levi9.socialnetwork.Service.impl.AddressServiceImpl;
-import com.levi9.socialnetwork.dto.AddressDTO;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(AddressController.class)

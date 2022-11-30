@@ -34,8 +34,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     public Comment replyToComment(ReplyDTO replyDTO) throws ResourceNotFoundException, BadRequestException {
-        Post post = postRepository.findById(replyDTO.getIdPost())
-                .orElseThrow(() -> new ResourceNotFoundException(POST_NOT_FOUND_MESSAGE + replyDTO.getIdPost()));
+        Post post = postRepository.findById(replyDTO.getIdPost()).orElseThrow(() -> new ResourceNotFoundException(POST_NOT_FOUND_MESSAGE + replyDTO.getIdPost()));
+
         if (post.isDeleted()) {
             throw new BadRequestException(DELETED_POST_MESSAGE);
         }
@@ -64,8 +64,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     public Comment getCommentById(Long id) throws ResourceNotFoundException {
-        return commentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(COMMENT_NOT_FOUND_MESSAGE + id));
+        return commentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(COMMENT_NOT_FOUND_MESSAGE + id));
     }
 
     public Comment createComment(CommentDTO commentDTO) {
@@ -74,8 +73,7 @@ public class CommentServiceImpl implements CommentService {
     }
  
     public Comment updateComment(Long commentId, @RequestBody CommentDTO commentDTO) throws ResourceNotFoundException {
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new ResourceNotFoundException(COMMENT_NOT_FOUND_MESSAGE + commentId));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResourceNotFoundException(COMMENT_NOT_FOUND_MESSAGE + commentId));
         comment.setText(commentDTO.getText());
         comment.setDeleted(commentDTO.isDeleted()); 
 
@@ -83,8 +81,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     public Comment deleteComment(Long commentId) throws ResourceNotFoundException {
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new ResourceNotFoundException(COMMENT_NOT_FOUND_MESSAGE + commentId));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResourceNotFoundException(COMMENT_NOT_FOUND_MESSAGE + commentId));
         comment.setDeleted(true);
         commentRepository.save(comment);
 
