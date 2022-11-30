@@ -1,15 +1,28 @@
 package com.levi9.socialnetwork.Model;
 
+import java.time.LocalDateTime;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
 import com.levi9.socialnetwork.dto.EventDTO;
 
 import lombok.EqualsAndHashCode;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.Set;
+import lombok.ToString;
 
 @Entity
 @Table(name = "event", schema = "public")
@@ -17,6 +30,8 @@ import java.util.Set;
 @Getter
 @Setter
 @EqualsAndHashCode
+@Builder
+@ToString
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,9 +69,15 @@ public class Event {
 //        this.memberUsers = eventDTO.getMemberUsers();
     }
 
-    @Override
-    public String toString() {
-        return "Event{" + "id=" + id + ", locationId=" + locationId + ", userId=" + userId + ", groupId=" + groupId
-                + ", startDate=" + startDate + ", endDate=" + endDate + '}';
+    public Event(Long id, Long locationId, Long userId, Long groupId, LocalDateTime startDate, LocalDateTime endDate,
+            Set<Member> memberUsers) {
+        super();
+        this.id = id;
+        this.locationId = locationId;
+        this.userId = userId;
+        this.groupId = groupId;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.memberUsers = memberUsers;
     }
 }

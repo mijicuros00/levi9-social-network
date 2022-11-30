@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
 @ControllerAdvice
-class CustomExceptionHandler extends BaseExceptionHandler {
+ public class CustomExceptionHandler extends BaseExceptionHandler {
 
 	public CustomExceptionHandler() {
         registerMapping(InvalidParameterException.class,HttpStatus.BAD_REQUEST);

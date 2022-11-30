@@ -6,7 +6,6 @@ import com.levi9.socialnetwork.Service.CommentService;
 import com.levi9.socialnetwork.dto.CommentDTO;
 import com.levi9.socialnetwork.dto.ReplyDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,58 +19,65 @@ public class CommentController {
     private CommentService commentService;
 
     @GetMapping
-    public ResponseEntity<List<Comment>> getAllComments() throws ResourceNotFoundException {
+    public ResponseEntity<List<CommentDTO>> getAllComments() {
 
         List<Comment> comments = commentService.getAllComments();
-        return ResponseEntity.ok().body(comments);
+        List<CommentDTO> commentDTOS = comments.stream().map(CommentDTO::new).toList();
+        return ResponseEntity.ok().body(commentDTOS);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Comment> getComment(@PathVariable(value = "id") Long commentId)
+    public ResponseEntity<CommentDTO> getComment(@PathVariable(value = "id") Long commentId)
             throws ResourceNotFoundException {
 
         Comment comment = commentService.getCommentById(commentId);
-        return ResponseEntity.ok().body(comment);
+        return ResponseEntity.ok().body(new CommentDTO(comment));
 
     }
 
     @GetMapping("/post/{postId}")
-    public ResponseEntity<List<Comment>> getCommentsByPost(@PathVariable(value = "postId") Long postId) {
+    public ResponseEntity<List<CommentDTO>> getCommentsByPost(@PathVariable(value = "postId") Long postId)
+            throws ResourceNotFoundException {
 
-        return new ResponseEntity<>(commentService.getCommentsByPost(postId), HttpStatus.OK);
+        List<Comment> comments = commentService.getCommentsByPost(postId);
+        List<CommentDTO> commentDTOS = comments.stream().map(CommentDTO::new).toList();
+        return ResponseEntity.ok().body(commentDTOS);
     }
 
     @GetMapping("{commentId}/reply")
-    public ResponseEntity<List<Comment>> getRepliesByComment(@PathVariable(value = "commentId") Long commentId) {
+    public ResponseEntity<List<ReplyDTO>> getRepliesByComment(@PathVariable(value = "commentId") Long commentId)
+            throws ResourceNotFoundException {
 
-        return new ResponseEntity<>(commentService.getRepliesByComment(commentId), HttpStatus.OK);
+        List<Comment> comments = commentService.getRepliesByComment(commentId);
+        List<ReplyDTO> replyDTOS = comments.stream().map(ReplyDTO::new).toList();
+        return ResponseEntity.ok().body(replyDTOS);
     }
 
     @PostMapping("/reply")
-    public ResponseEntity<Comment> replyToComment(@RequestBody ReplyDTO replyDTO) throws ResourceNotFoundException {
-        commentService.replyToComment(replyDTO);
-        return ResponseEntity.status(200).build();
+    public ResponseEntity<ReplyDTO> replyToComment(@RequestBody ReplyDTO replyDTO) throws ResourceNotFoundException {
+        Comment reply = commentService.replyToComment(replyDTO);
+        return ResponseEntity.ok().body(new ReplyDTO(reply));
     }
 
     @PostMapping
-    public ResponseEntity<Comment> createComment(@RequestBody CommentDTO commentDTO) {
+    public ResponseEntity<CommentDTO> createComment(@RequestBody CommentDTO commentDTO) {
 
-        commentService.createComment(commentDTO);
-        return ResponseEntity.status(200).build();
+        Comment comment = commentService.createComment(commentDTO);
+        return ResponseEntity.ok().body(new CommentDTO(comment));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Comment> updateComment(@PathVariable(value = "id") Long commentId,
+    public ResponseEntity<CommentDTO> updateComment(@PathVariable(value = "id") Long commentId,
             @RequestBody CommentDTO commentDTO) throws ResourceNotFoundException {
 
         Comment updatedComment = commentService.updateComment(commentId, commentDTO);
-        return ResponseEntity.ok().body(updatedComment);
+        return ResponseEntity.ok().body(new CommentDTO(updatedComment));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Comment> deleteComment(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
+    public ResponseEntity<CommentDTO> deleteComment(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
 
         Comment comment = commentService.deleteComment(id);
-        return ResponseEntity.ok().body(comment);
+        return ResponseEntity.ok().body(new CommentDTO(comment));
     }
 }

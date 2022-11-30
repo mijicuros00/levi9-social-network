@@ -19,17 +19,17 @@ import javax.persistence.Table;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "group", schema = "public")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode
+@Builder
 public class Group {
 
     @Id

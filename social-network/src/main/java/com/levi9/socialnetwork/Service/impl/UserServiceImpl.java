@@ -53,26 +53,15 @@ public class UserServiceImpl implements UserService {
         return this.userRepository.findAll();
     }
 
-    public ResponseEntity<User> getUserById(Long userId) throws ResourceNotFoundException {
+    public User getUserById(Long userId) throws ResourceNotFoundException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_EXCEPTION_MESSAGE + userId));
-        return ResponseEntity.ok().body(user);
-    }
-
-    @Override
-    public User findUserById(Long userId) throws ResourceNotFoundException {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_EXCEPTION_MESSAGE + userId));
+        return user;
     }
 
     @Override
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username);
-    }
-
-    @Override
-    public User save(User user) {
-        return userRepository.save(user);
     }
 
     @Override
@@ -93,17 +82,15 @@ public class UserServiceImpl implements UserService {
         return this.userRepository.getNotMutedUsers(groupId);
     }
 
-    public int addFriend(Long userId, Long friendId) {
-        Optional<User> user1 = userRepository.findById(userId);
-        User user = user1.get();
+    public User addFriend(Long userId, Long friendId) throws ResourceNotFoundException {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_EXCEPTION_MESSAGE + userId));
 
-        Optional<User> user2 = userRepository.findById(friendId);
-        User friend = user2.get();
+        User friend = userRepository.findById(friendId).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_EXCEPTION_MESSAGE + userId));
 
         user.getFriends().add(friend);
         userRepository.save(user);
 
-        return 5;
+        return user;
 
     }
 
@@ -111,7 +98,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
-    public ResponseEntity<User> updateUser(Long userId, @RequestBody User userDetails)
+    public User updateUser(Long userId, @RequestBody User userDetails)
             throws ResourceNotFoundException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_EXCEPTION_MESSAGE + userId));
@@ -121,8 +108,7 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userDetails.getEmail());
         user.setPassword(userDetails.getPassword());
 
-        final User updatedUser = userRepository.save(user);
-        return ResponseEntity.ok(updatedUser);
+        return userRepository.save(user);
     }
 
     public Map<String, Boolean> deleteUser(Long userId) throws ResourceNotFoundException {

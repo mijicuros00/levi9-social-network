@@ -1,7 +1,14 @@
 package com.levi9.socialnetwork.dto;
 
-import java.time.LocalDateTime;
+import com.levi9.socialnetwork.Model.Comment;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
 
+import java.time.LocalDateTime;
+import java.util.Objects;
+
+@Builder
+@EqualsAndHashCode
 public class ReplyDTO {
 	
 	private String text;
@@ -26,6 +33,15 @@ public class ReplyDTO {
 		this.idUser = idUser;
 		this.idRepliedTo = idRepliedTo;
 		this.idPost = idPost;
+	}
+
+	public ReplyDTO(Comment reply) {
+		this.text = reply.getText();
+		this.createdDate = reply.getCreatedDate();
+		this.deleted = reply.isDeleted();
+		this.idUser = reply.getIdUser();
+		this.idRepliedTo = reply.getIdRepliedTo();
+		this.idPost = reply.getIdPost();
 	}
 
 	public String getText() {
@@ -75,7 +91,4 @@ public class ReplyDTO {
 	public void setIdPost(Long idPost) {
 		this.idPost = idPost;
 	}
-	
-	
-	
 }
