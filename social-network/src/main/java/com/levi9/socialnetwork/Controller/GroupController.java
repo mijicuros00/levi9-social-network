@@ -165,7 +165,7 @@ public class GroupController {
             Principal principal) throws ResourceNotFoundException, ResourceExistsException {
 
         User user = userService.findUserByUsername(principal.getName());
-        Group group = groupService.getGroupById(user.getId());
+        Group group = groupService.getGroupById(groupId);
 
         if (!group.getIdAdmin().equals(user.getId())) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -175,21 +175,21 @@ public class GroupController {
         return new ResponseEntity<>(success, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{groupId}/remove-member")
+    @DeleteMapping("/{groupId}/remove-member/{userId}")
     @Transactional
-    public ResponseEntity<Void> removeMember(@PathVariable Long groupId, Principal principal)
+    public ResponseEntity<Void> removeMember(@PathVariable Long groupId, @PathVariable Long userId, Principal principal)
             throws ResourceNotFoundException {
 
-        User user = userService.findUserByUsername(principal.getName());
-        Group group = groupService.getGroupById(user.getId());
+        User loggedUser = userService.findUserByUsername(principal.getName());
+        Group group = groupService.getGroupById(groupId);
 
-        if (!group.getIdAdmin().equals(user.getId())) {
+        if (!group.getIdAdmin().equals(loggedUser.getId())) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
-        muteGroupService.deleteMuteGroup(user.getId(), groupId);
-        groupService.deleteMemberEvents(user.getId(), groupId);
-        groupService.removeMember(user.getId(), groupId);
+        muteGroupService.deleteMuteGroup(userId, groupId);
+        groupService.deleteMemberEvents(userId, groupId);
+        groupService.removeMember(userId, groupId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
