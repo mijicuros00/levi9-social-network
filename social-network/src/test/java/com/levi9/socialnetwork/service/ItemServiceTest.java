@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+import java.util.HashSet;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +23,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Item;
+import com.levi9.socialnetwork.Model.User;
 import com.levi9.socialnetwork.Repository.ItemRepository;
 import com.levi9.socialnetwork.Repository.UserRepository;
 import com.levi9.socialnetwork.Service.impl.EmailServiceImpl;
@@ -60,7 +62,6 @@ class ItemServiceTest {
 				.build();
 		when(itemRepository.save(expectedItem)).thenReturn(expectedItem);
 		when(itemRepository.findById(itemId)).thenReturn(Optional.of(expectedItem));
-		
 
 		ItemDTO actual = itemService.getItemById(1L);
 
@@ -127,19 +128,30 @@ class ItemServiceTest {
 
 		ItemDTO savedItemDTO = ItemDTO.builder().id(itemId)
 				.link("https://www.slikomania.rs/fotky6509/fotos/CWFTR026.jpg").build();
-		
-		
+
 		itemRepository.save(savedItem);
 		when(itemRepository.findById(1L)).thenReturn(Optional.of(savedItem));
-		
+
 		ItemDTO updatedItemDTO = itemService.updateItem(1L, newItemDTO);
 
 		assertThat(updatedItemDTO.getLink()).isEqualTo(newItem.getLink());
 	}
 
 	@Test
-	void testUpdateItem() {
-		fail("Not yet implemented");
+	void testUpdateItem() throws ResourceNotFoundException {
+		ItemDTO expectedItemDTO = ItemDTO.builder().id(itemId)
+				.link("https://www.slikomania.rs/fotky6509/fotos/CWFTR026.jpg").build();
+
+		Item expectedItem = Item.builder().id(itemId).link("https://www.slikomania.rs/fotky6509/fotos/CWFTR026.jpg")
+				.build();
+
+		when(itemRepository.getById(itemId)).thenReturn(expectedItem);
+
+		expectedItem.setLink("https://www.slikomania.rs/fotky6509/fotos/CWFTR026.jpg");
+		
+		when(itemRepository.save(expectedItem)).thenReturn(expectedItem);
+
+		assertThat(itemService.updateItem(itemId, expectedItemDTO)).isEqualTo(expectedItem);
 	}
 
 }
