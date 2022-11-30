@@ -8,6 +8,7 @@ import javax.persistence.*;
 @Table(name = "item", schema = "public")
 @Getter
 @Setter
+@Builder
 public class Item {
 
     @Id
