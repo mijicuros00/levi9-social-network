@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -161,4 +162,16 @@ public class User implements Serializable, UserDetails {
         return true;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id.equals(user.id) && Objects.equals(name, user.name) && Objects.equals(surname, user.surname) && Objects.equals(email, user.email) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(lastPasswordResetDate, user.lastPasswordResetDate) && Objects.equals(roles, user.roles) && Objects.equals(friends, user.friends) && status == user.status;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, surname, email, username, password, lastPasswordResetDate, roles, friends, status);
+    }
 }

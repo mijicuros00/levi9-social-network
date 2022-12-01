@@ -38,8 +38,6 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-//	@PreAuthorize("hasAnyRole('CUSTOMER','ADMIN'")
-//	@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDTO> getUserById(@PathVariable(value = "id") Long userId) throws ResourceNotFoundException {
 
         return new ResponseEntity<>(UserMapper.mapDTO(userService.getUserById(userId)), HttpStatus.OK);
@@ -66,9 +64,9 @@ public class UserController {
     }
 
     @PostMapping()
-    public User createUser(@RequestBody User user) {
-
-        return userService.createUser(user);
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        User user1 = userService.createUser(user);
+        return new ResponseEntity<>(user1, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
