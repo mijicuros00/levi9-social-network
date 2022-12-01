@@ -23,8 +23,8 @@
     <include file="dblogs/changelog/changes/13-create-hidden-from-table-changeset.sql"/>
     <include file="dblogs/changelog/changes/29-create-post-item-table-changeset.sql"/>
     <include file="dblogs/changelog/changes/30-create-confirmation-token-table-changeset.sql"/>
+    <include file="dblogs/changelog/changes/31-create-api-key-table-changeset.sql"/>
     <include file="dblogs/changelog/changes/14-add-constraints-changeset.sql"/>
-
 
     <!-- Inserting random test data into db -->
     <include file="dblogs/changelog/changes/15-insert-user-table-changeset.sql"/>
@@ -41,5 +41,6 @@
     <include file="dblogs/changelog/changes/26-insert-request-table-changeset.sql"/>
     <include file="dblogs/changelog/changes/27-insert-role-table-changeset.sql"/>
     <include file="dblogs/changelog/changes/28-insert-hidden-from-table-changeset.sql"/>
+    <include file="dblogs/changelog/changes/32-insert-api-key-table-changeset.sql"/>
 </databaseChangeLog>
 
