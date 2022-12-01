@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,6 +37,7 @@ import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Address;
 import com.levi9.socialnetwork.Model.Event;
 import com.levi9.socialnetwork.Model.Group;
+import com.levi9.socialnetwork.Model.MuteDuration;
 import com.levi9.socialnetwork.Model.MuteGroup;
 import com.levi9.socialnetwork.Model.Post;
 import com.levi9.socialnetwork.Model.User;
@@ -222,7 +222,7 @@ class GroupControllerTest {
                 .andExpect(jsonPath("$[0].startDate").value(event.getStartDate().toString()))
                 .andExpect(jsonPath("$[0].endDate").value(event.getEndDate().toString()));
     }
-    
+
     @Test
     void testCreateEventInGroup() throws Exception {
         AddressDTO addressDTO = new AddressDTO(1L, "Serbia", "Novi Sad", "Freedom Square", 1);
@@ -238,12 +238,12 @@ class GroupControllerTest {
         given(groupService.getGroupById(GROUP_ID)).willReturn(newGroup);
         given(addressService.createAddress(any(Address.class))).willReturn(address);
         given(eventService.createEventInGroup(event, address, newGroup)).willReturn(event);
-        
+
         mockMvc.perform(post(URL_PREFIX + "/" + GROUP_ID + "/events").principal(principal)
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8").content(requestBody))
                 .andExpect(status().isOk());
     }
-    
+
     @Test
     void testCreateEventInGroupShouldReturnUnathorized() throws Exception {
         AddressDTO addressDTO = new AddressDTO(1L, "Serbia", "Novi Sad", "Freedom Square", 1);
@@ -259,12 +259,12 @@ class GroupControllerTest {
         given(groupService.getGroupById(GROUP_ID)).willReturn(newGroup);
         given(addressService.createAddress(any(Address.class))).willReturn(address);
         given(eventService.createEventInGroup(event, address, newGroup)).willReturn(event);
-        
+
         mockMvc.perform(post(URL_PREFIX + "/" + GROUP_ID + "/events").principal(principal)
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8").content(requestBody))
                 .andExpect(status().isUnauthorized());
     }
-    
+
     @Test
     void testCreateEventInGroupShouldReturnNonFoundBecauseUserIsNotGroupMember() throws Exception {
         AddressDTO addressDTO = new AddressDTO(1L, "Serbia", "Novi Sad", "Freedom Square", 1);
@@ -279,95 +279,129 @@ class GroupControllerTest {
         given(groupService.getGroupById(GROUP_ID)).willReturn(newGroup);
         given(addressService.createAddress(any(Address.class))).willReturn(address);
         given(eventService.createEventInGroup(event, address, newGroup)).willReturn(event);
-        
+
         mockMvc.perform(post(URL_PREFIX + "/" + GROUP_ID + "/events").principal(principal)
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8").content(requestBody))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    void testMuteGroup() throws Exception {
+        User user = new User(1L, "John", "Smith", "email", "123");
+        MuteGroup muteGroup = new MuteGroup(user.getId(),  GROUP_ID,  false, endDate);
+        
+        given(userService.findUserByUsername(principal.getName())).willReturn(user);
+        given(muteGroupService.getMuteDurationFromString("HOURS_24")).willReturn(MuteDuration.HOURS_24);
+        given(muteGroupService.muteGroup(user.getId(), GROUP_ID, MuteDuration.HOURS_24)).willReturn(muteGroup);
+        
+        String requestBody = "HOURS_24";
+        
+        mockMvc.perform(put(URL_PREFIX + "/" + GROUP_ID + "/mute").principal(principal).content(requestBody).contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.userId").value(muteGroup.getUserId()))
+                .andExpect(jsonPath("$.groupId").value(muteGroup.getGroupId()))
+                .andExpect(jsonPath("$.isPermanent").value(muteGroup.getIsPermanent()))
+                .andExpect(jsonPath("$.endOfMute".toString()).value(muteGroup.getEndOfMute().toString()));
+    }
     
+    @Test
+    void testMuteGroupShouldThrowUnathorized() throws Exception {
+        User user = new User(1L, "John", "Smith", "email", "123");
+        MuteGroup muteGroup = new MuteGroup(user.getId(),  GROUP_ID,  false, endDate);
+        
+        given(userService.findUserByUsername(principal.getName())).willReturn(null);
+        given(muteGroupService.getMuteDurationFromString("HOURS_24")).willReturn(MuteDuration.HOURS_24);
+        given(muteGroupService.muteGroup(user.getId(), GROUP_ID, MuteDuration.HOURS_24)).willReturn(muteGroup);
+        
+        String requestBody = "HOURS_24";
+        
+        mockMvc.perform(put(URL_PREFIX + "/" + GROUP_ID + "/mute").principal(principal).content(requestBody).contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8"))
+                .andExpect(status().isUnauthorized());
+    }
+
     @Test
     void testUnmuteGroup() throws Exception {
         User user = new User(1L, "John", "Smith", "email", "123");
         MuteGroup muteGroup = new MuteGroup(user.getId(), GROUP_ID, false, endDate);
         given(userService.findUserByUsername(principal.getName())).willReturn(user);
         given(muteGroupService.unmuteGroup(user.getId(), GROUP_ID)).willReturn(muteGroup);
-        
+
         mockMvc.perform(put(URL_PREFIX + "/" + GROUP_ID + "/unmute").principal(principal))
                 .andExpect(status().isOk());
     }
-    
+
     @Test
     void testUnmuteGroupShouldThrowUnathorized() throws Exception {
         User user = new User(1L, "John", "Smith", "email", "123");
         MuteGroup muteGroup = new MuteGroup(user.getId(), GROUP_ID, false, endDate);
         given(userService.findUserByUsername(principal.getName())).willReturn(null);
         given(muteGroupService.unmuteGroup(user.getId(), GROUP_ID)).willReturn(muteGroup);
-        
+
         mockMvc.perform(put(URL_PREFIX + "/" + GROUP_ID + "/unmute").principal(principal))
                 .andExpect(status().isUnauthorized());
     }
-    
+
     @Test
     void testAcceptMember() throws Exception {
-        
+
         Group group = new Group(false, 1L, "Group 1");
         group.setId(GROUP_ID);
         User user = new User(1L, "John", "Smith", "user1", "123");
-        
+
         given(groupService.getGroupById(GROUP_ID)).willReturn(group);
         given(userService.findUserByUsername(principal.getName())).willReturn(user);
         given(groupService.acceptMember(user.getId(), GROUP_ID)).willReturn(true);
-        
+
         mockMvc.perform(post(URL_PREFIX + "/" + GROUP_ID + "/accept-member/" + user.getId())
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8").principal(principal))
                 .andExpect(status().isOk());
     }
-    
+
     @Test
     void testAcceptMemberNoAuthShouldReturnForbidden() throws Exception {
-        
+
         Group group = new Group(false, 2L, "Group 1");
         group.setId(GROUP_ID);
         User user = new User(1L, "John", "Smith", "user1", "123");
-        
+
         given(groupService.getGroupById(GROUP_ID)).willReturn(group);
         given(userService.findUserByUsername(principal.getName())).willReturn(user);
         given(groupService.acceptMember(user.getId(), GROUP_ID)).willReturn(true);
-        
+
         mockMvc.perform(post(URL_PREFIX + "/" + GROUP_ID + "/accept-member/" + user.getId())
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8").principal(principal))
                 .andExpect(status().isForbidden());
     }
-    
+
     @Test
     void testRemoveMember() throws Exception {
-        
+
         Group group = new Group(false, 1L, "Group 1");
         group.setId(GROUP_ID);
         User user = new User(1L, "John", "Smith", "user1", "123");
-        
+
         given(groupService.getGroupById(GROUP_ID)).willReturn(group);
         given(userService.findUserByUsername(principal.getName())).willReturn(user);
         groupService.deleteMemberEvents(user.getId(), GROUP_ID);
         groupService.removeMember(user.getId(), GROUP_ID);
-        
+
         mockMvc.perform(delete(URL_PREFIX + "/" + GROUP_ID + "/remove-member/" + user.getId())
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8").principal(principal))
                 .andExpect(status().is2xxSuccessful());
     }
-    
+
     @Test
     void testRemoveMemberShouldReturnForbidden() throws Exception {
-        
+
         Group group = new Group(false, 2L, "Group 1");
         group.setId(GROUP_ID);
         User user = new User(1L, "John", "Smith", "user1", "123");
-        
+
         given(groupService.getGroupById(GROUP_ID)).willReturn(group);
         given(userService.findUserByUsername(principal.getName())).willReturn(user);
         groupService.deleteMemberEvents(user.getId(), GROUP_ID);
         groupService.removeMember(user.getId(), GROUP_ID);
-        
+
         mockMvc.perform(delete(URL_PREFIX + "/" + GROUP_ID + "/remove-member/" + user.getId())
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8").principal(principal))
                 .andExpect(status().isForbidden());
