@@ -9,16 +9,15 @@ import com.levi9.socialnetwork.Service.PostService;
 import com.levi9.socialnetwork.Service.UserService;
 import com.levi9.socialnetwork.dto.CreatePostDTO;
 import com.levi9.socialnetwork.dto.PostDTO;
-
-import java.security.Principal;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "api/posts")
@@ -107,15 +106,15 @@ public class PostController {
         User user = userService.findUserByUsername(principal.getName());
         PostDTO post = postService.getPostById(id);
 
-        if(!user.getId().equals(post.getUserId())){
+        if (!user.getId().equals(post.getUserId())) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
         PostDTO updatedPost;
 
-        try{
+        try {
             updatedPost = postService.updatePost(id, postDTO);
-        }catch (ResourceNotFoundException e){
+        } catch (ResourceNotFoundException e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 

@@ -1,16 +1,7 @@
 package com.levi9.socialnetwork.Service.impl;
 
-import java.util.List;
-
-import javax.transaction.Transactional;
-
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.levi9.socialnetwork.Controller.UserController;
 import com.levi9.socialnetwork.Exception.BadRequestException;
-import com.levi9.socialnetwork.Exception.ResourceExistsException;
 import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Group;
 import com.levi9.socialnetwork.Model.Post;
@@ -23,8 +14,12 @@ import com.levi9.socialnetwork.Service.PostService;
 import com.levi9.socialnetwork.dto.CreatePostDTO;
 import com.levi9.socialnetwork.dto.PostDTO;
 import com.levi9.socialnetwork.mapper.PostMapper;
-
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public class  PostServiceImpl implements PostService {
@@ -48,7 +43,7 @@ public class  PostServiceImpl implements PostService {
                 .orElseThrow(() -> new ResourceNotFoundException("Post with id " + id + " was not found"));
     }
 
-    public Long createPost(CreatePostDTO postDTO, Long userId) throws ResourceNotFoundException, ResourceExistsException{
+    public Long createPost(CreatePostDTO postDTO, Long userId){
 
         Post post = postRepository.save(PostMapper.mapCreateDTOToEntity(postDTO, userId));
 
