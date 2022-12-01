@@ -5,10 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -51,24 +48,23 @@ class ItemServiceTest {
 	static final Long itemId = 1L;
 
 	@BeforeEach
-	void setUp() throws Exception {
+	void setUp() {
 		MockitoAnnotations.initMocks(this);
 	}
 
 	@Test
 	void shouldFindAndReturnOneItem() throws ResourceNotFoundException {
-
-		Item expectedItem = Item.builder().id(1L).link("https://www.slikomania.rs/fotky6509/fotos/CWFTR026.jpg")
+		Item expectedItem = Item.builder()
+				.id(1L)
+				.link("https://www.slikomania.rs/fotky6509/fotos/CWFTR026.jpg")
 				.build();
-		when(itemRepository.save(expectedItem)).thenReturn(expectedItem);
-		when(itemRepository.findById(itemId)).thenReturn(Optional.of(expectedItem));
+		given(itemRepository.findItemById(itemId))
+				.willReturn(Optional.of(expectedItem));
 
-		ItemDTO actual = itemService.getItemById(1L);
-
+		ItemDTO actual = itemService.getItemById(itemId);
 		assertThat(actual).usingRecursiveComparison().isEqualTo(expectedItem);
-		verify(itemRepository, times(1)).findById(1L);
+		verify(itemRepository, times(1)).findItemById(1L);
 		verifyNoMoreInteractions(itemRepository);
-
 	}
 
 	@Test
@@ -115,43 +111,60 @@ class ItemServiceTest {
 	}
 
 	@Test
-	void testCreateItem() throws ResourceNotFoundException {
-
-		Item savedItem = Item.builder().id(itemId).link("https://www.slikomania.rs/fotky6509/fotos/CWFTR026.jpg")
-				.build();
-
+	void testCreateItem() {
 		Item newItem = Item.builder().id(itemId)
 				.link("http://www.10naj.com/wp-content/uploads/2016/08/zvezdananoc_.jpg").build();
 
 		ItemDTO newItemDTO = ItemDTO.builder().id(itemId)
 				.link("http://www.10naj.com/wp-content/uploads/2016/08/zvezdananoc_.jpg").build();
 
-		ItemDTO savedItemDTO = ItemDTO.builder().id(itemId)
-				.link("https://www.slikomania.rs/fotky6509/fotos/CWFTR026.jpg").build();
+		given(itemRepository.save(newItem))
+				.willReturn(newItem);
 
-		itemRepository.save(savedItem);
-		when(itemRepository.findById(1L)).thenReturn(Optional.of(savedItem));
+		Long returnedItemId = itemService.createItem(newItemDTO);
 
-		ItemDTO updatedItemDTO = itemService.updateItem(1L, newItemDTO);
-
-		assertThat(updatedItemDTO.getLink()).isEqualTo(newItem.getLink());
+		assertThat(returnedItemId).isEqualTo(newItem.getId());
 	}
 
 	@Test
 	void testUpdateItem() throws ResourceNotFoundException {
 		ItemDTO expectedItemDTO = ItemDTO.builder().id(itemId)
 				.link("https://www.slikomania.rs/fotky6509/fotos/CWFTR026.jpg").build();
-
-		Item expectedItem = Item.builder().id(itemId).link("https://www.slikomania.rs/fotky6509/fotos/CWFTR026.jpg")
+		Item expectedItem = Item.builder()
+				.id(itemId)
+				.link("https://www.slikomania.rs/fotky6509/fotos/CWFTR026.png")
 				.build();
 
-		when(itemRepository.getById(itemId)).thenReturn(expectedItem);
+		given(itemRepository.findItemById(itemId))
+				.willReturn(Optional.of(expectedItem));
+		given(itemRepository.save(expectedItem))
+				.willReturn(expectedItem);
 
-		expectedItem.setLink("https://www.slikomania.rs/fotky6509/fotos/CWFTR026.jpg");
-		
-		when(itemRepository.save(expectedItem)).thenReturn(expectedItem);
+		ItemDTO returnedItemDTO = itemService.updateItem(itemId, expectedItemDTO);
+		assertThat(returnedItemDTO).isEqualTo(expectedItemDTO);
+	}
 
-		assertThat(itemService.updateItem(itemId, expectedItemDTO)).isEqualTo(expectedItem);
+	@Test
+	void givenItemIdDeleteId() throws ResourceNotFoundException {
+		given(itemRepository.existsById(itemId))
+				.willReturn(true);
+		doNothing().when(itemRepository).deleteById(itemId);
+
+		itemService.deleteItem(itemId);
+		verify(itemRepository, times(1)).existsById(itemId);
+		verify(itemRepository, times(1)).deleteById(itemId);
+		verifyNoMoreInteractions(itemRepository);
+	}
+
+	@Test
+	void givenItemIdThrowResourceNotFoundException() throws ResourceNotFoundException {
+		given(itemRepository.existsById(itemId))
+				.willReturn(false);
+
+		assertThrows(ResourceNotFoundException.class,
+				() -> itemService.deleteItem(itemId));
+		verify(itemRepository, times(1)).existsById(itemId);
+		verifyNoMoreInteractions(itemRepository);
 	}
 
 }

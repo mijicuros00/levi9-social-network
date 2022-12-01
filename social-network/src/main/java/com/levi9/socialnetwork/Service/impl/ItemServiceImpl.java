@@ -28,20 +28,21 @@ public class ItemServiceImpl implements ItemService {
 
     @Transactional
     public ItemDTO updateItem(Long id, ItemDTO itemDTO) throws ResourceNotFoundException {
-        Item item = itemRepository.findItemById(id).map(searchedItem -> searchedItem)
-                .orElseThrow(() -> new ResourceNotFoundException("Item with id " + id + "was not found"));
+        Item item = itemRepository.findItemById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Item with id " + id + " was not found"));
 
         item.setLink(itemDTO.getLink());
 
-        itemRepository.save(item);
+        item = itemRepository.save(item);
 
         return ItemMapper.mapEntityToDTO(item);
     }
 
     @Transactional
     public void deleteItem(Long id) throws ResourceNotFoundException {
-        itemRepository.findItemById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Item with id " + id + "was not found"));
+        if (!itemRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Item with id " + id + " was not found");
+        }
 
         itemRepository.deleteById(id);
     }
