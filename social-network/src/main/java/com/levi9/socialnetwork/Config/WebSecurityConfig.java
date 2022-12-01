@@ -64,7 +64,7 @@ public class WebSecurityConfig {
                 .antMatchers("/api/auth/**").permitAll().antMatchers("/api/events/**").permitAll()
                 .antMatchers("/api/mute_groups/**").permitAll().antMatchers("/api/group/**").permitAll()
                 .antMatchers("/api/comments/**").permitAll().antMatchers("/api/posts/**").permitAll()
-
+                .antMatchers("/api/items/**").permitAll()
                 .antMatchers("/api/events/**").permitAll()
 
                 .anyRequest().authenticated().and()

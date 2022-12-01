@@ -58,6 +58,7 @@ class ItemServiceTest {
 				.id(1L)
 				.link("https://www.slikomania.rs/fotky6509/fotos/CWFTR026.jpg")
 				.build();
+		
 		given(itemRepository.findItemById(itemId))
 				.willReturn(Optional.of(expectedItem));
 
