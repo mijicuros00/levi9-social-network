@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,6 +38,7 @@ import com.levi9.socialnetwork.Exception.ResourceNotFoundException;
 import com.levi9.socialnetwork.Model.Address;
 import com.levi9.socialnetwork.Model.Event;
 import com.levi9.socialnetwork.Model.Group;
+import com.levi9.socialnetwork.Model.MuteGroup;
 import com.levi9.socialnetwork.Model.Post;
 import com.levi9.socialnetwork.Model.User;
 import com.levi9.socialnetwork.Service.AddressService;
@@ -69,7 +71,7 @@ class GroupControllerTest {
     UserService userService;
 
     @MockBean
-    MuteGroupService mockGroupService;
+    MuteGroupService muteGroupService;
 
     @MockBean
     PostService postService;
@@ -284,6 +286,28 @@ class GroupControllerTest {
     }
     
     @Test
+    void testUnmuteGroup() throws Exception {
+        User user = new User(1L, "John", "Smith", "email", "123");
+        MuteGroup muteGroup = new MuteGroup(user.getId(), GROUP_ID, false, endDate);
+        given(userService.findUserByUsername(principal.getName())).willReturn(user);
+        given(muteGroupService.unmuteGroup(user.getId(), GROUP_ID)).willReturn(muteGroup);
+        
+        mockMvc.perform(put(URL_PREFIX + "/" + GROUP_ID + "/unmute").principal(principal))
+                .andExpect(status().isOk());
+    }
+    
+    @Test
+    void testUnmuteGroupShouldThrowUnathorized() throws Exception {
+        User user = new User(1L, "John", "Smith", "email", "123");
+        MuteGroup muteGroup = new MuteGroup(user.getId(), GROUP_ID, false, endDate);
+        given(userService.findUserByUsername(principal.getName())).willReturn(null);
+        given(muteGroupService.unmuteGroup(user.getId(), GROUP_ID)).willReturn(muteGroup);
+        
+        mockMvc.perform(put(URL_PREFIX + "/" + GROUP_ID + "/unmute").principal(principal))
+                .andExpect(status().isUnauthorized());
+    }
+    
+    @Test
     void testAcceptMember() throws Exception {
         
         Group group = new Group(false, 1L, "Group 1");
@@ -327,7 +351,7 @@ class GroupControllerTest {
         groupService.deleteMemberEvents(user.getId(), GROUP_ID);
         groupService.removeMember(user.getId(), GROUP_ID);
         
-        mockMvc.perform(delete(URL_PREFIX + "/" + GROUP_ID + "/remove-member/")
+        mockMvc.perform(delete(URL_PREFIX + "/" + GROUP_ID + "/remove-member/" + user.getId())
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8").principal(principal))
                 .andExpect(status().is2xxSuccessful());
     }
@@ -344,7 +368,7 @@ class GroupControllerTest {
         groupService.deleteMemberEvents(user.getId(), GROUP_ID);
         groupService.removeMember(user.getId(), GROUP_ID);
         
-        mockMvc.perform(delete(URL_PREFIX + "/" + GROUP_ID + "/remove-member/")
+        mockMvc.perform(delete(URL_PREFIX + "/" + GROUP_ID + "/remove-member/" + user.getId())
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("utf-8").principal(principal))
                 .andExpect(status().isForbidden());
     }

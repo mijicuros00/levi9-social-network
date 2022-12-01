@@ -170,20 +170,19 @@ public class GroupServiceTest {
     void testDeleteGroup() throws ResourceNotFoundException {
         Group group = new Group(false, 1L, "New group");
         group.setId(GROUP_ID);
-        when(groupRepository.save(group)).thenReturn(group);
+        when(groupRepository.findById(GROUP_ID)).thenReturn(Optional.of(group));
 
-        groupRepository.delete(group);
+        groupService.deleteGroup(group.getId());
         verify(groupRepository, times(1)).delete(group);
-        verifyNoMoreInteractions(groupRepository);
     }
 
     @Test
-    void testDeleteNonExistingGroup() {
+    void testDeleteNonExistingGroup() throws ResourceNotFoundException {
         Group group = new Group(false, 1L, "New group");
         group.setId(GROUP_ID);
-        when(groupRepository.save(group)).thenReturn(group);
+        when(groupRepository.findById(GROUP_ID)).thenReturn(Optional.of(group));
 
-        groupRepository.delete(group);
+        groupService.deleteGroup(group.getId());
 
         assertThrows(ResourceNotFoundException.class, () -> {
             groupService.deleteGroup(2L);
@@ -205,6 +204,42 @@ public class GroupServiceTest {
         groupService.addUserToGroup(requestDTO);
 
         assertThat(group.getMembers(), hasItem(hasProperty("name", is("John"))));
+    }
+    
+    @Test
+    void testAddBadUserToGroupShouldReturnException() throws ResourceNotFoundException, ResourceExistsException {
+        Group group = new Group(false, 1L, "Group 1");
+        group.setId(GROUP_ID);
+        User user = new User(1L, "John", "Smith", "user1", "123");
+        MuteGroup muteGroup = new MuteGroup(user.getId(), group.getId(), false, LocalDateTime.now());
+        RequestDTO requestDTO = new RequestDTO(user.getId(), group.getId());
+
+        given(groupRepository.findById(GROUP_ID)).willReturn(Optional.of(group));
+        given(userRepository.findById(1L)).willReturn(Optional.empty());
+        given(groupRepository.save(group)).willReturn(group);
+        given(muteGroupService.createMuteGroup(muteGroup)).willReturn(muteGroup);
+        
+        assertThrows(ResourceNotFoundException.class, () -> {
+            groupService.addUserToGroup(requestDTO);
+        });
+    }
+    
+    @Test
+    void testAddUserToBadGroupShouldReturnException() throws ResourceNotFoundException, ResourceExistsException {
+        Group group = new Group(false, 1L, "Group 1");
+        group.setId(GROUP_ID);
+        User user = new User(1L, "John", "Smith", "user1", "123");
+        MuteGroup muteGroup = new MuteGroup(user.getId(), group.getId(), false, LocalDateTime.now());
+        RequestDTO requestDTO = new RequestDTO(user.getId(), group.getId());
+
+        given(groupRepository.findById(GROUP_ID)).willReturn(Optional.empty());
+        given(userRepository.findById(1L)).willReturn(Optional.of(user));
+        given(groupRepository.save(group)).willReturn(group);
+        given(muteGroupService.createMuteGroup(muteGroup)).willReturn(muteGroup);
+        
+        assertThrows(ResourceNotFoundException.class, () -> {
+            groupService.addUserToGroup(requestDTO);
+        });
     }
 
     @Test
