@@ -1,13 +1,16 @@
 package com.levi9.socialnetwork.Model;
 
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
-
-import javax.persistence.*;
 
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
+
 
 @Entity
 @Table(name = "user", schema = "public")
