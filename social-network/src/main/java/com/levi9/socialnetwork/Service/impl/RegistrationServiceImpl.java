@@ -94,7 +94,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         ConfirmationToken confirmationToken = new ConfirmationToken(token, null, registeredUser.getId());
         confirmationTokenService.save(confirmationToken);
 
-        String link = "http://localhost:8081/api/auth/confirm?token=" + confirmationToken.getToken();
+        String link = "http://localhost:8762/social-network/api/auth/confirm?token=" + confirmationToken.getToken();
         try {
             emailService.sendEmail(registeredUser.getEmail(),
                     emailService.registerEmail(registeredUser.getName(), link), "Verify your email");

@@ -60,12 +60,17 @@ public class WebSecurityConfig {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 
                 .exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and().authorizeRequests()
-                .antMatchers("/api/auth/**").permitAll().antMatchers("/api/users/**").permitAll()
-                .antMatchers("/api/auth/**").permitAll().antMatchers("/api/events/**").permitAll()
-                .antMatchers("/api/mute_groups/**").permitAll().antMatchers("/api/group/**").permitAll()
-                .antMatchers("/api/comments/**").permitAll().antMatchers("/api/posts/**").permitAll()
+                .antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/api/users/**").permitAll()
+                .antMatchers("/api/events/**").permitAll()
+                .antMatchers("/api/mute_groups/**").permitAll()
+                .antMatchers("/api/groups/**").permitAll()
+                .antMatchers("/api/comments/**").permitAll()
+                .antMatchers("/api/posts/**").permitAll()
                 .antMatchers("/api/items/**").permitAll()
                 .antMatchers("/api/events/**").permitAll()
+                .antMatchers("/api/addresses/**").permitAll()
+                
 
                 .anyRequest().authenticated().and()
 
@@ -78,30 +83,26 @@ public class WebSecurityConfig {
         return http.build();
     }
 
-    	private static final String[] AUTH_WHITELIST = {
-	        "/swagger-resources/**",
-	        "/swagger-ui.html",
-	        "/v2/api-docs",
-	        "/webjars/**"
-	};
-    	
-    	@Bean
-    	@Profile("test")
-    	public WebSecurityCustomizer webSecurityCustomizerTest() {
-    	 //Since we added the Spring Security to pom.xml and the spring security default
-    	 //Behavior is ... well to secure and block all traffic
-    	 //This will disable the behavior when testing none secured related tests
-    	 return web -> web.ignoring().anyRequest();
-    	}
+    private static final String[] AUTH_WHITELIST = { "/swagger-resources/**", "/swagger-ui.html", "/v2/api-docs",
+            "/webjars/**" };
 
-	@Bean
-	public WebSecurityCustomizer webSecurityCustomizer() {
-		return (web) -> {
-			web.ignoring().antMatchers(HttpMethod.POST, "/auth/login");
-			web.ignoring().antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "favicon.ico", "/**/*.html",
-					"/**/*.css", "/**/*.js");
-			 web.ignoring().antMatchers(AUTH_WHITELIST);
-		};
-	}
+    @Bean
+    @Profile("test")
+    public WebSecurityCustomizer webSecurityCustomizerTest() {
+        // Since we added the Spring Security to pom.xml and the spring security default
+        // Behavior is ... well to secure and block all traffic
+        // This will disable the behavior when testing none secured related tests
+        return web -> web.ignoring().anyRequest();
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> {
+            web.ignoring().antMatchers(HttpMethod.POST, "/auth/login");
+            web.ignoring().antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "favicon.ico", "/**/*.html",
+                    "/**/*.css", "/**/*.js");
+            web.ignoring().antMatchers(AUTH_WHITELIST);
+        };
+    }
 
 }

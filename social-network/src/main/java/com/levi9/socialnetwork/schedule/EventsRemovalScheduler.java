@@ -23,7 +23,7 @@ public class EventsRemovalScheduler {
     }
 
     @Scheduled(cron = "0 */1 * * * *")
-    public void removePenalty() {
+    public void removeEvent() {
         List<Event> expiredEvents = eventRepository.getAllExpiredEvents();
 
         for (Event e : expiredEvents) {
