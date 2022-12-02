@@ -47,20 +47,20 @@ public class PostController {
     }
 
 
-    @GetMapping(value = "/friendPosts/{userId}")
+    @GetMapping(value = "/friend/{userId}")
     public ResponseEntity<List<Post>> getAllPostsFromFriends(@PathVariable Long userId) throws ResourceNotFoundException {
 
         return new ResponseEntity<>(postService.getAllPostsFromFriends(userId), HttpStatus.OK);
     }
 
 
-    @GetMapping(value = "/friendPostsPublicGroups/{userId}")
+    @GetMapping(value = "/friend/{userId}/public-groups")
     public ResponseEntity<List<Post>> getAllPostsOfMyFriendsFromPublicGroups(@PathVariable Long userId) throws ResourceNotFoundException {
 
         return new ResponseEntity<>(postService.getAllPostsOfMyFriendsFromPublicGroups(userId), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/friendPostsPrivateGroups/{userId}")
+    @GetMapping(value = "/friend/{userId}/private-groups")
     public ResponseEntity<List<Post>> getAllPostsOfMyFriendsFromPrivateGroups(@PathVariable Long userId) throws ResourceNotFoundException {
 
         return new ResponseEntity<>(postService.getAllPostsOfMyFriendsFromPrivateGroups(userId), HttpStatus.OK);
